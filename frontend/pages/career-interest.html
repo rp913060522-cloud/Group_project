@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Interest | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link active">Career Interest</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container" style="padding: 40px 20px 60px;">
+    
+    <div class="card" style="max-width: 680px; margin: 0 auto; box-shadow: var(--shadow-card);">
+      
+      <h1 class="card-title" style="font-size: 1.6rem; margin-bottom: 24px;">Career Interest</h1>
+
+      <form id="careerInterestForm">
+        
+        <!-- 1. Interested Field -->
+        <div class="form-group">
+          <label class="form-label" for="interestField">Interested Field / Industry</label>
+          <select id="interestField" class="form-select no-icon" required>
+            <option value="">Select your preferred field</option>
+            <option value="Data Science" selected>Data Science &amp; Analytics</option>
+            <option value="Web Development">Web Development &amp; Software</option>
+            <option value="Government Services (SSC/Railways)">Government Services (SSC, Railways, Post Office)</option>
+            <option value="Defense & Police">Defense &amp; Police (Army, Navy, Police)</option>
+            <option value="Healthcare & Nursing">Healthcare &amp; Nursing</option>
+            <option value="Technical Trades">Technical Trades (Electrician, Automobile, ITI)</option>
+            <option value="Teaching & Education">Teaching &amp; Education</option>
+          </select>
+        </div>
+
+        <!-- 2. Favourite Subjects -->
+        <div class="form-group">
+          <label class="form-label" for="favSubjects">Favourite Subjects</label>
+          <input type="text" id="favSubjects" class="form-control no-icon" placeholder="E.g. Mathematics, Computer Science, Physics" value="Mathematics, Computer Science" required>
+        </div>
+
+        <!-- 3. Career Preference -->
+        <div class="form-group">
+          <label class="form-label" for="careerPreference">Career Preference / Priority</label>
+          <select id="careerPreference" class="form-select no-icon" required>
+            <option value="">Select your preference</option>
+            <option value="Immediate Job">Immediate Job / Quick Earning to Support Family</option>
+            <option value="Higher Studies" selected>Higher Studies &amp; Degree with Scholarships</option>
+            <option value="Government Exam">Government Exam Preparation</option>
+            <option value="Vocational Apprenticeship">Skill Apprenticeship (Learn &amp; Earn)</option>
+          </select>
+        </div>
+
+        <!-- 4. Skills the student wants to learn -->
+        <div class="form-group">
+          <label class="form-label" for="skillsToLearn">Skills / Areas You Want to Learn</label>
+          <input type="text" id="skillsToLearn" class="form-control no-icon" placeholder="E.g. Python, SQL, Spoken English, Web Coding" value="Python, Machine Learning, Data Analysis" required>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center;">
+          <button type="submit" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
+            Save
+          </button>
+          <a href="ai-guidance.html" class="btn btn-outline" style="padding: 12px 24px;">
+            Continue to AI Guidance ➔
+          </a>
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('careerInterestForm');
+      const saved = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
+
+      if (saved.field) document.getElementById('interestField').value = saved.field;
+      if (saved.favSubjects) document.getElementById('favSubjects').value = saved.favSubjects;
+      if (saved.preference) document.getElementById('careerPreference').value = saved.preference;
+      if (saved.skills) document.getElementById('skillsToLearn').value = saved.skills;
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const interestData = {
+            field: document.getElementById('interestField').value,
+            favSubjects: document.getElementById('favSubjects').value.trim(),
+            preference: document.getElementById('careerPreference').value,
+            skills: document.getElementById('skillsToLearn').value.trim(),
+            updatedAt: new Date().toLocaleDateString()
+          };
+          localStorage.setItem('student_career_interest', JSON.stringify(interestData));
+          alert('Career Interest preferences saved! Ready for AI Guidance.');
+          window.location.href = 'ai-guidance.html';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

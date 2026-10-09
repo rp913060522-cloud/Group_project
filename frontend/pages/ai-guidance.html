@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Career Guidance | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* AI Page Custom Styling matching Stitch 8 & 9 */
+    .ai-header-layout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 20px;
+    }
+    .how-it-works-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-top: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .how-it-works-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 18px;
+    }
+    .how-step-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .how-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: #1d4ed8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      flex-shrink: 0;
+    }
+    .how-step-text {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      padding-top: 2px;
+    }
+
+    /* Result Card (Design 9: AI Result Page - Example) */
+    .result-section-box {
+      margin-top: 40px;
+    }
+    .result-card-stitch {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-card);
+    }
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .role-icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 14px;
+      background: #2563eb;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+    .role-title-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+    .role-tagline-green {
+      color: #10b981;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .result-block-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      margin-top: 18px;
+    }
+    .result-list-bullets {
+      padding-left: 20px;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .result-list-bullets li {
+      margin-bottom: 6px;
+    }
+    .result-list-numbers {
+      padding-left: 20px;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .result-list-numbers li {
+      margin-bottom: 6px;
+    }
+    .skill-pills-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .skill-pill {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .yt-recommend-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.92rem;
+      color: #166534;
+    }
+    .yt-recommend-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link">Career Interest</a></li>
+        <li><a href="ai-guidance.html" class="nav-link active">AI Guidance</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content matching Stitch 8. AI Career Guidance Page -->
+  <main class="container" style="padding: 36px 20px 60px;">
+    
+    <div style="max-width: 720px; margin: 0 auto;">
+
+      <!-- Header with Mascot -->
+      <div class="ai-header-layout">
+        <div>
+          <h1 class="card-title" style="font-size: 1.8rem; margin-bottom: 6px;">AI Career Guidance</h1>
+          <p class="card-subtitle" style="margin-bottom: 0;">Tell us your interests and let AI suggest the best career options for you.</p>
+        </div>
+        <div>
+          <img src="../assets/icons/robot.svg" alt="AI Robot Mascot" style="width: 100px; height: 100px;">
+        </div>
+      </div>
+
+      <!-- Input Card -->
+      <div class="card" style="box-shadow: var(--shadow-card);">
+        <div class="form-group" style="margin-bottom: 18px;">
+          <label class="form-label" for="aiInterestInput" style="font-size: 0.95rem;">Your Interest / Preferred Field</label>
+          <input type="text" id="aiInterestInput" class="form-control no-icon" placeholder="e.g. Data Science, Web Development, etc." value="Data Science">
+        </div>
+
+        <button type="button" id="getSuggestionsBtn" class="btn btn-primary btn-block" style="padding: 13px; font-size: 1rem;">
+          Get Suggestions
+        </button>
+      </div>
+
+      <!-- How it works? Card -->
+      <div class="how-it-works-card">
+        <h3>How it works?</h3>
+        
+        <div class="how-step-row">
+          <div class="how-step-num">1</div>
+          <div class="how-step-text">AI analyzes your interests and educational background.</div>
+        </div>
+
+        <div class="how-step-row">
+          <div class="how-step-num">2</div>
+          <div class="how-step-text">It suggests suitable career options and eligibility.</div>
+        </div>
+
+        <div class="how-step-row" style="margin-bottom: 0;">
+          <div class="how-step-num">3</div>
+          <div class="how-step-text">You get step-by-step guidance and useful resources.</div>
+        </div>
+      </div>
+
+      <!-- 9. AI Result Page - Example (Matches Design 9 exactly) -->
+      <div class="result-section-box" id="aiResultContainer">
+        
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px;">
+          Career Suggestions for You
+        </h2>
+
+        <div class="result-card-stitch">
+          
+          <!-- Role Header -->
+          <div class="result-card-header">
+            <div class="role-icon-box">
+              📊
+            </div>
+            <div>
+              <div class="role-title-text">Data Scientist</div>
+              <div class="role-tagline-green">High Demand • Great Career Growth</div>
+            </div>
+          </div>
+
+          <!-- Eligibility -->
+          <div class="result-block-title">Eligibility</div>
+          <ul class="result-list-bullets">
+            <li>12th with Maths (for Graduation)</li>
+            <li>Basic knowledge of Python/Statistics</li>
+          </ul>
+
+          <!-- Next Steps -->
+          <div class="result-block-title">Next Steps</div>
+          <ol class="result-list-numbers">
+            <li>Learn Python (basic to advanced)</li>
+            <li>Study Data Analysis &amp; Visualization</li>
+            <li>Build Projects / Portfolio</li>
+          </ol>
+
+          <!-- Useful Skills -->
+          <div class="result-block-title">Useful Skills</div>
+          <div class="skill-pills-row">
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">SQL</span>
+            <span class="skill-pill">Machine Learning</span>
+            <span class="skill-pill">Data Analysis</span>
+          </div>
+
+          <!-- Green Info Box -->
+          <div class="yt-recommend-box">
+            <div class="yt-recommend-icon">i</div>
+            <div>
+              You can also check relevant <a href="youtube-resources.html" style="color: #15803d; font-weight: 700; text-decoration: underline;">YouTube playlists</a> for free learning resources.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/ai-guidance.js"></script>
+</body>
+</html>

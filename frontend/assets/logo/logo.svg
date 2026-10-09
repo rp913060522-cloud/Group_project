@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="48" height="48">
+  <path d="M32 6 L6 18 L32 30 L58 18 Z" fill="#2563eb"/>
+  <path d="M16 23 V36 C16 43 23 48 32 48 C41 48 48 43 48 36 V23" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+  <path d="M58 18 V34" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="58" cy="35" r="3" fill="#2563eb"/>
+  <!-- Open book base -->
+  <path d="M10 44 C22 41 30 46 32 49 C34 46 42 41 54 44 V56 C42 53 34 57 32 60 C30 57 22 53 10 56 Z" fill="#3b82f6"/>
+</svg>

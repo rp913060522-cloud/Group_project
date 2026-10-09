@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home / Dashboard | Career Guidance Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Matching Stitch: Career Guidance Portal | Hi, Student) -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="dashboard.html" class="nav-brand">
+        <img src="assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <!-- Quick Nav Links -->
+      <ul class="nav-links" id="navLinks">
+        <li><a href="dashboard.html" class="nav-link active">Home</a></li>
+        <li><a href="pages/student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="pages/education.html" class="nav-link">Education Background</a></li>
+        <li><a href="pages/career-interest.html" class="nav-link">Career Interest</a></li>
+        <li><a href="pages/ai-guidance.html" class="nav-link">AI Guidance</a></li>
+      </ul>
+
+      <!-- User Greeting Profile Badge -->
+      <div class="nav-user" style="cursor: pointer;" onclick="window.location.href='pages/student-info.html';">
+        <img src="assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">⌄</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="container dashboard-page-container">
+
+    <!-- 1. Top Sliding Banner Carousel (2-3 Automatic Sliding Banners) -->
+    <div class="carousel-wrapper" id="homeCarousel" aria-label="Career Highlights Carousel">
+      <div class="carousel-slides-track" id="carouselTrack">
+        <!-- Slide 1: Your Career Matters (Exact Stitch Design) -->
+        <div class="carousel-item-slide">
+          <a href="pages/ai-guidance.html" style="display: block; width: 100%; height: 100%;">
+            <img src="assets/banners/home-banner.svg" alt="Your Career Matters - Get the right guidance">
+          </a>
+        </div>
+        <!-- Slide 2: Government Scholarships -->
+        <div class="carousel-item-slide">
+          <a href="pages/scholarships.html" style="display: block; width: 100%; height: 100%;">
+            <img src="assets/banners/banner2.svg" alt="Government Scholarships Scheme">
+          </a>
+        </div>
+        <!-- Slide 3: AI Career Guidance -->
+        <div class="carousel-item-slide">
+          <a href="pages/ai-guidance.html" style="display: block; width: 100%; height: 100%;">
+            <img src="assets/banners/banner3.svg" alt="AI-Powered Career Guidance">
+          </a>
+        </div>
+      </div>
+
+      <!-- Arrow Buttons -->
+      <button class="carousel-nav-btn carousel-nav-prev" id="prevSlideBtn" aria-label="Previous Slide">‹</button>
+      <button class="carousel-nav-btn carousel-nav-next" id="nextSlideBtn" aria-label="Next Slide">›</button>
+
+      <!-- Dots Indicators -->
+      <div class="carousel-dots-group" id="carouselDots">
+        <button class="carousel-dot active" data-index="0" aria-label="Slide 1"></button>
+        <button class="carousel-dot" data-index="1" aria-label="Slide 2"></button>
+        <button class="carousel-dot" data-index="2" aria-label="Slide 3"></button>
+      </div>
+    </div>
+
+    <!-- Section Title (from Stitch: 3. Home / Dashboard (After Login)) -->
+    <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 16px;">
+      Home / Dashboard (After Login)
+    </div>
+
+    <!-- 2. Simple Welcome Section (from Stitch Home Page) -->
+    <div class="stitch-welcome-card">
+      <div class="welcome-text-box">
+        <h2>Welcome, Student! 👋</h2>
+        <p>Let's understand your interests and help you plan your future.</p>
+      </div>
+      <div class="welcome-quote-box">
+        <div>
+          Small steps today, big dreams tomorrow
+        </div>
+        <span class="seedling-icon">🌱</span>
+      </div>
+    </div>
+
+    <!-- 3. Main Feature Options (Exact 6 Cards from Stitch Home Page) -->
+    <div class="features-grid-stitch">
+
+      <!-- Card 1: Student Information -->
+      <a href="pages/student-info.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-purple-stitch">
+          👤
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">Student Information</div>
+          <div class="feature-desc-stitch">Tell us about yourself</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+      <!-- Card 2: Educational Background -->
+      <a href="pages/education.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-green-stitch">
+          🎓
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">Educational Background</div>
+          <div class="feature-desc-stitch">Your education details</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+      <!-- Card 3: Government Scholarships -->
+      <a href="pages/scholarships.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-pink-stitch">
+          🪙
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">Government Scholarships</div>
+          <div class="feature-desc-stitch">Find available scholarships</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+      <!-- Card 4: Latest Jobs & Results -->
+      <a href="pages/jobs-results.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-blue-stitch">
+          💼
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">Latest Jobs &amp; Results</div>
+          <div class="feature-desc-stitch">Jobs, exams &amp; results</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+      <!-- Card 5: AI Career Guidance -->
+      <a href="pages/ai-guidance.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-amber-stitch">
+          💡
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">AI Career Guidance</div>
+          <div class="feature-desc-stitch">Get personalized career advice</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+      <!-- Card 6: YouTube Learning Resources -->
+      <a href="pages/youtube-resources.html" class="feature-box-card">
+        <div class="feature-icon-badge badge-red-stitch">
+          ▶️
+        </div>
+        <div class="feature-content-box">
+          <div class="feature-title-stitch">YouTube Learning Resources</div>
+          <div class="feature-desc-stitch">Recommended playlists &amp; courses</div>
+        </div>
+        <span class="feature-arrow-stitch">→</span>
+      </a>
+
+    </div>
+
+  </main>
+
+  <!-- Footer Tagline from Stitch -->
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script>
+    // Automatic Sliding Banner Carousel Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.getElementById('carouselTrack');
+      const prevBtn = document.getElementById('prevSlideBtn');
+      const nextBtn = document.getElementById('nextSlideBtn');
+      const dots = document.querySelectorAll('.carousel-dot');
+      const carouselWrapper = document.getElementById('homeCarousel');
+      const totalSlides = dots.length;
+      let currentIndex = 0;
+      let intervalId = null;
+
+      function goToSlide(index) {
+        currentIndex = (index + totalSlides) % totalSlides;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        dots.forEach((dot, idx) => {
+          if (idx === currentIndex) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      function nextSlide() {
+        goToSlide(currentIndex + 1);
+      }
+
+      function prevSlide() {
+        goToSlide(currentIndex - 1);
+      }
+
+      function startAutoSlide() {
+        if (!intervalId) {
+          intervalId = setInterval(nextSlide, 4000); // 4-second automatic sliding
+        }
+      }
+
+      function stopAutoSlide() {
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      // Next / Prev button events
+      if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          nextSlide();
+          stopAutoSlide();
+          startAutoSlide();
+        });
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          prevSlide();
+          stopAutoSlide();
+          startAutoSlide();
+        });
+      }
+
+      // Dot buttons
+      dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+          const idx = parseInt(dot.getAttribute('data-index'), 10);
+          goToSlide(idx);
+          stopAutoSlide();
+          startAutoSlide();
+        });
+      });
+
+      // Pause on hover
+      if (carouselWrapper) {
+        carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
+        carouselWrapper.addEventListener('mouseleave', startAutoSlide);
+      }
+
+      // Start automatic sliding
+      startAutoSlide();
+    });
+  </script>
+</body>
+</html>

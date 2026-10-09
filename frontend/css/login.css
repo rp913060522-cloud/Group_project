@@ -1,0 +1,264 @@
+/* ========================================================
+   SPLASH SCREEN & LOGIN PAGE STYLING (Google Stitch UI)
+   Exact match to: welcome page and login page.jpeg
+   ======================================================== */
+
+/* Splash Screen (1 sec or landing view) */
+.splash-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 10% 20%, #eaf3fe 0%, #ffffff 80%);
+  position: relative;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.splash-logo-box {
+  margin-bottom: 24px;
+}
+
+.splash-logo-box img {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto;
+}
+
+.splash-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.splash-title span {
+  color: var(--primary);
+  display: block;
+}
+
+.splash-tagline {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  letter-spacing: 0.5px;
+}
+
+.splash-welcome-box {
+  margin-top: 20px;
+}
+
+.splash-welcome-box h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.splash-welcome-box p {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.splash-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.splash-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bfdbfe;
+  transition: var(--transition);
+}
+
+.splash-dot.active {
+  background: var(--primary);
+  width: 24px;
+  border-radius: 12px;
+}
+
+/* ========================================================
+   LOGIN PAGE (Split Screen Design from Stitch)
+   ======================================================== */
+.login-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: stretch;
+  background: #ffffff;
+}
+
+/* Left Hero Illustration Column */
+.login-left-column {
+  flex: 1;
+  background: linear-gradient(180deg, #e4f0fe 0%, #d4e7fd 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left-header {
+  text-align: center;
+}
+
+.login-left-header img {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 12px;
+}
+
+.login-left-header h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.login-left-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.login-left-hero {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.login-left-hero h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.3;
+  margin-bottom: 24px;
+}
+
+.login-illustration-container {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Right Form Column */
+.login-right-column {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 60px;
+  background: #ffffff;
+}
+
+.login-form-box {
+  width: 100%;
+  max-width: 440px;
+}
+
+.login-form-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.login-form-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.login-options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 0.88rem;
+}
+
+.remember-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.auth-switch-text {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.auth-switch-text a {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.or-divider::before, .or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.or-divider span {
+  padding: 0 12px;
+}
+
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.google-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 900px) {
+  .login-page-wrapper {
+    flex-direction: column;
+  }
+  .login-left-column {
+    display: none;
+  }
+  .login-right-column {
+    padding: 40px 24px;
+  }
+}

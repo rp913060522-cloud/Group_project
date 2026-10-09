@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Educational Background | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link active">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link">Career Interest</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Card Container matching Stitch 5. Educational Background Page.jpeg -->
+  <main class="container" style="padding: 40px 20px 60px;">
+    
+    <div class="card" style="max-width: 680px; margin: 0 auto; box-shadow: var(--shadow-card);">
+      
+      <h1 class="card-title" style="font-size: 1.6rem; margin-bottom: 24px;">Educational Background</h1>
+
+      <form id="educationForm">
+        
+        <!-- Field 1: Current Education Level -->
+        <div class="form-group">
+          <label class="form-label" for="eduLevel">Current Education Level</label>
+          <select id="eduLevel" class="form-select no-icon" required>
+            <option value="">Select your current level</option>
+            <option value="10th Pass">10th Pass (High School)</option>
+            <option value="12th Pursuing">12th Pursuing (Senior Secondary)</option>
+            <option value="12th Pass">12th Pass</option>
+            <option value="ITI / Diploma">ITI Trade / Polytechnic Diploma</option>
+            <option value="Undergraduate">Undergraduate Degree (College)</option>
+          </select>
+        </div>
+
+        <!-- Field 2: Stream / Course -->
+        <div class="form-group">
+          <label class="form-label" for="stream">Stream / Course</label>
+          <select id="stream" class="form-select no-icon" required>
+            <option value="">Select your stream</option>
+            <option value="Science (PCM)">Science (Physics, Chemistry, Maths)</option>
+            <option value="Science (PCB)">Science (Physics, Chemistry, Biology)</option>
+            <option value="Commerce">Commerce (Accounts, Business, Economics)</option>
+            <option value="Arts / Humanities">Arts / Humanities (History, Pol Science)</option>
+            <option value="Vocational / ITI Trades">Vocational / ITI Trades (Technical)</option>
+            <option value="General School">General School Level (All Subjects)</option>
+          </select>
+        </div>
+
+        <!-- Field 3: Subjects (optional) -->
+        <div class="form-group">
+          <label class="form-label" for="subjects">Subjects (optional)</label>
+          <input type="text" id="subjects" class="form-control no-icon" placeholder="E.g. Maths, Physics, Computer Science">
+        </div>
+
+        <!-- Field 4: Marks / Percentage -->
+        <div class="form-group">
+          <label class="form-label" for="marks">Marks / Percentage</label>
+          <input type="text" id="marks" class="form-control no-icon" placeholder="Enter your marks or percentage" required>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center;">
+          <button type="submit" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
+            Save
+          </button>
+          <a href="career-interest.html" class="btn btn-outline" style="padding: 12px 24px;">
+            Next: Career Interest ➔
+          </a>
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/education.js"></script>
+</body>
+</html>

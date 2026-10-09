@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Learning Resources | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Styling matching Stitch 10. YouTube Learning Resources Page.png */
+    .yt-section-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-top: 24px;
+    }
+    .yt-section-heading {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+    .yt-playlist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .yt-playlist-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .yt-left-details {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-grow: 1;
+    }
+    .yt-thumbnail-box {
+      width: 170px;
+      height: 96px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0f172a;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .yt-thumbnail-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .yt-course-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .yt-channel-link {
+      color: var(--primary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+    .yt-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    @media (max-width: 768px) {
+      .yt-playlist-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .yt-left-details {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .yt-thumbnail-box {
+        width: 100%;
+        height: 160px;
+      }
+      .watch-youtube-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+        <li><a href="youtube-resources.html" class="nav-link active">YouTube Resources</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content matching Stitch 10. YouTube Learning Resources Page.png -->
+  <main class="container" style="padding: 40px 20px 60px;">
+    
+    <div style="max-width: 980px; margin: 0 auto;">
+      
+      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">YouTube Learning Resources</h1>
+      <p class="card-subtitle" style="margin-bottom: 20px;">
+        Based on your Interest (<span id="interestTopic">Data Science</span>), here are some recommended playlists from YouTube.
+      </p>
+
+      <!-- Container Card: Data Science -->
+      <div class="yt-section-card">
+        
+        <div class="yt-section-heading">Data Science</div>
+
+        <!-- Course 1: CodeWithHarry -->
+        <div class="yt-playlist-item">
+          <div class="yt-left-details">
+            <div class="yt-thumbnail-box" style="background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);">
+              <svg viewBox="0 0 170 96" width="170" height="96">
+                <rect width="170" height="96" fill="#0f172a"/>
+                <text x="12" y="30" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="bold">Python</text>
+                <text x="12" y="52" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">DATA SCIENCE</text>
+                <text x="12" y="70" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">FULL COURSE</text>
+                <rect x="12" y="76" width="95" height="14" rx="3" fill="#10b981"/>
+                <text x="16" y="87" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Beginner to Advanced</text>
+                <circle cx="140" cy="50" r="18" fill="#3b82f6" opacity="0.3"/>
+                <text x="133" y="56" fill="#ffffff" font-size="16">🐍</text>
+              </svg>
+            </div>
+            <div>
+              <div class="yt-course-title">Data Science Full Course (Beginner to Advanced)</div>
+              <a href="#" class="yt-channel-link">CodeWithHarry</a>
+              <div class="yt-meta-row">
+                <span>👁 3.2M Views</span>
+                <span>•</span>
+                <span>⏱ 150 videos</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Data Science Full Course (Beginner to Advanced)" data-url="https://www.youtube.com">
+            ▶ Watch on YouTube
+          </button>
+        </div>
+
+        <!-- Course 2: freeCodeCamp -->
+        <div class="yt-playlist-item">
+          <div class="yt-left-details">
+            <div class="yt-thumbnail-box" style="background: #0284c7;">
+              <svg viewBox="0 0 170 96" width="170" height="96">
+                <rect width="170" height="96" fill="#0369a1"/>
+                <text x="12" y="30" fill="#fef08a" font-family="sans-serif" font-size="12" font-weight="bold">Python</text>
+                <circle cx="85" cy="52" r="28" fill="#ffffff" opacity="0.15"/>
+                <text x="65" y="62" font-size="34">🐍</text>
+                <rect x="120" y="65" width="35" height="20" rx="3" fill="#38bdf8"/>
+                <text x="125" y="79" fill="#0c4a6e" font-size="10" font-weight="bold">📊 Data</text>
+              </svg>
+            </div>
+            <div>
+              <div class="yt-course-title">Python for Data Science</div>
+              <a href="#" class="yt-channel-link">freeCodeCamp.org</a>
+              <div class="yt-meta-row">
+                <span>👁 3.1M Views</span>
+                <span>•</span>
+                <span>⏱ 120 videos</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Python for Data Science" data-url="https://www.youtube.com">
+            ▶ Watch on YouTube
+          </button>
+        </div>
+
+        <!-- Course 3: Simplilearn -->
+        <div class="yt-playlist-item">
+          <div class="yt-left-details">
+            <div class="yt-thumbnail-box" style="background: #1e1b4b;">
+              <svg viewBox="0 0 170 96" width="170" height="96">
+                <rect width="170" height="96" fill="#1e1b4b"/>
+                <text x="12" y="36" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Data Science</text>
+                <text x="12" y="58" fill="#38bdf8" font-family="sans-serif" font-size="14" font-weight="bold">For Beginners</text>
+                <circle cx="135" cy="50" r="20" fill="#4338ca"/>
+                <text x="125" y="56" fill="#ffffff" font-size="16">📈</text>
+              </svg>
+            </div>
+            <div>
+              <div class="yt-course-title">Data Science for Beginners</div>
+              <a href="#" class="yt-channel-link">Simplilearn</a>
+              <div class="yt-meta-row">
+                <span>👁 2.3M Views</span>
+                <span>•</span>
+                <span>⏱ 100 videos</span>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Data Science for Beginners" data-url="https://www.youtube.com">
+            ▶ Watch on YouTube
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/youtube.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedInterest = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
+      if (savedInterest.field) {
+        const el = document.getElementById('interestTopic');
+        if (el) el.textContent = savedInterest.field;
+      }
+    });
+  </script>
+</body>
+</html>

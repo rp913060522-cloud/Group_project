@@ -1,0 +1,272 @@
+/* ========================================================
+   DASHBOARD / HOME PAGE STYLES (Google Stitch UI)
+   Exact match to: home page.jpeg
+   ======================================================== */
+
+.dashboard-page-container {
+  padding-top: 24px;
+  padding-bottom: 50px;
+}
+
+/* ========================================================
+   TOP SLIDING BANNER CAROUSEL
+   ======================================================== */
+.carousel-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 41, 66, 0.06);
+  margin-bottom: 28px;
+  background: #ffffff;
+}
+
+.carousel-slides-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+.carousel-item-slide {
+  min-width: 100%;
+  position: relative;
+  height: 280px;
+}
+
+.carousel-item-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Carousel Control Buttons */
+.carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffffff;
+  color: var(--text-main);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  transition: var(--transition);
+}
+
+.carousel-nav-btn:hover {
+  background: var(--primary);
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.carousel-nav-prev {
+  left: 20px;
+}
+
+.carousel-nav-next {
+  right: 20px;
+}
+
+.carousel-dots-group {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.carousel-dot.active {
+  background: var(--primary);
+  width: 24px;
+  border-radius: 12px;
+}
+
+/* ========================================================
+   WELCOME CARD SECTION (from home page.jpeg)
+   ======================================================== */
+.stitch-welcome-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-card);
+  gap: 20px;
+}
+
+.welcome-text-box h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.welcome-text-box p {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.welcome-quote-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: right;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-main);
+  font-style: italic;
+}
+
+.welcome-quote-box .seedling-icon {
+  font-size: 1.8rem;
+}
+
+/* ========================================================
+   6 MAIN FEATURE CARDS (Exact match to Stitch Home Page)
+   ======================================================== */
+.features-grid-stitch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-box-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+  position: relative;
+}
+
+.feature-box-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-hover);
+}
+
+.feature-icon-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* 6 Exact Badge Color Themes from Stitch */
+.badge-purple-stitch {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.badge-green-stitch {
+  background: #d1fae5;
+  color: #10b981;
+}
+
+.badge-pink-stitch {
+  background: #fce7f3;
+  color: #ec4899;
+}
+
+.badge-blue-stitch {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.badge-amber-stitch {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.badge-red-stitch {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.feature-content-box {
+  flex-grow: 1;
+}
+
+.feature-title-stitch {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.feature-desc-stitch {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.feature-arrow-stitch {
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-left: 8px;
+  transition: var(--transition);
+}
+
+.feature-box-card:hover .feature-arrow-stitch {
+  transform: translateX(4px);
+}
+
+/* Responsive */
+@media (max-width: 990px) {
+  .features-grid-stitch {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .carousel-item-slide {
+    height: 220px;
+  }
+}
+
+@media (max-width: 640px) {
+  .features-grid-stitch {
+    grid-template-columns: 1fr;
+  }
+  .stitch-welcome-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .welcome-quote-box {
+    text-align: left;
+  }
+  .carousel-item-slide {
+    height: 180px;
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest Jobs &amp; Results | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Styling matching Stitch 7. Latest Jobs & Results Page.jpeg */
+    .sarkari-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .sarkari-logo-text {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+    .sarkari-red {
+      color: #dc2626;
+    }
+    .sarkari-blue {
+      color: #0f2942;
+    }
+    .sarkari-card h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .sarkari-card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="scholarships.html" class="nav-link">Scholarships</a></li>
+        <li><a href="jobs-results.html" class="nav-link active">Jobs &amp; Results</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content matching Stitch 7. Latest Jobs & Results Page.jpeg -->
+  <main class="container" style="padding: 40px 20px 60px;">
+    
+    <div style="max-width: 680px; margin: 0 auto;">
+      
+      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">Latest Jobs &amp; Results</h1>
+      <p class="card-subtitle" style="margin-bottom: 20px;">Click below to visit SarkariResult for latest government jobs, exams and results.</p>
+
+      <!-- Center SarkariResult Card -->
+      <div class="sarkari-card">
+        <div class="sarkari-logo-text">
+          <span class="sarkari-red">Sarkari</span><span class="sarkari-blue">Result.com</span>
+        </div>
+
+        <h3>Sarkari Result</h3>
+        <p>Latest Jobs | Admit Cards | Results</p>
+
+        <button type="button" id="visitSarkariResultBtn" class="btn btn-primary btn-block" style="padding: 14px; font-size: 1.05rem;">
+          Visit Website ➔
+        </button>
+      </div>
+
+      <!-- Stitch Notice Alert Box -->
+      <div class="stitch-notice" style="margin-top: 24px;">
+        <div class="notice-icon-circle">i</div>
+        <div>
+          You will be redirected to the official SarkariResult website.
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/jobs-results.js"></script>
+</body>
+</html>

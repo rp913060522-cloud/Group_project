@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Career Guidance Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <!-- Split Screen Layout matching Stitch Login Page -->
+  <div class="login-page-wrapper">
+    
+    <!-- Left Hero Column -->
+    <div class="login-left-column">
+      <div class="login-left-header">
+        <img src="assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <h3>Career Guidance Portal</h3>
+        <p>Right Guidance | Better Future</p>
+      </div>
+
+      <div class="login-left-hero">
+        <h2>Explore Your Potential<br>Build Your Future</h2>
+        
+        <!-- Illustration matching Stitch -->
+        <div class="login-illustration-container">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" width="100%" height="auto">
+            <!-- Sky & Hills -->
+            <ellipse cx="200" cy="280" rx="190" ry="80" fill="#bfdbfe" opacity="0.3"/>
+            <circle cx="200" cy="190" r="70" fill="#fef08a" opacity="0.5"/>
+            <!-- Road -->
+            <path d="M170 320 Q 185 240 205 190 Q 215 240 230 320 Z" fill="#ffffff"/>
+            <!-- Signpost -->
+            <g transform="translate(225, 120)">
+              <rect x="25" y="0" width="8" height="180" fill="#475569" rx="2"/>
+              <!-- Sign 1: Career -->
+              <path d="M0 5 L65 5 L75 19 L65 33 L0 33 Z" fill="#2563eb"/>
+              <text x="12" y="24" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Career</text>
+              <!-- Sign 2: Education -->
+              <path d="M0 45 L75 45 L85 59 L75 73 L0 73 Z" fill="#10b981"/>
+              <text x="8" y="64" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Education</text>
+              <!-- Sign 3: Scholarship -->
+              <path d="M0 85 L85 85 L95 99 L85 113 L0 113 Z" fill="#f59e0b"/>
+              <text x="6" y="104" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Scholarship</text>
+              <!-- Sign 4: Success -->
+              <path d="M0 125 L68 125 L78 139 L68 153 L0 153 Z" fill="#8b5cf6"/>
+              <text x="10" y="144" font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#ffffff">Success</text>
+            </g>
+            <!-- Student Back View -->
+            <g transform="translate(130, 160)">
+              <circle cx="45" cy="30" r="16" fill="#1e293b"/>
+              <path d="M26 48 C26 48 40 42 62 48 L62 140 L26 140 Z" fill="#1d4ed8"/>
+              <!-- Backpack -->
+              <rect x="12" y="55" width="28" height="52" rx="12" fill="#2563eb"/>
+              <path d="M28 130 L35 140 L40 140 L40 160 L28 160 Z" fill="#0f172a"/>
+              <path d="M42 140 L50 130 L60 130 L60 160 L48 160 Z" fill="#0f172a"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <div style="text-align: center; font-size: 0.85rem; color: var(--text-light);">
+        Empowering Underprivileged Students
+      </div>
+    </div>
+
+    <!-- Right Login Form Column -->
+    <div class="login-right-column">
+      <div class="login-form-box">
+        <h1 class="login-form-title">Login</h1>
+        <p class="login-form-subtitle">Welcome back! Please login to your account.</p>
+
+        <form id="loginForm">
+          <!-- Email / Username -->
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email / Username</label>
+            <div class="input-with-icon">
+              <span class="input-icon">✉</span>
+              <input type="text" id="loginEmail" class="form-control" placeholder="Enter your email or username" value="student@demo.org" required>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="loginPassword">Password</label>
+            <div class="input-with-icon">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" value="password123" required>
+              <button type="button" id="togglePassword" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; font-size: 1.1rem; color: var(--text-light);">👁</button>
+            </div>
+          </div>
+
+          <!-- Remember Me & Forgot Password -->
+          <div class="login-options-row">
+            <label class="remember-checkbox">
+              <input type="checkbox" checked> Remember me
+            </label>
+            <a href="#" class="forgot-link" onclick="alert('For viva demo: Use student@demo.org with password123 to log in.'); return false;">Forgot Password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 13px; font-size: 1rem;">
+            Login
+          </button>
+        </form>
+
+        <div class="auth-switch-text">
+          Don't have an account? <a href="register.html">Register</a>
+        </div>
+
+        <div class="or-divider">
+          <span>OR</span>
+        </div>
+
+        <!-- Google Login Button -->
+        <button type="button" class="google-btn" onclick="alert('Google Auth is scheduled for Phase 2 integration.');">
+          <svg class="google-icon" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

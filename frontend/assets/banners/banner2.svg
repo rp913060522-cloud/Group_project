@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdf2f8"/>
+      <stop offset="60%" stop-color="#fce7f3"/>
+      <stop offset="100%" stop-color="#fbcfe8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" rx="20" fill="url(#bg2)"/>
+  <circle cx="1000" cy="180" r="140" fill="#ffffff" opacity="0.6"/>
+  
+  <g transform="translate(90, 85)">
+    <text x="0" y="50" font-family="Segoe UI, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#831843">Government</text>
+    <text x="0" y="105" font-family="Segoe UI, -apple-system, sans-serif" font-size="44" font-weight="800" fill="#db2777">Scholarships</text>
+    <text x="0" y="152" font-family="Segoe UI, -apple-system, sans-serif" font-size="19" fill="#475569">Explore national and state financial aid schemes</text>
+    <text x="0" y="180" font-family="Segoe UI, -apple-system, sans-serif" font-size="19" fill="#475569">for higher studies and skill certifications.</text>
+    <rect x="0" y="210" width="220" height="46" rx="23" fill="#db2777"/>
+    <text x="24" y="240" font-family="Segoe UI, -apple-system, sans-serif" font-size="17" font-weight="600" fill="#ffffff">View Scholarships ➔</text>
+  </g>
+  <g transform="translate(880, 80)">
+    <circle cx="90" cy="90" r="80" fill="#ffffff" opacity="0.8"/>
+    <text x="45" y="115" font-size="75">🪙</text>
+  </g>
+</svg>

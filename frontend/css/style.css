@@ -1,0 +1,493 @@
+/* ========================================================
+   CAREER GUIDANCE PORTAL - DESIGN SYSTEM (Google Stitch UI)
+   College CEP Project for Underprivileged Students
+   Palette: Clean Soft Blue / Crisp White / Pastel Accents
+   ======================================================== */
+
+:root {
+  /* Stitch Primary Brand */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --primary-border: #bfdbfe;
+
+  /* Accent Colors */
+  --accent-green: #10b981;
+  --accent-green-bg: #ecfdf5;
+  --accent-amber: #f59e0b;
+  --accent-amber-bg: #fffbeb;
+  --accent-pink: #ec4899;
+  --accent-pink-bg: #fdf2f8;
+  --accent-purple: #7c3aed;
+  --accent-purple-bg: #f5f3ff;
+  --accent-red: #ef4444;
+  --accent-red-bg: #fee2e2;
+
+  /* Typography & Neutrals */
+  --text-main: #0f2942;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  --bg-page: #f1f7fe;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --border-light: #edf2f7;
+
+  /* Radius & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 12px rgba(15, 41, 66, 0.05);
+  --shadow-hover: 0 8px 24px rgba(37, 99, 235, 0.1);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.6;
+  font-size: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ========================================================
+   TOP NAVIGATION BAR (Google Stitch Style)
+   ======================================================== */
+.navbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-brand img {
+  width: 38px;
+  height: 38px;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 6px;
+}
+
+.nav-link {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  transition: var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 14px;
+  right: 14px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 3px 3px 0 0;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.nav-user img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-main);
+}
+
+/* ========================================================
+   CARDS & CONTAINERS
+   ======================================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+}
+
+.card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.card-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* ========================================================
+   STEPPER SIDEBAR (from student registration.jpeg)
+   ======================================================== */
+.stepper-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  gap: 24px;
+  margin: 30px 0;
+}
+
+.stepper-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stepper-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.stepper-item.active {
+  background: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.12);
+  border-left: 4px solid var(--primary);
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.88rem;
+  background: #f1f5f9;
+  color: var(--text-muted);
+}
+
+.stepper-item.active .step-circle {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.step-text .step-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.step-text .step-desc {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+/* Right Info Card */
+.info-card-side {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  height: fit-content;
+}
+
+.info-avatar-box {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-card-side h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.info-card-side p {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.safe-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ========================================================
+   FORM CONTROLS (Stitch Style)
+   ======================================================== */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.form-label .required {
+  color: #ef4444;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  pointer-events: none;
+}
+
+.form-control, .form-select {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  font-size: 0.92rem;
+  color: var(--text-main);
+  background-color: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-control.no-icon, .form-select.no-icon {
+  padding-left: 14px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* ========================================================
+   BUTTONS (Google Stitch Style)
+   ======================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-outline {
+  background: #ffffff;
+  border-color: var(--border);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background: #f8fafc;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ========================================================
+   INFO ALERT NOTICES
+   ======================================================== */
+.stitch-notice {
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.9rem;
+  color: #1e40af;
+  margin-top: 24px;
+}
+
+.notice-icon-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Footer Tagline */
+.portal-footer {
+  margin-top: auto;
+  padding: 24px 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  background: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .stepper-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    flex-direction: column;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .nav-links.show {
+    display: flex;
+  }
+  .mobile-toggle {
+    display: block;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Scholarships | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Styling matching Stitch 6. Government Scholarships Page.png */
+    .scholarship-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .scholarship-link-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+    .scholarship-link-card:hover {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+      transform: translateY(-2px);
+    }
+    .sch-left-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .sch-emblem-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: #f8fafc;
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+    .sch-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+    .sch-url-text {
+      font-size: 0.88rem;
+      color: var(--primary);
+    }
+    .sch-arrow {
+      color: #1e3a8a;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="scholarships.html" class="nav-link active">Scholarships</a></li>
+        <li><a href="jobs-results.html" class="nav-link">Jobs &amp; Results</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content matching Stitch 6. Government Scholarships Page.png -->
+  <main class="container" style="padding: 40px 20px 60px;">
+    
+    <div style="max-width: 720px; margin: 0 auto;">
+      
+      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">Government Scholarships</h1>
+      <p class="card-subtitle" style="margin-bottom: 24px;">Click on the links below to visit official government websites for scholarship information.</p>
+
+      <div class="scholarship-list-container">
+        
+        <!-- Link 1: NSP -->
+        <div class="scholarship-link-card" data-url="https://scholarships.gov.in" data-name="National Scholarship Portal (NSP)">
+          <div class="sch-left-content">
+            <div class="sch-emblem-icon">🏛️</div>
+            <div>
+              <div class="sch-title">National Scholarship Portal (NSP)</div>
+              <div class="sch-url-text">https://scholarships.gov.in</div>
+            </div>
+          </div>
+          <span class="sch-arrow">›</span>
+        </div>
+
+        <!-- Link 2: Mahatma Azad / UGC -->
+        <div class="scholarship-link-card" data-url="https://www.ugc.ac.in" data-name="Mahatma Azad National Fellowship">
+          <div class="sch-left-content">
+            <div class="sch-emblem-icon">🎓</div>
+            <div>
+              <div class="sch-title">Mahatma Azad National Fellowship</div>
+              <div class="sch-url-text">https://www.ugc.ac.in</div>
+            </div>
+          </div>
+          <span class="sch-arrow">›</span>
+        </div>
+
+        <!-- Link 3: State Government Scholarships -->
+        <div class="scholarship-link-card" data-url="#" data-name="State Government Scholarships">
+          <div class="sch-left-content">
+            <div class="sch-emblem-icon">🏛️</div>
+            <div>
+              <div class="sch-title">State Government Scholarships</div>
+              <div class="sch-url-text" style="color: var(--text-muted);">(Varies by state)</div>
+            </div>
+          </div>
+          <span class="sch-arrow">›</span>
+        </div>
+
+        <!-- Link 4: Other Useful Portals -->
+        <div class="scholarship-link-card" data-url="#" data-name="Other Useful Portals">
+          <div class="sch-left-content">
+            <div class="sch-emblem-icon">🌐</div>
+            <div>
+              <div class="sch-title">Other Useful Portals</div>
+              <div class="sch-url-text" style="color: var(--text-muted);">(Check your state website)</div>
+            </div>
+          </div>
+          <span class="sch-arrow">›</span>
+        </div>
+
+      </div>
+
+      <!-- Stitch Info Notice Box -->
+      <div class="stitch-notice">
+        <div class="notice-icon-circle">i</div>
+        <div>
+          <strong>Note:</strong> We do not handle scholarship applications.<br>
+          You will be redirected to the official websites.
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/scholarships.js"></script>
+</body>
+</html>

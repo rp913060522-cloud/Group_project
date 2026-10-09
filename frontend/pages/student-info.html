@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Information | Career Guidance Portal</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Matching Stitch Design) -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
+        <span class="brand-title">Career Guidance Portal</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link active">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link">Career Interest</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+      </ul>
+
+      <div class="nav-user">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">⌄</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3-Column Stepper Layout matching Stitch student registation.jpeg -->
+  <main class="container">
+    <div class="stepper-layout">
+
+      <!-- Column 1: Left Stepper Navigation -->
+      <aside class="stepper-sidebar">
+        <!-- Step 1 (Active) -->
+        <div class="stepper-item active">
+          <div class="step-circle">1</div>
+          <div class="step-text">
+            <div class="step-title">Student Information</div>
+            <div class="step-desc">Basic personal details</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <a href="education.html" class="stepper-item" style="text-decoration: none;">
+          <div class="step-circle">2</div>
+          <div class="step-text">
+            <div class="step-title">Educational Background</div>
+            <div class="step-desc">Your academic details</div>
+          </div>
+        </a>
+
+        <!-- Step 3 -->
+        <a href="career-interest.html" class="stepper-item" style="text-decoration: none;">
+          <div class="step-circle">3</div>
+          <div class="step-text">
+            <div class="step-title">Career Interest</div>
+            <div class="step-desc">Your interests &amp; goals</div>
+          </div>
+        </a>
+
+        <!-- Step 4 -->
+        <a href="ai-guidance.html" class="stepper-item" style="text-decoration: none;">
+          <div class="step-circle">4</div>
+          <div class="step-text">
+            <div class="step-title">Review &amp; Submit</div>
+            <div class="step-desc">Confirm and submit</div>
+          </div>
+        </a>
+      </aside>
+
+      <!-- Column 2: Center Main Form Card -->
+      <section class="card" style="box-shadow: var(--shadow-card);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: #e0edff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+              👤
+            </div>
+            <div>
+              <h1 class="card-title" style="margin-bottom: 0;">Student Information</h1>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline" id="viewProfileModalBtn" style="font-size: 0.85rem; padding: 6px 14px;">
+            👁 View My Profile Card
+          </button>
+        </div>
+        <p class="card-subtitle" style="margin-bottom: 28px;">Please provide your basic personal details to get started.</p>
+
+        <form id="studentInfoForm">
+          <!-- Row 1: Full Name & Age -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <span class="input-icon">👤</span>
+                <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="age">Age <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <span class="input-icon">📅</span>
+                <input type="number" id="age" class="form-control" placeholder="Enter your age" min="10" max="60" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Gender & Phone Number -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="gender">Gender <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <span class="input-icon">⚧</span>
+                <select id="gender" class="form-select" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone Number <span class="required">*</span></label>
+              <div class="input-with-icon">
+                <span class="input-icon">📞</span>
+                <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Email -->
+          <div class="form-group">
+            <label class="form-label" for="email">Email <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="input-icon">✉</span>
+              <input type="email" id="email" class="form-control" placeholder="Enter your email (optional)" required>
+            </div>
+          </div>
+
+          <!-- Row 4: City / Location -->
+          <div class="form-group">
+            <label class="form-label" for="location">City / Location <span class="required">*</span></label>
+            <div class="input-with-icon">
+              <span class="input-icon">📍</span>
+              <input type="text" id="location" class="form-control" placeholder="Enter your city or location" required>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <a href="../dashboard.html" class="btn btn-outline">
+              ← Back
+            </a>
+            <button type="submit" class="btn btn-primary" style="padding: 12px 28px;">
+              Save &amp; Continue ➔
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Column 3: Right Information Card -->
+      <aside class="info-card-side">
+        <div class="info-avatar-box">
+          <img src="../assets/icons/student-avatar.svg" alt="Student Illustration" style="width: 80px; height: 80px;">
+        </div>
+        <h4>Your Information Helps Us</h4>
+        <p>This information helps us provide personalized career guidance and better suggestions for your future.</p>
+        <div class="safe-badge">
+          <span>🛡️</span> Your data is safe with us
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Stitch Design 11: Profile Card Preview Modal -->
+    <div id="profileCardModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+      <div style="background: #ffffff; border-radius: var(--radius-lg); width: 100%; max-width: 820px; box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column;">
+        <div style="padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-main);">My Profile (Stitch Design 11)</h3>
+          <button type="button" id="closeProfileModalBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 260px; gap: 24px; padding: 28px;">
+          <!-- Left: Profile Details -->
+          <div>
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+              <img src="../assets/icons/student-avatar.svg" alt="Student Avatar" style="width: 64px; height: 64px; border-radius: 50%;">
+              <div>
+                <h4 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);" id="cardProfileName">Student</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted);" id="cardProfileEmail">student@example.com</p>
+              </div>
+            </div>
+
+            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px;">
+              <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; color: var(--text-main);">Profile Details</div>
+              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 10px; font-size: 0.92rem;">
+                <div style="color: var(--text-muted);">Name</div>
+                <div style="font-weight: 600;" id="dtName">: Student</div>
+
+                <div style="color: var(--text-muted);">Email</div>
+                <div style="font-weight: 600;" id="dtEmail">: student@example.com</div>
+
+                <div style="color: var(--text-muted);">Phone</div>
+                <div style="font-weight: 600;" id="dtPhone">: 98706543210</div>
+
+                <div style="color: var(--text-muted);">Education</div>
+                <div style="font-weight: 600;" id="dtEdu">: 12th (Science)</div>
+
+                <div style="color: var(--text-muted);">Interest</div>
+                <div style="font-weight: 600;" id="dtInterest">: Data Science</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Motivation Banner from Design 11 -->
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+            <div style="font-size: 2.2rem; margin-bottom: 16px;">🌱</div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; color: #1e40af; margin-bottom: 6px;">Your Journey</h4>
+            <h4 style="font-size: 1.15rem; font-weight: 800; color: #1e40af; margin-bottom: 6px;">Is Important</h4>
+            <p style="font-size: 0.95rem; font-weight: 600; color: var(--primary);">Keep Going!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Tagline from Stitch -->
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/student.js"></script>
+</body>
+</html>
