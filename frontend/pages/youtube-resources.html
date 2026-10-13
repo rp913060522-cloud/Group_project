@@ -3,94 +3,419 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YouTube Learning Resources | Career Guidance Portal</title>
+  <title>CareerSetu | YouTube Learning Resources</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    /* Styling matching Stitch 10. YouTube Learning Resources Page.png */
-    .yt-section-card {
+    /* ========================================================
+       YOUTUBE LEARNING RESOURCES PAGE STYLING
+       Google Stitch Design System (Soft Blue & Crisp White)
+       ======================================================== */
+
+    .yt-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* Hero / Header Section */
+    .yt-hero-section {
+      margin-bottom: 24px;
+    }
+    .yt-page-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
+    .yt-page-subtitle {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      max-width: 820px;
+      line-height: 1.55;
+    }
+    .yt-interest-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 5px 14px;
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Search & Filter Toolbar Card */
+    .yt-controls-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 28px;
-      box-shadow: var(--shadow-card);
-      margin-top: 24px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 26px;
     }
-    .yt-section-heading {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-main);
+
+    /* Search Input Wrapper */
+    .yt-search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      transition: var(--transition);
       margin-bottom: 20px;
     }
-    .yt-playlist-item {
+    .yt-search-wrapper:focus-within {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .yt-search-icon {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-right: 12px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .yt-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.96rem;
+      color: var(--text-main);
+      font-family: inherit;
+    }
+    .yt-search-input::placeholder {
+      color: var(--text-light);
+    }
+    .yt-clear-btn {
+      background: #e2e8f0;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: bold;
+      transition: var(--transition);
+      margin-left: 8px;
+    }
+    .yt-clear-btn:hover {
+      background: #cbd5e1;
+      color: #0f172a;
+    }
+
+    /* Category Filter Section */
+    .category-filters-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 10px;
     }
-    .yt-playlist-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .category-filters-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
     }
-    .yt-left-details {
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 7px 15px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      user-select: none;
+    }
+    .filter-pill:hover {
+      background: #edf2f7;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+    .filter-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .filter-pill .pill-count {
+      font-size: 0.78rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    .filter-pill.active .pill-count {
+      opacity: 0.95;
+    }
+
+    /* Results Header Bar */
+    .yt-results-bar {
       display: flex;
       align-items: center;
-      gap: 20px;
-      flex-grow: 1;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
-    .yt-thumbnail-box {
-      width: 170px;
-      height: 96px;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #0f172a;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .yt-thumbnail-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .yt-course-title {
+    .yt-results-count {
       font-size: 1.05rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 4px;
     }
-    .yt-channel-link {
+    .yt-active-filter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--primary-border);
+    }
+
+    /* Playlists Grid */
+    .yt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 24px;
+    }
+
+    /* Individual Playlist Card */
+    .yt-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .yt-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+      border-color: var(--primary-border);
+    }
+    .yt-card-thumbnail-wrap {
+      position: relative;
+      width: 100%;
+      height: 175px;
+      background: #0f172a;
+      overflow: hidden;
+    }
+    .yt-card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .yt-card:hover .yt-card-thumb {
+      transform: scale(1.04);
+    }
+    .yt-card-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+    .yt-card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .yt-card-category {
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 10px;
+    }
+    .yt-card-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.42;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.84em;
+    }
+    .yt-card-channel {
       font-size: 0.88rem;
       font-weight: 600;
-      margin-bottom: 6px;
-      display: inline-block;
-    }
-    .yt-meta-row {
+      color: var(--text-muted);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 0.82rem;
-      color: var(--text-muted);
+      gap: 6px;
     }
+    .yt-channel-icon {
+      color: #ef4444;
+      font-size: 0.82rem;
+    }
+    .yt-skills-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+      flex-grow: 1;
+      align-content: flex-start;
+    }
+    .skill-tag {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      font-size: 0.74rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .yt-card-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .yt-card-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .watch-youtube-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 16px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+    .watch-youtube-btn:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    .watch-youtube-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Empty State */
+    .yt-no-results {
+      text-align: center;
+      padding: 60px 24px;
+      background: #ffffff;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      margin: 20px 0;
+      display: none;
+    }
+    .yt-empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 14px;
+      opacity: 0.85;
+    }
+    .yt-empty-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .yt-empty-desc {
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+    .btn-reset-filters {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: #ffffff;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .btn-reset-filters:hover {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Mobile Responsive Adjustments */
     @media (max-width: 768px) {
-      .yt-playlist-item {
+      .yt-container {
+        padding: 24px 16px 40px;
+      }
+      .yt-controls-card {
+        padding: 16px;
+      }
+      .yt-results-bar {
         flex-direction: column;
         align-items: flex-start;
       }
-      .yt-left-details {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .yt-thumbnail-box {
-        width: 100%;
-        height: 160px;
-      }
-      .watch-youtube-btn {
-        width: 100%;
+      .yt-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
     }
   </style>
@@ -101,14 +426,19 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
+
+      <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+        ☰
+      </button>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="../dashboard.html" class="nav-link">Home</a></li>
         <li><a href="student-info.html" class="nav-link">Student Information</a></li>
         <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link">Career Interest</a></li>
         <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
         <li><a href="youtube-resources.html" class="nav-link active">YouTube Resources</a></li>
       </ul>
@@ -120,124 +450,118 @@
     </div>
   </nav>
 
-  <!-- Main Content matching Stitch 10. YouTube Learning Resources Page.png -->
-  <main class="container" style="padding: 40px 20px 60px;">
+  <!-- Main Content Area -->
+  <main class="yt-container">
     
-    <div style="max-width: 980px; margin: 0 auto;">
-      
-      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">YouTube Learning Resources</h1>
-      <p class="card-subtitle" style="margin-bottom: 20px;">
-        Based on your Interest (<span id="interestTopic">Data Science</span>), here are some recommended playlists from YouTube.
+    <!-- Hero Header -->
+    <header class="yt-hero-section">
+      <h1 class="yt-page-title">YouTube Learning Resources</h1>
+      <p class="yt-page-subtitle">
+        Curated free courses, roadmaps, and high-yield video playlists from top educational creators to help you master modern job skills and competitive entrance exams.
       </p>
+      <div class="yt-interest-badge">
+        🎯 <span>Recommended for: <strong id="interestTopic">General Exploration</strong></span>
+      </div>
+    </header>
 
-      <!-- Container Card: Data Science -->
-      <div class="yt-section-card">
-        
-        <div class="yt-section-heading">Data Science</div>
-
-        <!-- Course 1: CodeWithHarry -->
-        <div class="yt-playlist-item">
-          <div class="yt-left-details">
-            <div class="yt-thumbnail-box" style="background: linear-gradient(135deg, #090d16 0%, #1e293b 100%);">
-              <svg viewBox="0 0 170 96" width="170" height="96">
-                <rect width="170" height="96" fill="#0f172a"/>
-                <text x="12" y="30" fill="#38bdf8" font-family="sans-serif" font-size="11" font-weight="bold">Python</text>
-                <text x="12" y="52" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">DATA SCIENCE</text>
-                <text x="12" y="70" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">FULL COURSE</text>
-                <rect x="12" y="76" width="95" height="14" rx="3" fill="#10b981"/>
-                <text x="16" y="87" fill="#ffffff" font-family="sans-serif" font-size="9" font-weight="bold">Beginner to Advanced</text>
-                <circle cx="140" cy="50" r="18" fill="#3b82f6" opacity="0.3"/>
-                <text x="133" y="56" fill="#ffffff" font-size="16">🐍</text>
-              </svg>
-            </div>
-            <div>
-              <div class="yt-course-title">Data Science Full Course (Beginner to Advanced)</div>
-              <a href="#" class="yt-channel-link">CodeWithHarry</a>
-              <div class="yt-meta-row">
-                <span>👁 3.2M Views</span>
-                <span>•</span>
-                <span>⏱ 150 videos</span>
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Data Science Full Course (Beginner to Advanced)" data-url="https://www.youtube.com">
-            ▶ Watch on YouTube
-          </button>
-        </div>
-
-        <!-- Course 2: freeCodeCamp -->
-        <div class="yt-playlist-item">
-          <div class="yt-left-details">
-            <div class="yt-thumbnail-box" style="background: #0284c7;">
-              <svg viewBox="0 0 170 96" width="170" height="96">
-                <rect width="170" height="96" fill="#0369a1"/>
-                <text x="12" y="30" fill="#fef08a" font-family="sans-serif" font-size="12" font-weight="bold">Python</text>
-                <circle cx="85" cy="52" r="28" fill="#ffffff" opacity="0.15"/>
-                <text x="65" y="62" font-size="34">🐍</text>
-                <rect x="120" y="65" width="35" height="20" rx="3" fill="#38bdf8"/>
-                <text x="125" y="79" fill="#0c4a6e" font-size="10" font-weight="bold">📊 Data</text>
-              </svg>
-            </div>
-            <div>
-              <div class="yt-course-title">Python for Data Science</div>
-              <a href="#" class="yt-channel-link">freeCodeCamp.org</a>
-              <div class="yt-meta-row">
-                <span>👁 3.1M Views</span>
-                <span>•</span>
-                <span>⏱ 120 videos</span>
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Python for Data Science" data-url="https://www.youtube.com">
-            ▶ Watch on YouTube
-          </button>
-        </div>
-
-        <!-- Course 3: Simplilearn -->
-        <div class="yt-playlist-item">
-          <div class="yt-left-details">
-            <div class="yt-thumbnail-box" style="background: #1e1b4b;">
-              <svg viewBox="0 0 170 96" width="170" height="96">
-                <rect width="170" height="96" fill="#1e1b4b"/>
-                <text x="12" y="36" fill="#ffffff" font-family="sans-serif" font-size="14" font-weight="bold">Data Science</text>
-                <text x="12" y="58" fill="#38bdf8" font-family="sans-serif" font-size="14" font-weight="bold">For Beginners</text>
-                <circle cx="135" cy="50" r="20" fill="#4338ca"/>
-                <text x="125" y="56" fill="#ffffff" font-size="16">📈</text>
-              </svg>
-            </div>
-            <div>
-              <div class="yt-course-title">Data Science for Beginners</div>
-              <a href="#" class="yt-channel-link">Simplilearn</a>
-              <div class="yt-meta-row">
-                <span>👁 2.3M Views</span>
-                <span>•</span>
-                <span>⏱ 100 videos</span>
-              </div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary watch-youtube-btn" data-title="Data Science for Beginners" data-url="https://www.youtube.com">
-            ▶ Watch on YouTube
-          </button>
-        </div>
-
+    <!-- Search & Filter Controls -->
+    <section class="yt-controls-card" aria-label="Search and Filter Playlists">
+      
+      <!-- Instant Search Bar -->
+      <div class="yt-search-wrapper">
+        <span class="yt-search-icon" aria-hidden="true">🔍</span>
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="yt-search-input" 
+          placeholder="Search playlists, courses or skills..." 
+          autocomplete="off"
+          aria-label="Search playlists, courses or skills"
+        >
+        <button type="button" id="clearSearchBtn" class="yt-clear-btn" aria-label="Clear search query" title="Clear search">
+          ✕
+        </button>
       </div>
 
+      <!-- Category Filter Pills -->
+      <div class="category-filters-container">
+        <div class="category-filters-header">
+          <span class="category-filters-title">Filter by Category</span>
+        </div>
+        <div class="category-filters" id="categoryFilters" role="toolbar" aria-label="Playlist category filters">
+          <button type="button" class="filter-pill active" data-category="All">
+            ✨ All Playlists <span class="pill-count">(100)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="Programming & Web Development">
+            💻 Programming & Web Dev <span class="pill-count">(20)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="Computer Fundamentals & IT">
+            🖥️ Computer Fundamentals <span class="pill-count">(15)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="AI, Data Science & Cybersecurity">
+            🤖 AI & Data Science <span class="pill-count">(15)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="Government & Entrance Exam Preparation">
+            🏛️ Government Exams <span class="pill-count">(20)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="English & Communication Skills">
+            🗣️ English & Communication <span class="pill-count">(10)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="Career Skills, Resume & Interview Preparation">
+            💼 Career & Interviews <span class="pill-count">(10)</span>
+          </button>
+          <button type="button" class="filter-pill" data-category="Mathematics & Aptitude">
+            📐 Maths & Aptitude <span class="pill-count">(10)</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Results Status Bar -->
+    <div class="yt-results-bar">
+      <div id="resultsCount" class="yt-results-count">Showing 100 playlists</div>
+      <div id="activeFilterLabel" class="yt-active-filter-label">All Categories</div>
+    </div>
+
+    <!-- Empty State Container -->
+    <div class="yt-no-results" id="noResultsContainer" role="status">
+      <div class="yt-empty-icon">🔍</div>
+      <h2 class="yt-empty-title">No playlists found</h2>
+      <p class="yt-empty-desc">
+        We couldn't find any learning resources matching your current search or category filter. Try searching for a different keyword or reset filters.
+      </p>
+      <button type="button" class="btn-reset-filters" id="resetFiltersBtn">
+        ↺ Reset Filters & Search
+      </button>
+    </div>
+
+    <!-- Playlists Dynamic Grid Container -->
+    <div class="yt-grid" id="playlistsGrid">
+      <!-- Cards rendered dynamically by youtube.js -->
     </div>
 
   </main>
 
+  <!-- Portal Footer -->
   <footer class="portal-footer">
     Empowering Underprivileged Students | Better Education ◆ Brighter Future
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/auth.js"></script>
   <script src="../js/youtube.js"></script>
   <script>
+    // Personalize interest banner if student saved their career interest earlier
     document.addEventListener('DOMContentLoaded', () => {
-      const savedInterest = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
-      if (savedInterest.field) {
-        const el = document.getElementById('interestTopic');
-        if (el) el.textContent = savedInterest.field;
+      try {
+        const savedInterest = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
+        if (savedInterest.field) {
+          const el = document.getElementById('interestTopic');
+          if (el) el.textContent = savedInterest.field;
+        }
+      } catch (err) {
+        console.warn('Could not read saved student interest:', err);
       }
     });
   </script>

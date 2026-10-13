@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career Interest | Career Guidance Portal</title>
+  <title>CareerSetu | Career Interest</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,8 +12,8 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
@@ -80,13 +80,13 @@
         </div>
 
         <!-- Action Buttons -->
-        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center;">
-          <button type="submit" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
-            Save
-          </button>
-          <a href="ai-guidance.html" class="btn btn-outline" style="padding: 12px 24px;">
-            Continue to AI Guidance ➔
+        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <a href="education.html" class="btn btn-outline" style="padding: 12px 24px;">
+            ← Back
           </a>
+          <button type="submit" id="saveInterestBtn" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
+            Save &amp; Continue to AI Guidance ➔
+          </button>
         </div>
 
       </form>
@@ -101,28 +101,183 @@
 
   <script src="../js/auth.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const form = document.getElementById('careerInterestForm');
-      const saved = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
 
-      if (saved.field) document.getElementById('interestField').value = saved.field;
-      if (saved.favSubjects) document.getElementById('favSubjects').value = saved.favSubjects;
-      if (saved.preference) document.getElementById('careerPreference').value = saved.preference;
-      if (saved.skills) document.getElementById('skillsToLearn').value = saved.skills;
+      function getStudentToken() {
+        return sessionStorage.getItem('student_token') || '';
+      }
 
+      function isGuestSession() {
+        return sessionStorage.getItem('is_guest_user') === 'true' || !sessionStorage.getItem('student_token');
+      }
+
+      function showFormMessage(message, type = 'error') {
+        if (!form) return;
+        let msgEl = form.querySelector('.form-message-banner');
+        if (!msgEl) {
+          msgEl = document.createElement('div');
+          msgEl.className = 'form-message-banner';
+          form.insertBefore(msgEl, form.firstChild);
+        }
+        msgEl.textContent = message;
+        msgEl.style.display = 'block';
+        msgEl.style.padding = '10px 14px';
+        msgEl.style.marginBottom = '16px';
+        msgEl.style.borderRadius = '8px';
+        msgEl.style.fontSize = '0.9rem';
+        msgEl.style.fontWeight = '500';
+        if (type === 'error') {
+          msgEl.style.background = '#fef2f2';
+          msgEl.style.border = '1px solid #fecaca';
+          msgEl.style.color = '#dc2626';
+        } else if (type === 'info') {
+          msgEl.style.background = '#eff6ff';
+          msgEl.style.border = '1px solid #bfdbfe';
+          msgEl.style.color = '#1d4ed8';
+        } else {
+          msgEl.style.background = '#f0fdf4';
+          msgEl.style.border = '1px solid #bbf7d0';
+          msgEl.style.color = '#16a34a';
+        }
+      }
+
+      function populateInterestFields(saved) {
+        if (!saved) return;
+        if (saved.field && document.getElementById('interestField')) document.getElementById('interestField').value = saved.field;
+        if (saved.favSubjects && document.getElementById('favSubjects')) document.getElementById('favSubjects').value = saved.favSubjects;
+        if (saved.preference && document.getElementById('careerPreference')) document.getElementById('careerPreference').value = saved.preference;
+        if (saved.skills && document.getElementById('skillsToLearn')) document.getElementById('skillsToLearn').value = saved.skills;
+      }
+
+      // 1. Initial pre-fill from localStorage
+      const localSaved = JSON.parse(localStorage.getItem('student_career_interest') || '{}');
+      populateInterestFields(localSaved);
+
+      // 2. Fetch authenticated profile from API if user has a valid JWT token
+      const activeToken = getStudentToken();
+      const guestActive = isGuestSession();
+
+      if (activeToken && !guestActive) {
+        try {
+          const response = await fetch('/api/student/profile', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${activeToken}`
+            }
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            if (result && result.student && result.student.careerInterest) {
+              const interest = result.student.careerInterest;
+              populateInterestFields(interest);
+
+              localStorage.setItem('student_career_interest', JSON.stringify({
+                ...localSaved,
+                ...interest
+              }));
+            }
+          }
+        } catch (err) {
+          console.warn('[career-interest] Could not load profile from server, using local data:', err.message);
+        }
+      } else if (guestActive) {
+        showFormMessage('ℹ️ You are exploring as a Guest. Changes will be saved locally on this device only. Log in to save your profile permanently.', 'info');
+      }
+
+      // 3. Handle Form Submit
       if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
           e.preventDefault();
+
+          const field = document.getElementById('interestField').value;
+          const favSubjects = document.getElementById('favSubjects').value.trim();
+          const preference = document.getElementById('careerPreference').value;
+          const skills = document.getElementById('skillsToLearn').value.trim();
+
           const interestData = {
-            field: document.getElementById('interestField').value,
-            favSubjects: document.getElementById('favSubjects').value.trim(),
-            preference: document.getElementById('careerPreference').value,
-            skills: document.getElementById('skillsToLearn').value.trim(),
+            field,
+            favSubjects,
+            preference,
+            skills,
             updatedAt: new Date().toLocaleDateString()
           };
+
+          // Cache locally
           localStorage.setItem('student_career_interest', JSON.stringify(interestData));
-          alert('Career Interest preferences saved! Ready for AI Guidance.');
-          window.location.href = 'ai-guidance.html';
+
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const originalBtnText = 'Save & Continue to AI Guidance ➔';
+          const userToken = getStudentToken();
+          const isGuestUser = isGuestSession();
+
+          // Clear prior message banner
+          const prevMsg = form.querySelector('.form-message-banner');
+          if (prevMsg) prevMsg.style.display = 'none';
+
+          if (userToken && !isGuestUser) {
+            if (submitBtn) {
+              submitBtn.disabled = true;
+              submitBtn.textContent = 'Saving to account...';
+            }
+
+            try {
+              const response = await fetch('/api/student/career-interest', {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                  field,
+                  favSubjects,
+                  preference,
+                  skills
+                })
+              });
+
+              const data = await response.json().catch(() => ({}));
+
+              if (!response.ok) {
+                showFormMessage(data.message || 'Failed to save career interests.', 'error');
+                if (submitBtn) {
+                  submitBtn.disabled = false;
+                  submitBtn.textContent = originalBtnText;
+                  submitBtn.style.background = '';
+                }
+                return;
+              }
+
+              // Success visual confirmation
+              if (submitBtn) {
+                submitBtn.textContent = '✓ Saved! Proceeding to AI Guidance ➔';
+                submitBtn.style.background = '#16a34a';
+              }
+
+              setTimeout(() => {
+                window.location.href = 'ai-guidance.html';
+              }, 600);
+            } catch (err) {
+              console.error('[career-interest] Submission error:', err);
+              showFormMessage('Network error while saving to server. Please check your connection and retry.', 'error');
+              if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+                submitBtn.style.background = '';
+              }
+            }
+          } else {
+            // Guest mode
+            if (submitBtn) {
+              submitBtn.disabled = true;
+              submitBtn.textContent = '✓ Saved locally! Proceeding ➔';
+              submitBtn.style.background = '#16a34a';
+            }
+            setTimeout(() => {
+              window.location.href = 'ai-guidance.html';
+            }, 400);
+          }
         });
       }
     });

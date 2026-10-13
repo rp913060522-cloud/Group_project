@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerSetu | My Profile</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* ── My Profile Page Custom Styles ────────────────────────────── */
+    .profile-page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .profile-title-group h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .profile-title-group p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Hero Profile Summary Card */
+    .profile-hero-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .hero-student-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-avatar-box {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      border: 2px solid var(--primary-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .hero-avatar-box img {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+    }
+    .hero-name-col h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .hero-email-tag {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .account-badge-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .account-badge-guest {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Section Cards Grid */
+    .profile-sections-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .profile-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .card-heading-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card-heading-icon {
+      font-size: 1.3rem;
+    }
+    .profile-card-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+    }
+    .edit-link-btn {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+    }
+    .edit-link-btn:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    /* Details Rows */
+    .detail-list {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      row-gap: 14px;
+      column-gap: 12px;
+      font-size: 0.93rem;
+    }
+    .detail-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .detail-value {
+      color: var(--text-main);
+      font-weight: 600;
+      word-break: break-word;
+    }
+    .detail-empty {
+      color: #94a3b8;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Progress & Completeness Bar */
+    .completion-bar-wrap {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .completion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .completion-track {
+      background: #e2e8f0;
+      height: 8px;
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .completion-fill {
+      background: var(--primary);
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.4s ease;
+    }
+    .completion-steps-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .step-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .step-pill.complete {
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+      color: #15803d;
+    }
+
+    /* State Boxes: Loading, Guest, Error */
+    .state-banner {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .state-banner-icon {
+      font-size: 3rem;
+      margin-bottom: 14px;
+    }
+    .state-banner h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .state-banner p {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto 20px auto;
+      line-height: 1.55;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-sections-grid {
+        grid-template-columns: 1fr;
+      }
+      .profile-hero-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-actions {
+        width: 100%;
+      }
+      .hero-actions .btn {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+      }
+      .detail-list {
+        grid-template-columns: 120px 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../dashboard.html" class="nav-brand">
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../dashboard.html" class="nav-link">Home</a></li>
+        <li><a href="student-info.html" class="nav-link">Student Information</a></li>
+        <li><a href="education.html" class="nav-link">Education Background</a></li>
+        <li><a href="career-interest.html" class="nav-link">Career Interest</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+      </ul>
+
+      <!-- User Greeting Profile Badge (Active on My Profile page) -->
+      <div class="nav-user" style="cursor: pointer;" title="My Profile">
+        <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+        <span id="headerStudentName">Hi, Student</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">⌄</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="container" style="padding: 36px 20px 60px; max-width: 1020px;">
+
+    <!-- Page Header -->
+    <div class="profile-page-header">
+      <div class="profile-title-group">
+        <h1>My Profile</h1>
+        <p>Review and manage your verified educational and career guidance details</p>
+      </div>
+      <div>
+        <a href="../dashboard.html" class="btn btn-outline" style="padding: 8px 18px; font-size: 0.9rem;">
+          ← Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- ── State 1: Loading State ───────────────────────────────────── -->
+    <div id="profileLoadingState" class="state-banner">
+      <div class="state-banner-icon">⏳</div>
+      <h2>Loading Your Profile...</h2>
+      <p>Retrieving your verified student information and career guidance records from the server.</p>
+    </div>
+
+    <!-- ── State 2: Guest State (Friendly Message) ─────────────────── -->
+    <div id="profileGuestState" class="state-banner" style="display: none;">
+      <div class="state-banner-icon">👤</div>
+      <h2>Guest Browsing Mode</h2>
+      <p>
+        You are currently exploring CareerSetu as a <strong>Guest</strong>.
+        Guest details are stored temporarily on this browser and are not saved to a personal student account.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="../login.html" class="btn btn-primary" style="padding: 11px 24px;">Login to Your Account</a>
+        <a href="../register.html" class="btn btn-outline" style="padding: 11px 24px;">Create Free Account</a>
+        <a href="../dashboard.html" class="btn btn-outline" style="padding: 11px 20px;">Continue as Guest</a>
+      </div>
+    </div>
+
+    <!-- ── State 3: Error State ────────────────────────────────────── -->
+    <div id="profileErrorState" class="state-banner" style="display: none; border-color: #fecaca; background: #fffaf0;">
+      <div class="state-banner-icon">⚠️</div>
+      <h2 style="color: #dc2626;">Unable to Load Profile</h2>
+      <p id="profileErrorMessage">A network error occurred while contacting the server.</p>
+      <button type="button" id="profileRetryBtn" class="btn btn-primary" style="padding: 10px 24px;">
+        Retry Connection
+      </button>
+    </div>
+
+    <!-- ── State 4: Authenticated Profile Content ──────────────────── -->
+    <div id="profileContentState" style="display: none;">
+
+      <!-- Hero Profile Summary Card -->
+      <div class="profile-hero-card">
+        <div class="hero-student-info">
+          <div class="hero-avatar-box">
+            <img src="../assets/icons/student-avatar.svg" alt="Student Profile Avatar">
+          </div>
+          <div class="hero-name-col">
+            <h2 id="profHeroName">Student</h2>
+            <div class="hero-email-tag">
+              <span id="profHeroEmail">student@example.com</span>
+              <span class="account-badge-verified" id="profVerifiedBadge">✓ Registered Student</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="student-info.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.92rem;">
+            ✏️ Edit Information
+          </a>
+          <button type="button" onclick="logoutUser()" class="btn btn-outline" style="padding: 10px 18px; font-size: 0.92rem; color: #dc2626; border-color: #fecaca;">
+            Log Out
+          </button>
+        </div>
+      </div>
+
+      <!-- Completeness Progress Card -->
+      <div class="completion-bar-wrap">
+        <div class="completion-header">
+          <span>Profile Progress</span>
+          <span id="completionPercentText" style="color: var(--primary);">0% Complete</span>
+        </div>
+        <div class="completion-track">
+          <div class="completion-fill" id="completionFillBar" style="width: 0%;"></div>
+        </div>
+        <div class="completion-steps-row">
+          <span class="step-pill" id="stepPillInfo">👤 1. Student Information</span>
+          <span class="step-pill" id="stepPillEdu">🎓 2. Education Details</span>
+          <span class="step-pill" id="stepPillInterest">💡 3. Career Interest</span>
+        </div>
+      </div>
+
+      <!-- 2-Column Details Grid -->
+      <div class="profile-sections-grid">
+
+        <!-- Card 1: Personal Information -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div class="card-heading-group">
+              <span class="card-heading-icon">👤</span>
+              <h3>Student Information</h3>
+            </div>
+            <a href="student-info.html" class="edit-link-btn" title="Edit Student Information">✏️ Edit</a>
+          </div>
+
+          <div class="detail-list">
+            <div class="detail-label">Full Name</div>
+            <div class="detail-value" id="valFullName">—</div>
+
+            <div class="detail-label">Age</div>
+            <div class="detail-value" id="valAge">—</div>
+
+            <div class="detail-label">Gender</div>
+            <div class="detail-value" id="valGender">—</div>
+
+            <div class="detail-label">Phone Number</div>
+            <div class="detail-value" id="valPhone">—</div>
+
+            <div class="detail-label">Email Address</div>
+            <div class="detail-value" id="valEmail">—</div>
+
+            <div class="detail-label">City / Location</div>
+            <div class="detail-value" id="valLocation">—</div>
+          </div>
+        </div>
+
+        <!-- Card 2: Educational Background -->
+        <div class="profile-card">
+          <div class="profile-card-header">
+            <div class="card-heading-group">
+              <span class="card-heading-icon">🎓</span>
+              <h3>Educational Background</h3>
+            </div>
+            <a href="education.html" class="edit-link-btn" title="Edit Educational Background">✏️ Edit</a>
+          </div>
+
+          <div class="detail-list">
+            <div class="detail-label">Current Level</div>
+            <div class="detail-value" id="valEduLevel">—</div>
+
+            <div class="detail-label">Stream / Course</div>
+            <div class="detail-value" id="valStream">—</div>
+
+            <div class="detail-label">Key Subjects</div>
+            <div class="detail-value" id="valSubjects">—</div>
+
+            <div class="detail-label">Marks / Score</div>
+            <div class="detail-value" id="valMarks">—</div>
+
+            <div class="detail-label">Last Updated</div>
+            <div class="detail-value" id="valEduUpdated">—</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Career Interest & Preferences -->
+        <div class="profile-card" style="grid-column: span 2;">
+          <div class="profile-card-header">
+            <div class="card-heading-group">
+              <span class="card-heading-icon">💡</span>
+              <h3>Career Interests &amp; Preferred Skills</h3>
+            </div>
+            <a href="career-interest.html" class="edit-link-btn" title="Edit Career Interest">✏️ Edit</a>
+          </div>
+
+          <div class="detail-list" style="grid-template-columns: 180px 1fr;">
+            <div class="detail-label">Preferred Field</div>
+            <div class="detail-value" id="valInterestField">—</div>
+
+            <div class="detail-label">Favourite Subjects</div>
+            <div class="detail-value" id="valFavSubjects">—</div>
+
+            <div class="detail-label">Career Priority</div>
+            <div class="detail-value" id="valCareerPreference">—</div>
+
+            <div class="detail-label">Skills to Learn</div>
+            <div class="detail-value" id="valSkillsToLearn">—</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Exploration Navigation Banner -->
+      <div style="background: var(--primary-light); border: 1px solid var(--primary-border); border-radius: var(--radius-lg); padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e40af; margin-bottom: 4px;">Ready for Personalized Guidance?</h4>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin: 0;">Explore career options and learning playlists based on your profile.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="ai-guidance.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.92rem;">AI Career Guidance ➔</a>
+          <a href="scholarships.html" class="btn btn-outline" style="padding: 10px 18px; font-size: 0.92rem;">Scholarships</a>
+          <a href="jobs-results.html" class="btn btn-outline" style="padding: 10px 18px; font-size: 0.92rem;">Jobs &amp; Results</a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="portal-footer">
+    Empowering Underprivileged Students | Better Education ◆ Brighter Future
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/my-profile.js"></script>
+</body>
+</html>

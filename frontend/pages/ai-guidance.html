@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Career Guidance | Career Guidance Portal</title>
+  <title>CareerSetu | AI Career Guidance</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
     /* AI Page Custom Styling matching Stitch 8 & 9 */
@@ -164,8 +164,8 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
@@ -199,90 +199,105 @@
         </div>
       </div>
 
+      <!-- Status & Notice Banners (Guest, Incomplete Profile, Errors) -->
+      <div id="aiStatusBanner" style="display: none; margin-bottom: 20px;"></div>
+
       <!-- Input Card -->
       <div class="card" style="box-shadow: var(--shadow-card);">
         <div class="form-group" style="margin-bottom: 18px;">
           <label class="form-label" for="aiInterestInput" style="font-size: 0.95rem;">Your Interest / Preferred Field</label>
-          <input type="text" id="aiInterestInput" class="form-control no-icon" placeholder="e.g. Data Science, Web Development, etc." value="Data Science">
+          <input type="text" id="aiInterestInput" class="form-control no-icon" placeholder="e.g. Data Science, Web Development, Electric Vehicle Tech, etc." value="">
         </div>
 
         <button type="button" id="getSuggestionsBtn" class="btn btn-primary btn-block" style="padding: 13px; font-size: 1rem;">
-          Get Suggestions
+          Get AI Career Suggestions ➔
         </button>
       </div>
 
+      <!-- Loading State -->
+      <div id="aiLoadingIndicator" style="display: none; background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px 24px; text-align: center; margin-top: 28px; box-shadow: var(--shadow-sm);">
+        <div style="font-size: 2.8rem; margin-bottom: 12px; animation: pulse 1.5s infinite;">🤖</div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Analyzing Your Profile with Gemini AI...</h3>
+        <p style="font-size: 0.93rem; color: var(--text-muted); max-width: 460px; margin: 0 auto;">Matching your educational background and interests against industry roadmaps and eligibility requirements.</p>
+      </div>
+
       <!-- How it works? Card -->
-      <div class="how-it-works-card">
+      <div class="how-it-works-card" id="howItWorksCard">
         <h3>How it works?</h3>
         
         <div class="how-step-row">
           <div class="how-step-num">1</div>
-          <div class="how-step-text">AI analyzes your interests and educational background.</div>
+          <div class="how-step-text">AI analyzes your interests and educational background from your saved profile.</div>
         </div>
 
         <div class="how-step-row">
           <div class="how-step-num">2</div>
-          <div class="how-step-text">It suggests suitable career options and eligibility.</div>
+          <div class="how-step-text">It suggests suitable career options, eligibility criteria, and skills to learn.</div>
         </div>
 
         <div class="how-step-row" style="margin-bottom: 0;">
           <div class="how-step-num">3</div>
-          <div class="how-step-text">You get step-by-step guidance and useful resources.</div>
+          <div class="how-step-text">You get step-by-step guidance and verified learning resources.</div>
         </div>
       </div>
 
-      <!-- 9. AI Result Page - Example (Matches Design 9 exactly) -->
-      <div class="result-section-box" id="aiResultContainer">
+      <!-- Dynamic AI Result Section -->
+      <div class="result-section-box" id="aiResultContainer" style="display: none;">
         
-        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-bottom: 16px;">
-          Career Suggestions for You
-        </h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+          <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin: 0;">
+            Career Suggestions for You
+          </h2>
+          <span id="aiModelBadge" style="font-size: 0.78rem; font-weight: 700; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; padding: 3px 12px; border-radius: 9999px;">
+            Powered by Gemini AI
+          </span>
+        </div>
 
-        <div class="result-card-stitch">
-          
-          <!-- Role Header -->
-          <div class="result-card-header">
-            <div class="role-icon-box">
-              📊
-            </div>
-            <div>
-              <div class="role-title-text">Data Scientist</div>
-              <div class="role-tagline-green">High Demand • Great Career Growth</div>
-            </div>
+        <!-- Student Profile Summary Banner -->
+        <div id="aiProfileSummaryBox" style="background: #ffffff; border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Profile Analysis</div>
+          <p id="aiProfileSummaryText" style="font-size: 0.95rem; color: var(--text-main); margin: 0; line-height: 1.55;"></p>
+        </div>
+
+        <!-- Career Cards Container -->
+        <div id="dynamicCareerCards" style="display: flex; flex-direction: column; gap: 24px;"></div>
+
+        <!-- General Learning Roadmap -->
+        <div id="aiGeneralRoadmapCard" style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 28px; margin-top: 24px; box-shadow: var(--shadow-card);">
+          <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <span>🗺️</span> Recommended General Learning Roadmap
           </div>
+          <ol id="aiGeneralRoadmapList" class="result-list-numbers" style="margin: 0;"></ol>
+        </div>
 
-          <!-- Eligibility -->
-          <div class="result-block-title">Eligibility</div>
-          <ul class="result-list-bullets">
-            <li>12th with Maths (for Graduation)</li>
-            <li>Basic knowledge of Python/Statistics</li>
-          </ul>
-
-          <!-- Next Steps -->
-          <div class="result-block-title">Next Steps</div>
-          <ol class="result-list-numbers">
-            <li>Learn Python (basic to advanced)</li>
-            <li>Study Data Analysis &amp; Visualization</li>
-            <li>Build Projects / Portfolio</li>
-          </ol>
-
-          <!-- Useful Skills -->
-          <div class="result-block-title">Useful Skills</div>
-          <div class="skill-pills-row">
-            <span class="skill-pill">Python</span>
-            <span class="skill-pill">SQL</span>
-            <span class="skill-pill">Machine Learning</span>
-            <span class="skill-pill">Data Analysis</span>
+        <!-- Learning Resources & Quick Actions -->
+        <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px 28px; margin-top: 24px; box-shadow: var(--shadow-card);">
+          <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <span>📚</span> Verified CareerSetu Learning &amp; Opportunity Portals
           </div>
-
-          <!-- Green Info Box -->
-          <div class="yt-recommend-box">
-            <div class="yt-recommend-icon">i</div>
-            <div>
-              You can also check relevant <a href="youtube-resources.html" style="color: #15803d; font-weight: 700; text-decoration: underline;">YouTube playlists</a> for free learning resources.
-            </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;" id="aiVerifiedResourcesGrid">
+            <a href="youtube-resources.html" style="text-decoration: none; display: block; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: #f8fafc; transition: border-color 0.15s;">
+              <div style="font-size: 1.2rem; margin-bottom: 6px;">🎥</div>
+              <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;">YouTube Learning Playlists</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">100+ curated free playlists covering technical and vocational topics.</div>
+            </a>
+            <a href="scholarships.html" style="text-decoration: none; display: block; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: #f8fafc; transition: border-color 0.15s;">
+              <div style="font-size: 1.2rem; margin-bottom: 6px;">🎓</div>
+              <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;">Government Scholarships</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Official central and state financial aid portals for eligible students.</div>
+            </a>
+            <a href="jobs-results.html" style="text-decoration: none; display: block; padding: 16px; border: 1px solid var(--border); border-radius: var(--radius-md); background: #f8fafc; transition: border-color 0.15s;">
+              <div style="font-size: 1.2rem; margin-bottom: 6px;">💼</div>
+              <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 4px;">Jobs &amp; Results Portal</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Latest notifications for competitive exams and recruitment drives.</div>
+            </a>
           </div>
+        </div>
 
+        <!-- Disclaimer Box -->
+        <div style="margin-top: 24px; padding: 14px 18px; border-radius: var(--radius-md); background: #fffbeb; border: 1px solid #fef3c7; color: #92400e; font-size: 0.86rem; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px;">
+          <span style="font-size: 1.1rem; flex-shrink: 0;">ℹ️</span>
+          <span id="aiDisclaimerText">This career guidance is AI-generated for informational and educational purposes. Course eligibility, admissions, and recruitment criteria must be verified through official government or institution notifications.</span>
         </div>
 
       </div>

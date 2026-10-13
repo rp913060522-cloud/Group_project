@@ -3,41 +3,476 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Latest Jobs &amp; Results | Career Guidance Portal</title>
+  <title>CareerSetu | Jobs &amp; Results</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    /* Styling matching Stitch 7. Latest Jobs & Results Page.jpeg */
-    .sarkari-card {
+    /* ========================================================
+       LATEST JOBS & RESULTS PAGE STYLING
+       Google Stitch Design System (Soft Blue & Crisp White)
+       ======================================================== */
+
+    .jobs-page-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* Hero Section */
+    .jobs-hero {
+      margin-bottom: 24px;
+    }
+    .jobs-page-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
+    .jobs-page-subtitle {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      max-width: 840px;
+      line-height: 1.55;
+    }
+
+    /* Verification Notice Banner */
+    .notice-banner {
+      background: #eff6ff;
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+    .notice-banner-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    /* Controls Toolbar Card */
+    .jobs-controls-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 40px 32px;
-      text-align: center;
-      margin-top: 24px;
-      box-shadow: var(--shadow-card);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 26px;
     }
-    .sarkari-logo-text {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 12px;
+
+    /* Search Input Wrapper */
+    .jobs-search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      transition: var(--transition);
+      margin-bottom: 20px;
     }
-    .sarkari-red {
-      color: #dc2626;
+    .jobs-search-wrapper:focus-within {
+      border-color: var(--primary);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
-    .sarkari-blue {
-      color: #0f2942;
+    .jobs-search-icon {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-right: 12px;
+      flex-shrink: 0;
+      line-height: 1;
     }
-    .sarkari-card h3 {
-      font-size: 1.35rem;
+    .jobs-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.96rem;
+      color: var(--text-main);
+      font-family: inherit;
+    }
+    .jobs-search-input::placeholder {
+      color: var(--text-light);
+    }
+    .jobs-clear-btn {
+      background: #e2e8f0;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: bold;
+      transition: var(--transition);
+      margin-left: 8px;
+    }
+    .jobs-clear-btn:hover {
+      background: #cbd5e1;
+      color: #0f172a;
+    }
+
+    /* Filter Controls Rows */
+    .filter-controls-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .filter-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-row-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+    .filter-pills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Category Filter Pills */
+    .filter-pill {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 7px 15px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      user-select: none;
+    }
+    .filter-pill:hover {
+      background: #edf2f7;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+    .filter-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .filter-pill .pill-count {
+      font-size: 0.78rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+    .filter-pill.active .pill-count {
+      opacity: 0.95;
+    }
+
+    /* Type Toggle Buttons (Official vs Private) */
+    .type-toggle-btn {
+      background: #ffffff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+    .type-toggle-btn:hover {
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+    .type-toggle-btn.active {
+      background: #f0fdf4;
+      border-color: #10b981;
+      color: #065f46;
+      font-weight: 700;
+    }
+    .type-toggle-btn[data-type="private"].active {
+      background: #f8fafc;
+      border-color: #64748b;
+      color: #1e293b;
+    }
+    .type-toggle-btn[data-type="all"].active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Results Header Bar */
+    .jobs-results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .jobs-results-count {
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--text-main);
-      margin-bottom: 6px;
     }
-    .sarkari-card p {
-      font-size: 0.95rem;
+    .jobs-active-filter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--primary-border);
+    }
+
+    /* Grid Layout */
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 22px;
+    }
+
+    /* Job Portal Card */
+    .job-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      position: relative;
+    }
+    .job-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.1);
+      border-color: var(--primary-border);
+    }
+
+    /* Card Header */
+    .job-card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .job-card-icon-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .job-card-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: #f1f5f9;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .job-card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 2px;
+    }
+    .job-card-domain {
+      font-size: 0.84rem;
+      color: var(--primary);
+      font-weight: 600;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .job-card-domain:hover {
+      text-decoration: underline;
+    }
+
+    /* Badges */
+    .job-card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .portal-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+    .badge-official {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .badge-private {
+      background: #f8fafc;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    .badge-category {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Card Description */
+    .job-card-desc {
+      font-size: 0.9rem;
       color: var(--text-muted);
-      margin-bottom: 28px;
+      line-height: 1.52;
+      margin-bottom: 14px;
+      flex-grow: 1;
+    }
+
+    /* Tags */
+    .job-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .job-tag {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      color: #334155;
+      font-size: 0.74rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* Card Footer */
+    .job-card-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .portal-meta-note {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .note-official {
+      color: #059669;
+    }
+    .note-private {
+      color: #64748b;
+    }
+    .visit-portal-btn {
+      padding: 9px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Empty State */
+    .jobs-no-results {
+      text-align: center;
+      padding: 60px 24px;
+      background: #ffffff;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-lg);
+      margin: 20px 0;
+      display: none;
+    }
+    .jobs-empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 14px;
+      opacity: 0.85;
+    }
+    .jobs-empty-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .jobs-empty-desc {
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 20px;
+      line-height: 1.5;
+    }
+    .btn-reset-filters {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: #ffffff;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .btn-reset-filters:hover {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .jobs-page-container {
+        padding: 24px 16px 40px;
+      }
+      .jobs-controls-card {
+        padding: 16px;
+      }
+      .jobs-results-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .jobs-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .job-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .visit-portal-btn {
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -47,9 +482,13 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
+
+      <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+        ☰
+      </button>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="../dashboard.html" class="nav-link">Home</a></li>
@@ -57,6 +496,8 @@
         <li><a href="education.html" class="nav-link">Education Background</a></li>
         <li><a href="scholarships.html" class="nav-link">Scholarships</a></li>
         <li><a href="jobs-results.html" class="nav-link active">Jobs &amp; Results</a></li>
+        <li><a href="ai-guidance.html" class="nav-link">AI Guidance</a></li>
+        <li><a href="youtube-resources.html" class="nav-link">YouTube Resources</a></li>
       </ul>
 
       <div class="nav-user">
@@ -66,44 +507,803 @@
     </div>
   </nav>
 
-  <!-- Main Content matching Stitch 7. Latest Jobs & Results Page.jpeg -->
-  <main class="container" style="padding: 40px 20px 60px;">
+  <!-- Main Content Area -->
+  <main class="jobs-page-container">
     
-    <div style="max-width: 680px; margin: 0 auto;">
+    <!-- Hero Header -->
+    <header class="jobs-hero">
+      <h1 class="jobs-page-title">Latest Jobs, Portals &amp; Results</h1>
+      <p class="jobs-page-subtitle">
+        Direct links to official Maharashtra and Central government recruitment portals, public service commissions, employment gazettes, scholarship portals, and verified career alerts.
+      </p>
+    </header>
+
+    <!-- Clear Distinction Notice -->
+    <div class="notice-banner" role="note">
+      <div class="notice-banner-icon" aria-hidden="true">🛡️</div>
+      <div>
+        <strong>Official vs. Private Portals:</strong>
+        Websites bearing the <strong>🏛️ Official Govt</strong> badge are legitimate state and central government portals hosted under the <code>.gov.in</code> domain. Portals marked <strong>📢 Private Portal</strong> are independent informational aggregators. Always verify dates, fees, and eligibility on the official department advertisement.
+      </div>
+    </div>
+
+    <!-- Search & Filter Controls Card -->
+    <section class="jobs-controls-card" aria-label="Search and Filter Job Portals">
       
-      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">Latest Jobs &amp; Results</h1>
-      <p class="card-subtitle" style="margin-bottom: 20px;">Click below to visit SarkariResult for latest government jobs, exams and results.</p>
-
-      <!-- Center SarkariResult Card -->
-      <div class="sarkari-card">
-        <div class="sarkari-logo-text">
-          <span class="sarkari-red">Sarkari</span><span class="sarkari-blue">Result.com</span>
-        </div>
-
-        <h3>Sarkari Result</h3>
-        <p>Latest Jobs | Admit Cards | Results</p>
-
-        <button type="button" id="visitSarkariResultBtn" class="btn btn-primary btn-block" style="padding: 14px; font-size: 1.05rem;">
-          Visit Website ➔
+      <!-- Instant Search Input -->
+      <div class="jobs-search-wrapper">
+        <span class="jobs-search-icon" aria-hidden="true">🔍</span>
+        <input 
+          type="text" 
+          id="portalSearchInput" 
+          class="jobs-search-input" 
+          placeholder="Search job portals, government websites or categories..." 
+          autocomplete="off"
+          aria-label="Search job portals, government websites or categories"
+        >
+        <button type="button" id="clearSearchBtn" class="jobs-clear-btn" aria-label="Clear search query" title="Clear search">
+          ✕
         </button>
       </div>
 
-      <!-- Stitch Notice Alert Box -->
-      <div class="stitch-notice" style="margin-top: 24px;">
-        <div class="notice-icon-circle">i</div>
-        <div>
-          You will be redirected to the official SarkariResult website.
+      <!-- Filters Group -->
+      <div class="filter-controls-group">
+        
+        <!-- Category Filter Pills -->
+        <div class="filter-row">
+          <span class="filter-row-label">Category Filters</span>
+          <div class="filter-pills-wrap" id="categoryFilters" role="toolbar" aria-label="Category filters">
+            <button type="button" class="filter-pill active" data-category="All">
+              ✨ All Portals <span class="pill-count">(14)</span>
+            </button>
+            <button type="button" class="filter-pill" data-category="Maharashtra Government">
+              🏛️ Maharashtra Government <span class="pill-count">(4)</span>
+            </button>
+            <button type="button" class="filter-pill" data-category="Central Government Jobs">
+              🇮🇳 Central Government Jobs <span class="pill-count">(3)</span>
+            </button>
+            <button type="button" class="filter-pill" data-category="Private Jobs & Job Alerts">
+              💼 Private Jobs &amp; Alerts <span class="pill-count">(4)</span>
+            </button>
+            <button type="button" class="filter-pill" data-category="Results & Recruitment">
+              📊 Results &amp; Recruitment <span class="pill-count">(2)</span>
+            </button>
+            <button type="button" class="filter-pill" data-category="Scholarships & Career Services">
+              🎓 Scholarships &amp; Career Services <span class="pill-count">(1)</span>
+            </button>
+          </div>
         </div>
+
+        <!-- Official vs Private Type Toggle -->
+        <div class="filter-row">
+          <span class="filter-row-label">Source Authenticity</span>
+          <div class="filter-pills-wrap" id="typeFilters" role="toolbar" aria-label="Source Authenticity filters">
+            <button type="button" class="type-toggle-btn active" data-type="all">
+              🌐 All Sources
+            </button>
+            <button type="button" class="type-toggle-btn" data-type="official">
+              🏛️ Official Government Only <span id="officialCount">(8)</span>
+            </button>
+            <button type="button" class="type-toggle-btn" data-type="private">
+              📢 Private Informational Only <span id="privateCount">(6)</span>
+            </button>
+          </div>
+        </div>
+
       </div>
 
+    </section>
+
+    <!-- Results Status Bar -->
+    <div class="jobs-results-bar">
+      <div id="resultsCount" class="jobs-results-count">Showing 14 portals</div>
+      <div id="activeFilterLabel" class="jobs-active-filter-label">All Portals</div>
+    </div>
+
+    <!-- Empty State Container -->
+    <div class="jobs-no-results" id="noResultsContainer" role="status">
+      <div class="jobs-empty-icon">🔍</div>
+      <h2 class="jobs-empty-title">No portals found</h2>
+      <p class="jobs-empty-desc">
+        We couldn't find any job or government websites matching your search criteria. Try a different keyword or reset filters.
+      </p>
+      <button type="button" class="btn-reset-filters" id="resetFiltersBtn">
+        ↺ Reset Filters &amp; Search
+      </button>
+    </div>
+
+    <!-- Job Portals Grid -->
+    <div class="jobs-grid" id="jobPortalsGrid">
+
+      <article class="job-card" data-id="1" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🏛️</div>
+            <div>
+              <h3 class="job-card-title">Maharashtra Government</h3>
+              <a 
+                href="https://www.maharashtra.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open maharashtra.gov.in in a new tab"
+              >
+                maharashtra.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Maharashtra Government</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Official apex portal of the Government of Maharashtra providing single-window access to citizen services, state department circulars, and Government Resolutions (GRs).</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Citizen Services</span><span class="job-tag">State Govt Resolutions</span><span class="job-tag">Department Directories</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://www.maharashtra.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Maharashtra Government (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="2" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🏛️</div>
+            <div>
+              <h3 class="job-card-title">Mahakosh</h3>
+              <a 
+                href="https://mahakosh.maharashtra.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open mahakosh.maharashtra.gov.in in a new tab"
+              >
+                mahakosh.maharashtra.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Maharashtra Government</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Directorate of Accounts and Treasuries, Finance Department, Government of Maharashtra. Manages treasury operations, employee pay services (Sevaarth), and state financial reports.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Treasury & Accounts</span><span class="job-tag">Finance Department</span><span class="job-tag">State Pay Services</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://mahakosh.maharashtra.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Mahakosh (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="3" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🏗️</div>
+            <div>
+              <h3 class="job-card-title">Maharashtra PWD</h3>
+              <a 
+                href="https://pwd.maharashtra.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open pwd.maharashtra.gov.in in a new tab"
+              >
+                pwd.maharashtra.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Maharashtra Government</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Official Public Works Department (PWD) website of the Government of Maharashtra for public infrastructure projects, civil tenders, engineer recruitments, and administrative notices.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Public Works</span><span class="job-tag">Engineering Tenders</span><span class="job-tag">State Department Updates</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://pwd.maharashtra.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Maharashtra PWD (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="4" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🤝</div>
+            <div>
+              <h3 class="job-card-title">Mahaswayam Maharashtra</h3>
+              <a 
+                href="https://www.mahaswayam.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open mahaswayam.gov.in in a new tab"
+              >
+                mahaswayam.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Maharashtra Government</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Integrated state initiative by Skill Development, Employment & Entrepreneurship Department, Maharashtra. Connects youth with vocational training, job fairs (Rojgar Melawa), and self-employment support.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Skill Development</span><span class="job-tag">Rojgar Melawa</span><span class="job-tag">Vocational Training</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://www.mahaswayam.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Mahaswayam Maharashtra (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="5" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🇮🇳</div>
+            <div>
+              <h3 class="job-card-title">UPSC (Union Public Service Commission)</h3>
+              <a 
+                href="https://upsc.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open upsc.gov.in in a new tab"
+              >
+                upsc.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Central Government Jobs</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">India's premier constitutional recruiting agency conducting Civil Services, Engineering Services, CDS, NDA, and various central government competitive examinations.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Civil Services</span><span class="job-tag">Central Group A & B</span><span class="job-tag">Exam Calendars</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://upsc.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit UPSC (Union Public Service Commission) (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="6" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🌐</div>
+            <div>
+              <h3 class="job-card-title">National Career Service (NCS)</h3>
+              <a 
+                href="https://www.ncs.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open ncs.gov.in in a new tab"
+              >
+                ncs.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Central Government Jobs</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Mission Mode initiative by the Ministry of Labour and Employment, Government of India. Provides free nationwide job matching, career counselling, and apprenticeship opportunities.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Govt & Private Matching</span><span class="job-tag">Ministry of Labour</span><span class="job-tag">Career Counselling</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://www.ncs.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit National Career Service (NCS) (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="7" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">📰</div>
+            <div>
+              <h3 class="job-card-title">Employment News (Rozgar Samachar)</h3>
+              <a 
+                href="https://employmentnews.gov.in/newemp/home.aspx" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open employmentnews.gov.in in a new tab"
+              >
+                employmentnews.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Central Government Jobs</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Official weekly employment journal under the Ministry of Information & Broadcasting. Publishes authentic vacancy notifications for PSUs, Defence, Railways, and central ministries.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Weekly Gazette</span><span class="job-tag">PSU & Defence Jobs</span><span class="job-tag">Ministry of I&B</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://employmentnews.gov.in/newemp/home.aspx" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Employment News (Rozgar Samachar) (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="8" data-type="official">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🎓</div>
+            <div>
+              <h3 class="job-card-title">MahaDBT Scholarship Portal</h3>
+              <a 
+                href="https://mahadbt.maharashtra.gov.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open mahadbt.maharashtra.gov.in in a new tab"
+              >
+                mahadbt.maharashtra.gov.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-official" title="Official Government Portal">
+              🏛️ Official Govt
+            </span>
+            <span class="portal-badge badge-category">Scholarships & Career Services</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Official Direct Benefit Transfer portal of Maharashtra for post-matric scholarships, tuition fee waivers, and financial aid for SC, ST, VJNT, OBC, EBC, and minority students.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Post-Matric Scholarships</span><span class="job-tag">Fee Reimbursement</span><span class="job-tag">Direct Benefit Transfer</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-official">✓ Verified .gov.in Website</span>
+          </div>
+          <a 
+            href="https://mahadbt.maharashtra.gov.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit MahaDBT Scholarship Portal (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="9" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">📊</div>
+            <div>
+              <h3 class="job-card-title">Sarkari Result</h3>
+              <a 
+                href="https://www.sarkariresult.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open sarkariresult.com in a new tab"
+              >
+                sarkariresult.com ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private / Independent Job Information Portal">
+              📢 Private / Independent
+            </span>
+            <span class="portal-badge badge-category">Results & Recruitment</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Find government job notifications, exam results, admit cards, answer keys, and recruitment updates.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Govt Job Notifications</span><span class="job-tag">Exam Results</span><span class="job-tag">Admit Cards</span><span class="job-tag">Answer Keys</span><span class="job-tag">Recruitment Updates</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private / Independent Job Information Portal</span>
+          </div>
+          <a 
+            href="https://www.sarkariresult.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Sarkari Result (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="10" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">📢</div>
+            <div>
+              <h3 class="job-card-title">All Government Jobs</h3>
+              <a 
+                href="https://allgovernmentjobs.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open allgovernmentjobs.in in a new tab"
+              >
+                allgovernmentjobs.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private Informational Portal">
+              📢 Private Portal
+            </span>
+            <span class="portal-badge badge-category">Results & Recruitment</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Private educational website providing curated employment alerts, exam dates, answer keys, and syllabus information for central and state government job openings.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Recruitment Alerts</span><span class="job-tag">Hall Tickets</span><span class="job-tag">Bank & Police Vacancies</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private Informational Portal</span>
+          </div>
+          <a 
+            href="https://allgovernmentjobs.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit All Government Jobs (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="11" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">⚡</div>
+            <div>
+              <h3 class="job-card-title">Mahabharti</h3>
+              <a 
+                href="https://mahabharti.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open mahabharti.in in a new tab"
+              >
+                mahabharti.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private Informational Portal">
+              📢 Private Portal
+            </span>
+            <span class="portal-badge badge-category">Private Jobs & Job Alerts</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Popular regional recruitment alert and preparation portal for Maharashtra government jobs, police bharti, Talathi examinations, and competitive mock test updates.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Police Bharti</span><span class="job-tag">Maharashtra Alerts</span><span class="job-tag">Mock Tests</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private Informational Portal</span>
+          </div>
+          <a 
+            href="https://mahabharti.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Mahabharti (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="12" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">📝</div>
+            <div>
+              <h3 class="job-card-title">Mahasarkar</h3>
+              <a 
+                href="https://mahasarkar.co.in/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open mahasarkar.co.in in a new tab"
+              >
+                mahasarkar.co.in ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private Informational Portal">
+              📢 Private Portal
+            </span>
+            <span class="portal-badge badge-category">Private Jobs & Job Alerts</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Private Marathi career information blog and notification board publishing recruitment advertisements, answer keys, cut-off marks, and interview timetables.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Marathi Job News</span><span class="job-tag">Cut-Off Marks</span><span class="job-tag">Recruitment Timetables</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private Informational Portal</span>
+          </div>
+          <a 
+            href="https://mahasarkar.co.in/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Mahasarkar (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="13" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">🔔</div>
+            <div>
+              <h3 class="job-card-title">FreeJobAlert</h3>
+              <a 
+                href="https://www.freejobalert.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open freejobalert.com in a new tab"
+              >
+                freejobalert.com ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private Informational Portal">
+              📢 Private Portal
+            </span>
+            <span class="portal-badge badge-category">Private Jobs & Job Alerts</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Comprehensive private job alert platform providing daily updates on central and state exams, eligibility criteria, application dates, and previous question papers.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Daily Job Alerts</span><span class="job-tag">Eligibility Criteria</span><span class="job-tag">Old Question Papers</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private Informational Portal</span>
+          </div>
+          <a 
+            href="https://www.freejobalert.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit FreeJobAlert (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+
+      <article class="job-card" data-id="14" data-type="private">
+        <div class="job-card-header">
+          <div class="job-card-icon-title">
+            <div class="job-card-avatar" aria-hidden="true">💼</div>
+            <div>
+              <h3 class="job-card-title">Jobrapido India</h3>
+              <a 
+                href="https://in.jobrapido.com/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="job-card-domain" 
+                title="Open in.jobrapido.com in a new tab"
+              >
+                in.jobrapido.com ↗
+              </a>
+            </div>
+          </div>
+          
+          <div class="job-card-badges">
+            <span class="portal-badge badge-private" title="Private Job Search Engine">
+              📢 Private Portal
+            </span>
+            <span class="portal-badge badge-category">Private Jobs & Job Alerts</span>
+          </div>
+        </div>
+
+        <p class="job-card-desc">Leading global employment search engine indexing private corporate positions, IT roles, customer support, and sales openings across Indian metropolitan cities.</p>
+
+        <div class="job-card-tags">
+          <span class="job-tag">Private Sector Jobs</span><span class="job-tag">Corporate Hiring</span><span class="job-tag">City-Wise Job Search</span>
+        </div>
+
+        <div class="job-card-footer">
+          <div class="portal-meta-note">
+            <span class="note-private">ℹ Private Job Search Engine</span>
+          </div>
+          <a 
+            href="https://in.jobrapido.com/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn btn-primary visit-portal-btn"
+            title="Visit Jobrapido India (Opens in new tab)"
+          >
+            Visit Website
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- Student Advisory Footer Note -->
+    <div class="stitch-notice" style="margin-top: 36px;">
+      <div class="notice-icon-circle">ℹ</div>
+      <div>
+        <strong>College CEP Project Advisory:</strong> All external websites will open safely in a new tab. This portal provides guidance and navigation assistance for students; it does not collect recruitment fees or submit job applications on students' behalf.
+      </div>
     </div>
 
   </main>
 
+  <!-- Portal Footer -->
   <footer class="portal-footer">
     Empowering Underprivileged Students | Better Education ◆ Brighter Future
   </footer>
 
+  <!-- Scripts -->
   <script src="../js/auth.js"></script>
   <script src="../js/jobs-results.js"></script>
 </body>

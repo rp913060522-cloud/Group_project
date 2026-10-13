@@ -1,5 +1,5 @@
 /* ========================================================
-   CAREER GUIDANCE PORTAL - DESIGN SYSTEM (Google Stitch UI)
+   CAREERSETU - DESIGN SYSTEM (Google Stitch UI)
    College CEP Project for Underprivileged Students
    Palette: Clean Soft Blue / Crisp White / Pastel Accents
    ======================================================== */
@@ -106,8 +106,10 @@ a:hover {
 }
 
 .nav-brand img {
-  width: 38px;
   height: 38px;
+  width: auto;
+  max-width: 130px;
+  object-fit: contain;
 }
 
 .brand-title {
@@ -209,13 +211,16 @@ a:hover {
 }
 
 /* ========================================================
-   STEPPER SIDEBAR (from student registration.jpeg)
+   STUDENT INFORMATION LAYOUT
    ======================================================== */
+.student-info-layout,
 .stepper-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 280px;
-  gap: 24px;
-  margin: 30px 0;
+  grid-template-columns: 1fr 300px;
+  gap: 28px;
+  max-width: 1040px;
+  margin: 36px auto;
+  align-items: start;
 }
 
 .stepper-sidebar {
@@ -463,8 +468,11 @@ a:hover {
 
 /* Responsive */
 @media (max-width: 960px) {
+  .student-info-layout,
   .stepper-layout {
     grid-template-columns: 1fr;
+    margin: 20px auto;
+    gap: 20px;
   }
 }
 
@@ -491,3 +499,141 @@ a:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================================
+   CEP PROJECT INTRODUCTION POPUP MODAL
+   ======================================================== */
+.cep-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: cepFadeIn 0.22s ease-out;
+}
+
+.cep-modal-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 45px rgba(15, 41, 66, 0.18), 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border);
+  padding: 32px 28px 24px;
+  text-align: center;
+  position: relative;
+  animation: cepSlideUp 0.22s ease-out;
+}
+
+@keyframes cepFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes cepSlideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.cep-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-light);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.cep-close-btn:hover {
+  color: var(--text-main);
+  background: var(--border-light);
+}
+
+.cep-icon-box {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.1);
+}
+
+.cep-subtitle {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+
+.cep-heading {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+
+.cep-message {
+  font-size: 0.93rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.cep-message p + p {
+  margin-top: 10px;
+}
+
+.cep-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cep-buttons .btn {
+  padding: 11px 26px;
+  font-size: 0.95rem;
+}
+
+.cep-footer {
+  margin-top: 18px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+@media (max-width: 480px) {
+  .cep-modal-card {
+    padding: 24px 18px 20px;
+  }
+  .cep-heading {
+    font-size: 1.25rem;
+  }
+  .cep-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .cep-buttons .btn {
+    width: 100%;
+  }
+}
+

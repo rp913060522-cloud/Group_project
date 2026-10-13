@@ -21,9 +21,12 @@
 }
 
 .splash-logo-box img {
-  width: 90px;
-  height: 90px;
+  max-width: 140px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
   margin: 0 auto;
+  object-fit: contain;
 }
 
 .splash-title {
@@ -109,9 +112,12 @@
 }
 
 .login-left-header img {
-  width: 54px;
-  height: 54px;
+  max-width: 80px;
+  max-height: 60px;
+  width: auto;
+  height: auto;
   margin: 0 auto 12px;
+  object-fit: contain;
 }
 
 .login-left-header h3 {

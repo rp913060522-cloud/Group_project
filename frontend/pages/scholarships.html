@@ -3,65 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Government Scholarships | Career Guidance Portal</title>
+  <title>CareerSetu | Government Scholarships</title>
   <link rel="stylesheet" href="../css/style.css">
   <style>
-    /* Styling matching Stitch 6. Government Scholarships Page.png */
-    .scholarship-list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 24px;
-    }
-    .scholarship-link-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 20px 24px;
+    /* ── Scholarships Page — CareerSetu blue-and-white theme ───────────── */
+
+    /* Search bar */
+    .sch-search-wrap {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      text-decoration: none;
-      box-shadow: var(--shadow-sm);
-      transition: var(--transition);
-      cursor: pointer;
+      gap: 10px;
+      background: #fff;
+      border: 1.5px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-pill, 9999px);
+      padding: 8px 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm, 0 1px 4px rgba(15,41,66,0.06));
     }
-    .scholarship-link-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    .sch-search-wrap:focus-within {
+      border-color: var(--primary, #2563eb);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .sch-search-icon { font-size: 1.1rem; color: var(--text-muted, #64748b); }
+    #schSearchInput {
+      border: none; outline: none; flex: 1;
+      font-size: 0.95rem; color: var(--text-main, #0f2942);
+      background: transparent;
+    }
+    #schSearchInput::placeholder { color: var(--text-muted, #64748b); }
+
+    /* Category filter pills */
+    #schFilterBar {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .sch-filter-pill {
+      background: #fff;
+      border: 1.5px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-pill, 9999px);
+      padding: 5px 14px;
+      font-size: 0.85rem; font-weight: 600;
+      color: var(--text-muted, #64748b);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .sch-filter-pill:hover { border-color: var(--primary, #2563eb); color: var(--primary, #2563eb); }
+    .sch-filter-pill.active {
+      background: var(--primary, #2563eb);
+      border-color: var(--primary, #2563eb);
+      color: #fff;
+    }
+
+    /* Results count */
+    .sch-results-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .sch-results-count { font-size: 0.88rem; color: var(--text-muted, #64748b); }
+
+    /* Cards grid */
+    #schCardsGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .sch-portal-card {
+      background: #fff;
+      border: 1px solid var(--border, #e2e8f0);
+      border-radius: var(--radius-lg, 16px);
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: var(--shadow-card, 0 4px 12px rgba(15,41,66,0.05));
+      transition: box-shadow 0.18s, transform 0.18s, border-color 0.18s;
+    }
+    .sch-portal-card:hover {
+      border-color: var(--primary, #2563eb);
+      box-shadow: 0 6px 20px rgba(37,99,235,0.10);
       transform: translateY(-2px);
     }
-    .sch-left-content {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+
+    /* Card top row: icon + badges */
+    .sch-card-top {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
     }
-    .sch-emblem-icon {
-      width: 48px;
-      height: 48px;
+    .sch-card-icon {
+      width: 46px; height: 46px; flex-shrink: 0;
+      background: var(--primary-light, #eff6ff);
+      border: 1px solid var(--primary-border, #bfdbfe);
       border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      background: #f8fafc;
-      border: 1px solid var(--border-light);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
     }
-    .sch-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 3px;
+    .sch-card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .sch-official-badge {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.02em;
+      color: #15803d; background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: 9999px; padding: 2px 8px;
     }
-    .sch-url-text {
-      font-size: 0.88rem;
-      color: var(--primary);
+    .sch-private-badge {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--text-muted, #64748b); background: #f8fafc; border: 1px solid var(--border, #e2e8f0);
+      border-radius: 9999px; padding: 2px 8px;
     }
-    .sch-arrow {
-      color: #1e3a8a;
-      font-size: 1.4rem;
-      font-weight: 700;
+    .sch-cat-tag {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--primary, #2563eb); background: var(--primary-light, #eff6ff);
+      border: 1px solid var(--primary-border, #bfdbfe);
+      border-radius: 9999px; padding: 2px 8px;
+    }
+
+    /* Card body */
+    .sch-card-name {
+      font-size: 1rem; font-weight: 700; color: var(--text-main, #0f2942);
+      line-height: 1.35;
+    }
+    .sch-card-desc {
+      font-size: 0.875rem; color: var(--text-muted, #64748b);
+      line-height: 1.5; flex: 1;
+    }
+
+    /* Card footer: URL + button */
+    .sch-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; flex-wrap: wrap;
+      margin-top: 4px; padding-top: 10px;
+      border-top: 1px solid var(--border, #e2e8f0);
+    }
+    .sch-card-url {
+      font-size: 0.78rem; color: var(--primary, #2563eb);
+      word-break: break-all; flex: 1;
+    }
+    .sch-card-url.muted { color: var(--text-muted, #64748b); }
+
+    .sch-visit-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--primary, #2563eb); color: #fff;
+      font-size: 0.82rem; font-weight: 700;
+      padding: 7px 14px; border-radius: 9999px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background 0.18s; white-space: nowrap;
+    }
+    .sch-visit-btn:hover { background: var(--primary-hover, #1d4ed8); }
+    .sch-visit-btn.sch-visit-disabled {
+      background: var(--border, #e2e8f0); color: var(--text-muted, #64748b);
+      cursor: not-allowed;
+    }
+
+    /* No-results state */
+    #schNoResults {
+      display: none;
+      text-align: center; padding: 48px 20px;
+      background: #fff; border: 1px dashed var(--border, #e2e8f0);
+      border-radius: var(--radius-lg, 16px);
+    }
+    #schNoResults .no-res-icon { font-size: 2.4rem; margin-bottom: 8px; }
+    #schNoResults p { color: var(--text-muted, #64748b); font-size: 0.95rem; }
+
+    /* Notice box (preserved from original) */
+    .stitch-notice {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--primary-light, #eff6ff);
+      border: 1px solid var(--primary-border, #bfdbfe);
+      border-radius: var(--radius-lg, 16px);
+      padding: 16px 20px; margin-top: 28px;
+      font-size: 0.9rem; color: var(--text-muted, #64748b);
+    }
+    .notice-icon-circle {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: var(--primary, #2563eb); color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      #schCardsGrid { grid-template-columns: 1fr; }
+      .sch-card-footer { flex-direction: column; align-items: flex-start; }
+      .sch-visit-btn { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -71,8 +189,8 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
@@ -90,75 +208,44 @@
     </div>
   </nav>
 
-  <!-- Main Content matching Stitch 6. Government Scholarships Page.png -->
+  <!-- Main Content -->
   <main class="container" style="padding: 40px 20px 60px;">
-    
-    <div style="max-width: 720px; margin: 0 auto;">
-      
-      <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">Government Scholarships</h1>
-      <p class="card-subtitle" style="margin-bottom: 24px;">Click on the links below to visit official government websites for scholarship information.</p>
 
-      <div class="scholarship-list-container">
-        
-        <!-- Link 1: NSP -->
-        <div class="scholarship-link-card" data-url="https://scholarships.gov.in" data-name="National Scholarship Portal (NSP)">
-          <div class="sch-left-content">
-            <div class="sch-emblem-icon">🏛️</div>
-            <div>
-              <div class="sch-title">National Scholarship Portal (NSP)</div>
-              <div class="sch-url-text">https://scholarships.gov.in</div>
-            </div>
-          </div>
-          <span class="sch-arrow">›</span>
-        </div>
+    <h1 class="card-title" style="font-size: 1.7rem; margin-bottom: 6px;">Government Scholarships</h1>
+    <p class="card-subtitle" style="margin-bottom: 24px;">
+      Browse official scholarship and career support portals. Click <strong>Visit Portal</strong> to open the official website in a new tab.
+    </p>
 
-        <!-- Link 2: Mahatma Azad / UGC -->
-        <div class="scholarship-link-card" data-url="https://www.ugc.ac.in" data-name="Mahatma Azad National Fellowship">
-          <div class="sch-left-content">
-            <div class="sch-emblem-icon">🎓</div>
-            <div>
-              <div class="sch-title">Mahatma Azad National Fellowship</div>
-              <div class="sch-url-text">https://www.ugc.ac.in</div>
-            </div>
-          </div>
-          <span class="sch-arrow">›</span>
-        </div>
+    <!-- Search -->
+    <div class="sch-search-wrap">
+      <span class="sch-search-icon">🔍</span>
+      <input type="text" id="schSearchInput" placeholder="Search portals by name or category…" autocomplete="off">
+    </div>
 
-        <!-- Link 3: State Government Scholarships -->
-        <div class="scholarship-link-card" data-url="#" data-name="State Government Scholarships">
-          <div class="sch-left-content">
-            <div class="sch-emblem-icon">🏛️</div>
-            <div>
-              <div class="sch-title">State Government Scholarships</div>
-              <div class="sch-url-text" style="color: var(--text-muted);">(Varies by state)</div>
-            </div>
-          </div>
-          <span class="sch-arrow">›</span>
-        </div>
+    <!-- Category filter pills -->
+    <div id="schFilterBar"></div>
 
-        <!-- Link 4: Other Useful Portals -->
-        <div class="scholarship-link-card" data-url="#" data-name="Other Useful Portals">
-          <div class="sch-left-content">
-            <div class="sch-emblem-icon">🌐</div>
-            <div>
-              <div class="sch-title">Other Useful Portals</div>
-              <div class="sch-url-text" style="color: var(--text-muted);">(Check your state website)</div>
-            </div>
-          </div>
-          <span class="sch-arrow">›</span>
-        </div>
+    <!-- Results count -->
+    <div class="sch-results-row">
+      <span class="sch-results-count">Showing <strong id="schTotalCount">—</strong></span>
+    </div>
 
+    <!-- Cards grid (populated by JS) -->
+    <div id="schCardsGrid"></div>
+
+    <!-- No results state -->
+    <div id="schNoResults">
+      <div class="no-res-icon">🔍</div>
+      <p>No portals match your search. Try a different keyword or category.</p>
+    </div>
+
+    <!-- Note (preserved from original design) -->
+    <div class="stitch-notice">
+      <div class="notice-icon-circle">i</div>
+      <div>
+        <strong>Note:</strong> We do not handle scholarship applications.<br>
+        You will be redirected to the official websites. Always verify eligibility and deadlines directly on each portal.
       </div>
-
-      <!-- Stitch Info Notice Box -->
-      <div class="stitch-notice">
-        <div class="notice-icon-circle">i</div>
-        <div>
-          <strong>Note:</strong> We do not handle scholarship applications.<br>
-          You will be redirected to the official websites.
-        </div>
-      </div>
-
     </div>
 
   </main>

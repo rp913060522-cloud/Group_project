@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Educational Background | Career Guidance Portal</title>
+  <title>CareerSetu | Educational Background</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -12,8 +12,8 @@
   <nav class="navbar">
     <div class="container nav-container">
       <a href="../dashboard.html" class="nav-brand">
-        <img src="../assets/logo/logo.svg" alt="Career Guidance Portal Logo">
-        <span class="brand-title">Career Guidance Portal</span>
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="brand-title">CareerSetu</span>
       </a>
 
       <ul class="nav-links" id="navLinks">
@@ -50,7 +50,11 @@
             <option value="12th Pass">12th Pass</option>
             <option value="ITI / Diploma">ITI Trade / Polytechnic Diploma</option>
             <option value="Undergraduate">Undergraduate Degree (College)</option>
+            <option value="Other">Other</option>
           </select>
+          <div id="eduLevelCustomGroup" style="margin-top: 10px; display: none;">
+            <input type="text" id="eduLevelCustom" class="form-control no-icon" placeholder="Enter your current education level">
+          </div>
         </div>
 
         <!-- Field 2: Stream / Course -->
@@ -64,13 +68,20 @@
             <option value="Arts / Humanities">Arts / Humanities (History, Pol Science)</option>
             <option value="Vocational / ITI Trades">Vocational / ITI Trades (Technical)</option>
             <option value="General School">General School Level (All Subjects)</option>
+            <option value="Other">Other</option>
           </select>
+          <div id="streamCustomGroup" style="margin-top: 10px; display: none;">
+            <input type="text" id="streamCustom" class="form-control no-icon" placeholder="Enter your stream or course">
+            <small style="display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 5px;">
+              Example: B.Sc. IT, BCA, B.Com, Diploma in Computer Engineering, or another course.
+            </small>
+          </div>
         </div>
 
         <!-- Field 3: Subjects (optional) -->
         <div class="form-group">
           <label class="form-label" for="subjects">Subjects (optional)</label>
-          <input type="text" id="subjects" class="form-control no-icon" placeholder="E.g. Maths, Physics, Computer Science">
+          <input type="text" id="subjects" class="form-control no-icon" placeholder="E.g. Maths, Physics, Chemistry (separated by commas)">
         </div>
 
         <!-- Field 4: Marks / Percentage -->
@@ -80,13 +91,13 @@
         </div>
 
         <!-- Action Buttons -->
-        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center;">
-          <button type="submit" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
-            Save
-          </button>
-          <a href="career-interest.html" class="btn btn-outline" style="padding: 12px 24px;">
-            Next: Career Interest ➔
+        <div style="display: flex; gap: 14px; margin-top: 28px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+          <a href="student-info.html" class="btn btn-outline" style="padding: 12px 24px;">
+            ← Back
           </a>
+          <button type="submit" id="saveEduBtn" class="btn btn-primary" style="padding: 12px 34px; font-size: 1rem;">
+            Save &amp; Continue ➔
+          </button>
         </div>
 
       </form>
