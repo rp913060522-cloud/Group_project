@@ -10,7 +10,7 @@ const aiService = require('../services/aiService');
 
 /**
  * POST /api/ai/analyze
- * Generates personalized career guidance for the authenticated student using Gemini.
+ * Generates personalized career guidance for the authenticated student using Groq AI.
  */
 async function analyzeCareer(req, res) {
   try {
@@ -51,7 +51,7 @@ async function analyzeCareer(req, res) {
       ? req.body.interest.trim()
       : null;
 
-    // Call Gemini AI service
+    // Call Groq AI service
     const { guidance, modelUsed } = await aiService.generateCareerGuidance(student, customInterest);
 
     // Save generated guidance in student's own record
@@ -76,11 +76,25 @@ async function analyzeCareer(req, res) {
     if (error.code === 'CONFIG_MISSING') {
       return res.status(500).json({
         status: 'error',
-        message: 'Gemini AI service is not configured on the server. Please verify GEMINI_API_KEY.'
+        message: 'Groq AI service is not configured on the server. Please verify GROQ_API_KEY.'
       });
     }
 
-    if (error.code === 'TIMEOUT') {
+    if (error.code === 'AUTH_ERROR' || error.status === 401) {
+      return res.status(502).json({
+        status: 'error',
+        message: 'Groq AI authentication failed. Please verify your GROQ_API_KEY.'
+      });
+    }
+
+    if (error.code === 'RATE_LIMIT' || error.status === 429) {
+      return res.status(429).json({
+        status: 'error',
+        message: 'AI guidance service rate limit reached. Please wait a moment and try again.'
+      });
+    }
+
+    if (error.code === 'TIMEOUT' || error.status === 504) {
       return res.status(504).json({
         status: 'error',
         message: 'The AI request timed out. Please check your connection and try again.'

@@ -44,7 +44,7 @@ async function run() {
   assert(fs.existsSync(envExamplePath), '.env.example exists');
   const envExampleContent = fs.readFileSync(envExamplePath, 'utf8');
   assert(envExampleContent.includes('MONGODB_URI'), '.env.example defines MONGODB_URI placeholder');
-  assert(envExampleContent.includes('GEMINI_API_KEY'), '.env.example defines GEMINI_API_KEY placeholder');
+  assert(envExampleContent.includes('GROQ_API_KEY'), '.env.example defines GROQ_API_KEY placeholder');
   assert(envExampleContent.includes('PORT'), '.env.example defines PORT');
 
   assert(fs.existsSync(gitignorePath), '.gitignore exists');

@@ -121,21 +121,82 @@
     <div class="carousel-wrapper" id="homeCarousel" aria-label="Career Highlights Carousel">
       <div class="carousel-slides-track" id="carouselTrack">
         <!-- Slide 1: Your Career Matters (Exact Stitch Design) -->
-        <div class="carousel-item-slide">
-          <a href="pages/ai-guidance.html" style="display: block; width: 100%; height: 100%;">
-            <img src="assets/banners/home-banner.svg" alt="Your Career Matters - Get the right guidance">
+        <div class="carousel-item-slide slide-theme-blue">
+          <a href="pages/ai-guidance.html" class="slide-card-link">
+            <div class="slide-content-col">
+              <h2 class="slide-heading">Your Career<br class="desktop-br"> Matters</h2>
+              <p class="slide-description">Get the right guidance, explore opportunities and build a brighter future.</p>
+              <span class="slide-action-btn btn-blue">Explore Now ➔</span>
+            </div>
+            <div class="slide-graphic-col">
+              <svg viewBox="0 0 460 300" class="slide-svg-graphic" aria-hidden="true">
+                <!-- Clouds & Hills -->
+                <ellipse cx="280" cy="140" rx="90" ry="45" fill="#ffffff" opacity="0.6"/>
+                <ellipse cx="370" cy="120" rx="100" ry="50" fill="#ffffff" opacity="0.6"/>
+                <circle cx="390" cy="170" r="80" fill="#fef08a" opacity="0.4"/>
+                <ellipse cx="400" cy="270" rx="180" ry="80" fill="#bbf7d0" opacity="0.35"/>
+                <ellipse cx="290" cy="280" rx="160" ry="70" fill="#93c5fd" opacity="0.25"/>
+                <!-- Pathway -->
+                <path d="M190 300 Q 230 230 290 190 Q 360 160 410 160 Q 370 160 300 200 Q 250 240 220 300 Z" fill="#ffffff" opacity="0.8"/>
+                <!-- Signpost -->
+                <g transform="translate(250, 70)">
+                  <rect x="26" y="10" width="8" height="180" fill="#475569" rx="2"/>
+                  <!-- Sign 1: Education -->
+                  <path d="M0 16 L65 16 L76 30 L65 44 L0 44 Z" fill="#2563eb"/>
+                  <text x="10" y="34" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Education</text>
+                  <!-- Sign 2: Career -->
+                  <path d="M6 54 L72 54 L83 68 L72 82 L6 82 Z" fill="#10b981"/>
+                  <text x="18" y="72" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Career</text>
+                  <!-- Sign 3: Success -->
+                  <path d="M4 92 L70 92 L81 106 L70 120 L4 120 Z" fill="#f59e0b"/>
+                  <text x="14" y="110" font-family="Segoe UI, sans-serif" font-size="12" font-weight="700" fill="#ffffff">Success</text>
+                </g>
+                <!-- Student with Backpack -->
+                <g transform="translate(130, 115)">
+                  <!-- Head -->
+                  <circle cx="50" cy="38" r="16" fill="#1e293b"/>
+                  <circle cx="56" cy="40" r="12" fill="#fbcfe8"/>
+                  <!-- Body -->
+                  <path d="M32 54 C32 54 46 48 64 54 L64 135 L32 135 Z" fill="#1d4ed8"/>
+                  <!-- Backpack -->
+                  <rect x="16" y="60" width="28" height="50" rx="10" fill="#2563eb"/>
+                  <rect x="20" y="68" width="20" height="22" rx="6" fill="#1e40af"/>
+                  <!-- Pants -->
+                  <path d="M32 125 L40 135 L44 135 L44 158 L32 158 Z" fill="#0f172a"/>
+                  <path d="M46 135 L54 125 L64 125 L64 158 L52 158 Z" fill="#0f172a"/>
+                </g>
+              </svg>
+            </div>
           </a>
         </div>
         <!-- Slide 2: Government Scholarships -->
-        <div class="carousel-item-slide">
-          <a href="pages/scholarships.html" style="display: block; width: 100%; height: 100%;">
-            <img src="assets/banners/banner2.svg" alt="Government Scholarships Scheme">
+        <div class="carousel-item-slide slide-theme-pink">
+          <a href="pages/scholarships.html" class="slide-card-link">
+            <div class="slide-content-col">
+              <h2 class="slide-heading">Government<br class="desktop-br"> Scholarships</h2>
+              <p class="slide-description">Explore national and state financial aid schemes for higher studies and skill certifications.</p>
+              <span class="slide-action-btn btn-pink">View Scholarships ➔</span>
+            </div>
+            <div class="slide-graphic-col">
+              <div class="slide-badge-circle badge-pink-circle">
+                <span class="slide-emoji-icon">🪙</span>
+              </div>
+            </div>
           </a>
         </div>
         <!-- Slide 3: AI Career Guidance -->
-        <div class="carousel-item-slide">
-          <a href="pages/ai-guidance.html" style="display: block; width: 100%; height: 100%;">
-            <img src="assets/banners/banner3.svg" alt="AI-Powered Career Guidance">
+        <div class="carousel-item-slide slide-theme-green">
+          <a href="pages/ai-guidance.html" class="slide-card-link">
+            <div class="slide-content-col">
+              <h2 class="slide-heading">AI-Powered<br class="desktop-br"> Career Advice</h2>
+              <p class="slide-description">Get customized step-by-step guidance based on your favorite subjects and interests.</p>
+              <span class="slide-action-btn btn-green">Get AI Advice ➔</span>
+            </div>
+            <div class="slide-graphic-col">
+              <div class="slide-badge-circle badge-green-circle">
+                <span class="slide-emoji-icon">🤖</span>
+              </div>
+            </div>
           </a>
         </div>
       </div>
@@ -373,6 +434,27 @@
       if (carouselWrapper) {
         carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
         carouselWrapper.addEventListener('mouseleave', startAutoSlide);
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+        carouselWrapper.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+          stopAutoSlide();
+        }, { passive: true });
+
+        carouselWrapper.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          const diff = touchStartX - touchEndX;
+          if (Math.abs(diff) > 40) {
+            if (diff > 0) {
+              nextSlide();
+            } else {
+              prevSlide();
+            }
+          }
+          startAutoSlide();
+        }, { passive: true });
       }
 
       // Start automatic sliding

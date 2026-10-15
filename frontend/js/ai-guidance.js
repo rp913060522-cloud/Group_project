@@ -1,6 +1,6 @@
 /**
  * CareerSetu — AI Career Guidance Logic (Phase 4)
- * Connects to /api/ai/analyze and /api/ai/saved endpoints powered by Google Gemini AI.
+ * Connects to /api/ai/analyze and /api/ai/saved endpoints powered by Groq AI.
  * Handles loading, incomplete profile, guest mode, error recovery, and dynamic card rendering.
  */
 
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (response.ok) {
         const data = await response.json();
         if (data.status === 'success' && data.guidance) {
-          renderGuidance(data.guidance, 'Gemini AI (Saved)');
+          renderGuidance(data.guidance, 'Groq AI (Saved)');
         }
       }
     } catch (e) {
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 5. Button Click Handler: Request Real Gemini AI Guidance
+  // 5. Button Click Handler: Request Real Groq AI Guidance
   if (getSuggestionsBtn) {
     getSuggestionsBtn.addEventListener('click', () => {
       const field = interestInput ? interestInput.value.trim() : '';
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (getSuggestionsBtn) {
       getSuggestionsBtn.disabled = true;
-      getSuggestionsBtn.textContent = 'Analyzing with Gemini AI...';
+      getSuggestionsBtn.textContent = 'Analyzing with Groq AI...';
     }
 
     try {
@@ -217,14 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 6. Render Dynamic Gemini Guidance Content
+  // 6. Render Dynamic Groq Guidance Content
   function renderGuidance(guidance, modelName) {
     if (!resultContainer) return;
 
     // Model Badge
     const modelBadge = document.getElementById('aiModelBadge');
     if (modelBadge) {
-      modelBadge.textContent = modelName ? `Powered by Gemini (${modelName})` : 'Powered by Gemini AI';
+      modelBadge.textContent = modelName ? `Powered by Groq (${modelName})` : 'Powered by Groq AI';
     }
 
     // Profile Summary

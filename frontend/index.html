@@ -9,44 +9,82 @@
 </head>
 <body>
 
-  <!-- Splash Screen (Matching Stitch: Splash Screen 1 sec) -->
+  <!-- Splash Screen / Onboarding (Matching Stitch UI) -->
   <main class="splash-wrapper" id="splashScreen">
-    
-    <!-- Logo -->
-    <div class="splash-logo-box">
-      <img src="assets/careersetu-logo.png" alt="CareerSetu Logo">
+
+    <!-- Skip Link near Top-Right -->
+    <a href="login.html" id="splashSkipBtn" class="splash-skip-btn" aria-label="Skip onboarding to Login">
+      Skip
+    </a>
+
+    <!-- Center Content Box -->
+    <div class="splash-center-content">
+      <!-- Logo -->
+      <div class="splash-logo-box">
+        <img src="assets/careersetu-logo.png" alt="CareerSetu Logo">
+      </div>
+
+      <!-- Title & Tagline -->
+      <h1 class="splash-title">
+        Career<span>Setu</span>
+      </h1>
+      <p class="splash-tagline">Your Future, Our Guidance</p>
+
+      <!-- Four Onboarding Slides -->
+      <div class="splash-slides-container" id="splashSlidesContainer" aria-live="polite">
+        <!-- Slide 1 -->
+        <div class="splash-slide active" data-slide="0">
+          <div class="splash-welcome-box">
+            <h2>Welcome!</h2>
+            <p>Your future begins here...</p>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="splash-slide" data-slide="1">
+          <div class="splash-welcome-box">
+            <h2>Discover Your Path</h2>
+            <p>Explore career options tailored to your education and passions.</p>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="splash-slide" data-slide="2">
+          <div class="splash-welcome-box">
+            <h2>Scholarships & Schemes</h2>
+            <p>Find verified government scholarships and educational opportunities.</p>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="splash-slide" data-slide="3">
+          <div class="splash-welcome-box">
+            <h2>AI Career Guidance</h2>
+            <p>Get personalized intelligent guidance to achieve your dreams.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Dots Indicator -->
+      <div class="splash-dots" id="splashDots" role="tablist" aria-label="Onboarding slide indicators">
+        <button type="button" class="splash-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Slide 1: Welcome"></button>
+        <button type="button" class="splash-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Slide 2: Discover Your Path"></button>
+        <button type="button" class="splash-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Slide 3: Scholarships & Schemes"></button>
+        <button type="button" class="splash-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Slide 4: AI Career Guidance"></button>
+      </div>
+
+      <!-- Welcome Action Button -->
+      <div class="splash-action-box">
+        <a href="login.html" id="splashNextBtn" class="btn btn-primary splash-next-btn">
+          Next ➔
+        </a>
+      </div>
     </div>
 
-    <!-- Title & Tagline -->
-    <h1 class="splash-title">
-      Career<span>Setu</span>
-    </h1>
-    <p class="splash-tagline">Your Future, Our Guidance</p>
-
-    <!-- Welcome Message -->
-    <div class="splash-welcome-box">
-      <h2>Welcome!</h2>
-      <p>Your future begins here...</p>
-    </div>
-
-    <!-- 4 Dots Indicator -->
-    <div class="splash-dots">
-      <div class="splash-dot active"></div>
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-    </div>
-
-    <!-- Welcome Action Button -->
-    <div style="margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
-      <a href="login.html" id="splashNextBtn" class="btn btn-primary" style="padding: 14px 44px; border-radius: var(--radius-pill); font-size: 1.05rem; font-weight: 700; min-width: 170px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25); display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
-        Next ➔
-      </a>
-    </div>
-
-    <div style="position: absolute; bottom: 20px; font-size: 0.82rem; color: var(--text-light);">
+    <!-- College CEP Project Footer -->
+    <footer class="splash-footer">
       College CEP Project • Community Engagement Program
-    </div>
+    </footer>
   </main>
 
   <script src="js/auth.js"></script>

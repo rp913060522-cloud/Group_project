@@ -42,18 +42,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Welcome / Splash Screen Button Handler (No automatic timer redirect)
-  const splashNextBtn = document.getElementById('splashNextBtn') || document.getElementById('splashContinueBtn');
-  if (splashNextBtn) {
-    splashNextBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      // Navigate to the next appropriate page based on active session
+  // Welcome / Splash Screen Onboarding Logic (No automatic timer redirects)
+  const splashWrapper = document.getElementById('splashScreen');
+  if (splashWrapper) {
+    const splashSlides = splashWrapper.querySelectorAll('.splash-slide');
+    const splashDots = splashWrapper.querySelectorAll('.splash-dot');
+    const splashNextBtn = document.getElementById('splashNextBtn') || document.getElementById('splashContinueBtn');
+    const splashSkipBtn = document.getElementById('splashSkipBtn');
+    let currentSlide = 0;
+    const totalSlides = splashSlides.length > 0 ? splashSlides.length : 4;
+
+    function navigateToAuthOrDashboard() {
       const hasSession = sessionStorage.getItem('student_logged_in') === 'true' || sessionStorage.getItem('is_guest_user') === 'true';
       if (hasSession) {
         window.location.href = 'dashboard.html';
       } else {
         window.location.href = 'login.html';
       }
+    }
+
+    function showSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      currentSlide = index;
+
+      // Update slides visibility
+      splashSlides.forEach((slide, idx) => {
+        if (idx === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update dot indicators
+      splashDots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.classList.add('active');
+          dot.setAttribute('aria-selected', 'true');
+        } else {
+          dot.classList.remove('active');
+          dot.setAttribute('aria-selected', 'false');
+        }
+      });
+
+      // Update Next button label on final slide
+      if (splashNextBtn) {
+        if (currentSlide === totalSlides - 1) {
+          splashNextBtn.innerHTML = 'Get Started ➔';
+        } else {
+          splashNextBtn.innerHTML = 'Next ➔';
+        }
+      }
+    }
+
+    // Manual Next button handler
+    if (splashNextBtn) {
+      splashNextBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (currentSlide < totalSlides - 1) {
+          showSlide(currentSlide + 1);
+        } else {
+          navigateToAuthOrDashboard();
+        }
+      });
+    }
+
+    // Skip button handler: Navigates to Login/Register without breaking auth flow
+    if (splashSkipBtn) {
+      splashSkipBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateToAuthOrDashboard();
+      });
+    }
+
+    // Manual slide dot indicator clicks
+    splashDots.forEach((dot, idx) => {
+      dot.addEventListener('click', (e) => {
+        e.preventDefault();
+        showSlide(idx);
+      });
     });
   }
 

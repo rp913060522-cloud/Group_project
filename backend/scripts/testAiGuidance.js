@@ -1,14 +1,17 @@
 /**
- * CareerSetu — Phase 4 AI Career Guidance Test Suite
+ * CareerSetu — Phase 4 AI Career Guidance Test Suite (Groq API)
  *
  * Automated tests for:
- *   1. Unauthenticated requests rejected (HTTP 401)
- *   2. Incomplete profile validation (HTTP 400, status: 'incomplete_profile')
- *   3. Successful mocked AI career guidance generation (HTTP 200)
- *   4. Retrieval of saved AI guidance (GET /api/ai/saved)
- *   5. Provider error and timeout handling (HTTP 502 / 504)
- *   6. Cross-student AI result isolation (Student A results not shared with Student B)
- *   7. Zero secret or key leakage in responses
+ *   1. Route resolution & mounting (HTTP 200/401/404)
+ *   2. Unauthenticated requests rejected (HTTP 401)
+ *   3. Incomplete profile validation (HTTP 400, status: 'incomplete_profile')
+ *   4. Successful mocked Groq AI career guidance generation (HTTP 200)
+ *   5. Retrieval of saved AI guidance (GET /api/ai/saved)
+ *   6. Provider error, timeout, rate limiting, and config handling (HTTP 429 / 500 / 502 / 504)
+ *   7. Cross-student AI result isolation (Student A results not shared with Student B)
+ *   8. Zero secret or key leakage in responses (no GROQ_API_KEY / password)
+ *   9. Groq model candidate resolution & resiliency
+ *  10. parseGroqJSON resilience & error handling
  */
 
 'use strict';
@@ -164,7 +167,7 @@ const mockAiResponse = {
 
 async function run() {
   console.log('====================================================');
-  console.log('   CareerSetu — Phase 4 AI Guidance Tests');
+  console.log('   CareerSetu — Phase 4 AI Guidance Tests (Groq API)');
   console.log('====================================================\n');
 
   setupMockDatabase();
@@ -258,14 +261,14 @@ async function run() {
     const studentADoc = inMemoryStore.get(studentAId);
     assert(Boolean(studentADoc.personalInfo?.fullName && studentADoc.education?.eduLevel && studentADoc.education?.stream && studentADoc.careerInterest?.field), 'Student A has all required AI fields');
 
-    /* ── 4. Successful Mocked AI Guidance Generation ─────────────────── */
-    console.log('\n4. Successful AI Guidance Generation (Mocked Gemini):');
+    /* ── 4. Successful Mocked Groq AI Guidance Generation ───────────── */
+    console.log('\n4. Successful AI Guidance Generation (Mocked Groq):');
 
     // Mock aiService method
     aiService.generateCareerGuidance = async function (student, customInterest) {
       return {
         guidance: mockAiResponse,
-        modelUsed: 'gemini-flash-latest-mock',
+        modelUsed: 'llama-3.3-70b-versatile-mock',
         rawText: JSON.stringify(mockAiResponse)
       };
     };
@@ -295,12 +298,12 @@ async function run() {
     assert(savedRes.data.status === 'success', 'Saved guidance response has status: "success"');
     assert(savedRes.data.guidance.recommendedCareers[0].title === 'Junior Data Analyst', 'Returns previously saved career title');
 
-    /* ── 6. Provider Error and Timeout Handling ─────────────────────── */
-    console.log('\n6. Provider Error & Timeout Handling:');
+    /* ── 6. Provider Error, Rate Limit, Timeout & Config Handling ────── */
+    console.log('\n6. Provider Error, Rate Limit, Timeout & Config Handling:');
 
     // Simulate provider timeout
     aiService.generateCareerGuidance = async function () {
-      const timeoutErr = new Error('Request to Gemini timed out.');
+      const timeoutErr = new Error('Request to Groq timed out.');
       timeoutErr.code = 'TIMEOUT';
       throw timeoutErr;
     };
@@ -309,7 +312,31 @@ async function run() {
     assert(timeoutRes.status === 504, 'Provider timeout mapped to HTTP 504 Gateway Timeout');
     assert(timeoutRes.data.status === 'error', 'Timeout response has status: "error"');
 
-    // Simulate provider failure
+    // Simulate rate limit (429)
+    aiService.generateCareerGuidance = async function () {
+      const rateLimitErr = new Error('Rate limit exceeded');
+      rateLimitErr.code = 'RATE_LIMIT';
+      rateLimitErr.status = 429;
+      throw rateLimitErr;
+    };
+
+    const rateLimitRes = await request(port, 'POST', '/api/ai/analyze', {}, tokenA);
+    assert(rateLimitRes.status === 429, 'Rate limit mapped to HTTP 429 Too Many Requests');
+    assert(rateLimitRes.data.status === 'error', 'Rate limit response has status: "error"');
+    assert(rateLimitRes.data.message.includes('rate limit'), 'Rate limit response mentions rate limit');
+
+    // Simulate missing GROQ_API_KEY
+    aiService.generateCareerGuidance = async function () {
+      const configErr = new Error('Groq API key is not configured in environment variables.');
+      configErr.code = 'CONFIG_MISSING';
+      throw configErr;
+    };
+
+    const configErrRes = await request(port, 'POST', '/api/ai/analyze', {}, tokenA);
+    assert(configErrRes.status === 500, 'Missing GROQ_API_KEY mapped to HTTP 500');
+    assert(configErrRes.data.message.includes('GROQ_API_KEY'), 'Missing config response references GROQ_API_KEY');
+
+    // Simulate provider failure / invalid model
     aiService.generateCareerGuidance = async function () {
       const err = new Error('Provider unavailable');
       err.code = 'PROVIDER_ERROR';
@@ -330,20 +357,72 @@ async function run() {
 
     /* ── 8. Zero Secret Leakage ─────────────────────────────────────── */
     console.log('\n8. Secret & Key Leakage Prevention:');
-    const checkedPayloads = [validAiRes.data, savedRes.data, timeoutRes.data, providerErrRes.data];
+    const checkedPayloads = [validAiRes.data, savedRes.data, timeoutRes.data, rateLimitRes.data, configErrRes.data, providerErrRes.data];
     for (const payload of checkedPayloads) {
       const rawString = JSON.stringify(payload);
-      assert(!rawString.includes(process.env.GEMINI_API_KEY || 'fake_key'), 'Response never leaks GEMINI_API_KEY');
+      assert(!rawString.includes(process.env.GROQ_API_KEY || 'fake_key'), 'Response never leaks GROQ_API_KEY');
       assert(!rawString.includes('passwordHash'), 'Response never leaks passwordHash');
       assert(!rawString.includes('password'), 'Response never leaks password');
     }
+
+    /* ── 9. Groq Model Candidate Resolution & Resiliency ─────────────── */
+    console.log('\n9. Groq Model Candidate Resolution & Resiliency:');
+    assert(typeof aiService.getModelCandidates === 'function', 'aiService exports getModelCandidates function');
+    const defaultCandidates = aiService.getModelCandidates();
+    assert(Array.isArray(defaultCandidates) && defaultCandidates.length >= 3, 'getModelCandidates returns array of fallback candidates');
+    assert(defaultCandidates.includes('openai/gpt-oss-120b'), 'Fallback candidates include openai/gpt-oss-120b');
+    assert(defaultCandidates.includes('openai/gpt-oss-20b'), 'Fallback candidates include openai/gpt-oss-20b');
+    assert(defaultCandidates.includes('qwen/qwen3.8-27b'), 'Fallback candidates include qwen/qwen3.8-27b');
+
+    const customCandidates = aiService.getModelCandidates('custom-groq-model');
+    assert(customCandidates[0] === 'custom-groq-model', 'Custom model from GROQ_MODEL is prioritized first');
+    assert(new Set(customCandidates).size === customCandidates.length, 'Candidate list contains no duplicates');
+
+    /* ── 10. parseGroqJSON Resilience & Schema Validation ────────────── */
+    console.log('\n10. parseGroqJSON Resilience & Schema Validation:');
+    assert(typeof aiService.parseGroqJSON === 'function', 'aiService exports parseGroqJSON function');
+
+    // Clean JSON parsing
+    const cleanParsed = aiService.parseGroqJSON(JSON.stringify(mockAiResponse));
+    assert(cleanParsed.profileSummary === mockAiResponse.profileSummary, 'Parses clean JSON response');
+    assert(cleanParsed.recommendedCareers.length === 2, 'Retains recommendedCareers elements');
+
+    // Wrapped in markdown code fences
+    const fencedJSON = '```json\n' + JSON.stringify(mockAiResponse) + '\n```';
+    const fencedParsed = aiService.parseGroqJSON(fencedJSON);
+    assert(fencedParsed.profileSummary === mockAiResponse.profileSummary, 'Parses markdown-fenced JSON response');
+
+    // Invalid / empty string handling
+    let emptyThrew = false;
+    try {
+      aiService.parseGroqJSON('');
+    } catch (e) {
+      emptyThrew = true;
+    }
+    assert(emptyThrew, 'Throws error on empty string');
+
+    let malformedThrew = false;
+    try {
+      aiService.parseGroqJSON('this is not json');
+    } catch (e) {
+      malformedThrew = true;
+    }
+    assert(malformedThrew, 'Throws error on non-JSON content');
+
+    let missingCareersThrew = false;
+    try {
+      aiService.parseGroqJSON(JSON.stringify({ profileSummary: 'Valid summary', recommendedCareers: [] }));
+    } catch (e) {
+      missingCareersThrew = true;
+    }
+    assert(missingCareersThrew, 'Throws error when recommendedCareers array is missing or empty');
 
     console.log('\n====================================================');
     console.log(`Result: ${passedTests} of ${totalTests} checks passed.`);
     console.log('====================================================');
 
     if (passedTests === totalTests) {
-      console.log('🎉 Phase 4 AI Guidance API verified successfully!\n');
+      console.log('🎉 Phase 4 AI Guidance API (Groq) verified successfully!\n');
     }
   } finally {
     restoreAll();

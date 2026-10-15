@@ -50,6 +50,11 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   background-color: var(--bg-page);
@@ -59,6 +64,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 a {
@@ -477,10 +484,40 @@ a:hover {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    height: 58px;
+    padding: 0 12px;
+  }
+  .nav-brand {
+    gap: 8px;
+  }
+  .nav-brand img {
+    height: 30px;
+    max-width: 30px;
+  }
+  .brand-title {
+    font-size: 1.15rem;
+  }
+  .nav-user {
+    gap: 6px;
+    font-size: 0.84rem;
+  }
+  .nav-user img {
+    width: 28px;
+    height: 28px;
+  }
+  #headerStudentName {
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+  }
   .nav-links {
     display: none;
     position: absolute;
-    top: 68px;
+    top: 58px;
     left: 0;
     right: 0;
     background: #ffffff;
@@ -497,6 +534,17 @@ a:hover {
   }
   .form-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+  .portal-footer {
+    padding: 16px 12px;
+    font-size: 0.78rem;
+    line-height: 1.4;
   }
 }
 

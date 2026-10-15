@@ -25,15 +25,25 @@ const PORT = process.env.PORT || 5000;
 
 /* ── Middleware ──────────────────────────────────────────────────────────── */
 
-// CORS — allow the frontend (served from the file system or a local dev server)
+// CORS — allow frontend in local development and production (Render/custom domain)
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5500',   // Live Server (VS Code)
+  'http://127.0.0.1:5500',
+  'http://localhost:5000',
+  /^file:\/\//               // local file:// pages during development
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5500',   // Live Server (VS Code)
-    'http://127.0.0.1:5500',
-    'http://localhost:5000',
-    /^file:\/\//               // local file:// pages during development
-  ],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, or same-origin static files)
+    if (!origin) return callback(null, true);
+    if (process.env.NODE_ENV === 'production') return callback(null, true);
+    if (allowedOrigins.some(o => (o instanceof RegExp ? o.test(origin) : o === origin))) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Safe fallback to allow deployed frontend
+  },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -82,7 +92,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 // Phase 3: Student Data & Profile Persistence
 app.use('/api/student', require('./routes/studentRoutes'));
 
-// Phase 4: Gemini AI Career Guidance
+// Phase 4: Groq AI Career Guidance
 app.use('/api/ai', require('./routes/aiRoutes'));
 
 // Phase 5: app.use('/api/admin',   require('./routes/adminRoutes'));

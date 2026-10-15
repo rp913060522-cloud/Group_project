@@ -6,7 +6,7 @@
  *   2. Educational background (education page)
  *   3. Career interest        (career-interest page)
  *
- * Phase 4 will add: aiResult (Gemini analysis output)
+ * Phase 4: aiResult (Groq AI analysis output)
  * Phase 5 will let the admin read these documents.
  */
 
@@ -62,9 +62,9 @@ const careerInterestSchema = new mongoose.Schema(
 const aiResultSchema = new mongoose.Schema(
   {
     generatedAt:    { type: Date },
-    promptSummary:  { type: String },       // truncated prompt sent to Gemini
-    rawResponse:    { type: String },       // raw Gemini text (for debugging)
-    parsedResult:   { type: mongoose.Schema.Types.Mixed }, // structured JSON from Gemini
+    promptSummary:  { type: String },       // truncated prompt sent to AI
+    rawResponse:    { type: String },       // raw AI response text (for debugging)
+    parsedResult:   { type: mongoose.Schema.Types.Mixed }, // structured JSON from AI
     status:         {
       type: String,
       enum: ['pending', 'success', 'error'],
@@ -135,7 +135,7 @@ studentSchema.methods.comparePassword = async function (candidatePassword) {
 };
 
 /**
- * Checks whether all three profile sections are filled enough to send to Gemini.
+ * Checks whether all three profile sections are filled enough to send to AI.
  */
 studentSchema.methods.isReadyForAI = function () {
   const hasProfile   = !!(this.personalInfo?.fullName);

@@ -3,21 +3,60 @@
    Exact match to: welcome page and login page.jpeg
    ======================================================== */
 
-/* Splash Screen (1 sec or landing view) */
+/* Splash Screen / Onboarding View */
 .splash-wrapper {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: radial-gradient(circle at 10% 20%, #eaf3fe 0%, #ffffff 80%);
   position: relative;
   text-align: center;
-  padding: 40px 20px;
+  padding: 36px 20px 24px;
+  box-sizing: border-box;
+}
+
+/* Skip link near top-right */
+.splash-skip-btn {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary, #2563eb);
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 6px 18px;
+  border-radius: var(--radius-pill, 9999px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition, all 0.2s ease);
+  z-index: 10;
+}
+
+.splash-skip-btn:hover {
+  background: var(--primary, #2563eb);
+  color: #ffffff;
+  border-color: var(--primary, #2563eb);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+}
+
+.splash-center-content {
+  width: 100%;
+  max-width: 480px;
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .splash-logo-box {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .splash-logo-box img {
@@ -44,12 +83,44 @@
 .splash-tagline {
   font-size: 0.95rem;
   color: var(--text-muted);
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   letter-spacing: 0.5px;
 }
 
+/* Four-slide onboarding experience */
+.splash-slides-container {
+  width: 100%;
+  max-width: 440px;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.splash-slide {
+  display: none;
+  width: 100%;
+  animation: splashFadeIn 0.22s ease-out;
+}
+
+.splash-slide.active {
+  display: block;
+}
+
+@keyframes splashFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .splash-welcome-box {
-  margin-top: 20px;
+  margin: 0;
 }
 
 .splash-welcome-box h2 {
@@ -62,27 +133,128 @@
 .splash-welcome-box p {
   font-size: 1rem;
   color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
 }
 
+/* Four slide indicators: small, clean, visually consistent */
 .splash-dots {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  margin-top: 36px;
+  align-items: center;
+  margin-top: 32px;
 }
 
 .splash-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #bfdbfe;
-  transition: var(--transition);
+  background: #bfdbfe; /* Light blue for inactive slides */
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.splash-dot:hover {
+  background: #93c5fd;
 }
 
 .splash-dot.active {
-  background: var(--primary);
-  width: 24px;
-  border-radius: 12px;
+  background: var(--primary, #2563eb); /* Highlight active slide in blue */
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: scale(1.15);
+}
+
+/* Action box and button */
+.splash-action-box {
+  margin-top: 32px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.splash-next-btn {
+  padding: 13px 44px;
+  border-radius: var(--radius-pill, 9999px);
+  font-size: 1.05rem;
+  font-weight: 700;
+  min-width: 170px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition, all 0.2s ease);
+}
+
+.splash-footer {
+  font-size: 0.82rem;
+  color: var(--text-light, #94a3b8);
+  margin-top: 24px;
+  padding: 8px 16px;
+  text-align: center;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 600px) {
+  .splash-wrapper {
+    padding: 24px 16px 16px;
+  }
+  .splash-skip-btn {
+    top: 16px;
+    right: 16px;
+    font-size: 0.82rem;
+    padding: 5px 14px;
+  }
+  .splash-title {
+    font-size: 1.9rem;
+  }
+  .splash-tagline {
+    margin-bottom: 20px;
+  }
+  .splash-logo-box img {
+    max-width: 110px;
+    max-height: 80px;
+  }
+  .splash-welcome-box h2 {
+    font-size: 1.35rem;
+  }
+  .splash-welcome-box p {
+    font-size: 0.92rem;
+  }
+  .splash-dots {
+    margin-top: 24px;
+    gap: 8px;
+  }
+  .splash-dot {
+    width: 9px;
+    height: 9px;
+  }
+  .splash-dot.active {
+    width: 9px;
+    height: 9px;
+  }
+  .splash-action-box {
+    margin-top: 24px;
+  }
+  .splash-next-btn {
+    width: 100%;
+    max-width: 240px;
+    padding: 12px 28px;
+  }
+  .splash-footer {
+    font-size: 0.76rem;
+    margin-top: 16px;
+  }
 }
 
 /* ========================================================

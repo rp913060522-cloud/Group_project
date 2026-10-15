@@ -13,11 +13,11 @@
     "test": "npm run test:health && npm run test:auth && npm run test:student && npm run test:ai"
   },
   "dependencies": {
-    "@google/genai": "^2.28.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "groq-sdk": "^1.6.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.4.1"
   },
