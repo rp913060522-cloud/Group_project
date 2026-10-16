@@ -30,7 +30,11 @@ async function analyzeCareer(req, res) {
     if (!student.education?.eduLevel || !student.education?.stream) {
       missing.push('Educational Background');
     }
-    if (!student.careerInterest?.field && (!req.body || !req.body.interest)) {
+    const effectiveSavedField = (student.careerInterest?.field === 'Other' && student.careerInterest?.fieldCustom)
+      ? student.careerInterest.fieldCustom
+      : student.careerInterest?.field;
+
+    if (!effectiveSavedField && (!req.body || !req.body.interest)) {
       missing.push('Career Interests');
     }
 
@@ -57,7 +61,7 @@ async function analyzeCareer(req, res) {
     // Save generated guidance in student's own record
     student.aiResult = {
       generatedAt: new Date(),
-      promptSummary: `Guidance for ${customInterest || student.careerInterest?.field}`,
+      promptSummary: `Guidance for ${customInterest || effectiveSavedField}`,
       parsedResult: guidance,
       status: 'success'
     };

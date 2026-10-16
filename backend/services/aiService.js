@@ -78,12 +78,14 @@ function buildPrompt(studentProfile, customInterest) {
   const edu   = studentProfile.education || {};
   const cInt  = studentProfile.careerInterest || {};
 
-  const effectiveField  = (customInterest || cInt.field || 'General').trim();
+  const resolvedField = (cInt.field === 'Other' && cInt.fieldCustom) ? cInt.fieldCustom : cInt.field;
+  const effectiveField  = (customInterest || resolvedField || 'General').trim();
   const effectiveEdu    = (edu.eduLevel || 'Student').trim();
   const effectiveStream = (edu.stream || 'General').trim();
   const marks           = (edu.marks || 'Not specified').trim();
   const favSubjects     = (cInt.favSubjects || 'Not specified').trim();
-  const preference      = (cInt.preference || 'Career guidance').trim();
+  const resolvedPreference = (cInt.preference === 'Other' && cInt.preferenceCustom) ? cInt.preferenceCustom : cInt.preference;
+  const preference      = (resolvedPreference || 'Career guidance').trim();
   const skills          = (cInt.skills || 'Not specified').trim();
 
   return `

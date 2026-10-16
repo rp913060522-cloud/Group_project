@@ -49,11 +49,15 @@ const educationSchema = new mongoose.Schema(
 /* ── Sub-schema: Career Interest ─────────────────────────────────────────── */
 const careerInterestSchema = new mongoose.Schema(
   {
-    field:        { type: String, trim: true },  // preferred field/industry
-    favSubjects:  { type: String, trim: true },
-    preference:   { type: String, trim: true },  // Immediate Job / Higher Studies / etc.
-    skills:       { type: String, trim: true },  // skills the student wants to learn
-    updatedAt:    { type: Date, default: Date.now }
+    field:            { type: String, trim: true },  // effective preferred field/industry
+    fieldSelect:      { type: String, trim: true },  // dropdown value ('Other' or predefined)
+    fieldCustom:      { type: String, trim: true },  // text if 'Other' was chosen
+    favSubjects:      { type: String, trim: true },
+    preference:       { type: String, trim: true },  // effective career preference / priority
+    preferenceSelect: { type: String, trim: true },  // dropdown value ('Other' or predefined)
+    preferenceCustom: { type: String, trim: true },  // text if 'Other' was chosen
+    skills:           { type: String, trim: true },  // skills the student wants to learn
+    updatedAt:        { type: Date, default: Date.now }
   },
   { _id: false }
 );
@@ -140,7 +144,10 @@ studentSchema.methods.comparePassword = async function (candidatePassword) {
 studentSchema.methods.isReadyForAI = function () {
   const hasProfile   = !!(this.personalInfo?.fullName);
   const hasEducation = !!(this.education?.eduLevel && this.education?.stream);
-  const hasInterest  = !!(this.careerInterest?.field);
+  const effectiveField = (this.careerInterest?.field === 'Other' && this.careerInterest?.fieldCustom)
+    ? this.careerInterest.fieldCustom
+    : this.careerInterest?.field;
+  const hasInterest  = !!(effectiveField && effectiveField !== 'Other');
   return hasProfile && hasEducation && hasInterest;
 };
 

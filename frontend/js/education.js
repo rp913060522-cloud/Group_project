@@ -115,6 +115,305 @@ document.addEventListener('DOMContentLoaded', async () => {
     streamSelect.addEventListener('change', () => updateStreamVisibility(true));
   }
 
+  // ── Accessible Custom Select Component ────────────────────────
+  function setupAccessibleSelect(selectId, labelId) {
+    const selectEl = document.getElementById(selectId);
+    const labelEl = document.getElementById(labelId);
+    if (!selectEl) return null;
+
+    // Remove native required attribute so custom trigger handles validation focus cleanly
+    selectEl.removeAttribute('required');
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+    wrapper.id = `${selectId}Wrapper`;
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'custom-select-trigger';
+    trigger.id = `${selectId}Trigger`;
+    trigger.setAttribute('role', 'combobox');
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.setAttribute('aria-controls', `${selectId}Menu`);
+    if (labelId) {
+      trigger.setAttribute('aria-labelledby', `${labelId} ${selectId}Trigger`);
+    }
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'custom-select-label';
+
+    const arrowSpan = document.createElement('span');
+    arrowSpan.className = 'custom-select-arrow';
+    arrowSpan.setAttribute('aria-hidden', 'true');
+    arrowSpan.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    trigger.appendChild(labelSpan);
+    trigger.appendChild(arrowSpan);
+
+    const menu = document.createElement('ul');
+    menu.className = 'custom-select-menu';
+    menu.id = `${selectId}Menu`;
+    menu.setAttribute('role', 'listbox');
+    menu.setAttribute('tabindex', '-1');
+    if (labelId) {
+      menu.setAttribute('aria-labelledby', labelId);
+    }
+
+    // Insert wrapper before select and nest elements
+    selectEl.parentNode.insertBefore(wrapper, selectEl);
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(menu);
+    wrapper.appendChild(selectEl);
+
+    // Apply visually hidden styling to native select
+    selectEl.classList.add('custom-select-native');
+    selectEl.setAttribute('tabindex', '-1');
+    selectEl.setAttribute('aria-hidden', 'true');
+
+    // Build option items from native select
+    function rebuildOptions() {
+      menu.innerHTML = '';
+      Array.from(selectEl.options).forEach((opt, idx) => {
+        const li = document.createElement('li');
+        li.className = 'custom-select-option';
+        li.id = `${selectId}Opt-${idx}`;
+        li.setAttribute('role', 'option');
+        li.setAttribute('data-value', opt.value);
+        li.setAttribute('aria-selected', opt.selected ? 'true' : 'false');
+        li.setAttribute('tabindex', '-1');
+
+        const optText = document.createElement('span');
+        optText.textContent = opt.text;
+        li.appendChild(optText);
+
+        if (opt.selected && opt.value) {
+          const check = document.createElement('span');
+          check.className = 'custom-select-check';
+          check.setAttribute('aria-hidden', 'true');
+          check.textContent = '✓';
+          li.appendChild(check);
+        }
+
+        li.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectValue(opt.value);
+        });
+
+        menu.appendChild(li);
+      });
+      syncDisplay();
+    }
+
+    // Sync trigger and options with selectEl.value
+    function syncDisplay() {
+      const selectedOpt = selectEl.options[selectEl.selectedIndex] || selectEl.options[0];
+      const isPlaceholder = !selectEl.value;
+
+      labelSpan.textContent = selectedOpt ? selectedOpt.text : '';
+      if (isPlaceholder) {
+        labelSpan.classList.add('placeholder');
+      } else {
+        labelSpan.classList.remove('placeholder');
+      }
+
+      Array.from(menu.children).forEach((li) => {
+        const val = li.getAttribute('data-value');
+        const isSelected = val === selectEl.value;
+        li.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+
+        const existingCheck = li.querySelector('.custom-select-check');
+        if (existingCheck) existingCheck.remove();
+
+        if (isSelected && val) {
+          const check = document.createElement('span');
+          check.className = 'custom-select-check';
+          check.setAttribute('aria-hidden', 'true');
+          check.textContent = '✓';
+          li.appendChild(check);
+        }
+      });
+    }
+
+    let highlightedEl = null;
+
+    function setHighlighted(el) {
+      clearHighlight();
+      if (!el) return;
+      highlightedEl = el;
+      el.classList.add('focused');
+      trigger.setAttribute('aria-activedescendant', el.id);
+      el.scrollIntoView({ block: 'nearest' });
+    }
+
+    function clearHighlight() {
+      if (highlightedEl) {
+        highlightedEl.classList.remove('focused');
+        highlightedEl = null;
+      }
+      trigger.removeAttribute('aria-activedescendant');
+    }
+
+    function openMenu() {
+      // Close other open custom select menus
+      document.querySelectorAll('.custom-select-menu.open').forEach((m) => {
+        if (m !== menu) {
+          m.classList.remove('open');
+          const otherTrigger = m.parentNode.querySelector('.custom-select-trigger');
+          if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      menu.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+
+      const selectedItem = menu.querySelector('[aria-selected="true"]');
+      if (selectedItem) {
+        setHighlighted(selectedItem);
+      } else if (menu.firstElementChild) {
+        setHighlighted(menu.firstElementChild);
+      }
+    }
+
+    function closeMenu(refocus = true) {
+      if (!menu.classList.contains('open')) return;
+      menu.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      clearHighlight();
+      if (refocus) trigger.focus();
+    }
+
+    function toggleMenu() {
+      if (menu.classList.contains('open')) {
+        closeMenu(true);
+      } else {
+        openMenu();
+      }
+    }
+
+    function selectValue(val) {
+      if (selectEl.value !== val) {
+        selectEl.value = val;
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      syncDisplay();
+      closeMenu(true);
+    }
+
+    // Click / touch on trigger toggles menu
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleMenu();
+    });
+
+    // Clicking form label focuses custom trigger
+    if (labelEl) {
+      labelEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        trigger.focus();
+      });
+    }
+
+    // Keyboard navigation
+    trigger.addEventListener('keydown', (e) => {
+      const isOpen = menu.classList.contains('open');
+
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          if (!isOpen) {
+            openMenu();
+          } else {
+            const next = highlightedEl ? (highlightedEl.nextElementSibling || menu.firstElementChild) : menu.firstElementChild;
+            setHighlighted(next);
+          }
+          break;
+
+        case 'ArrowUp':
+          e.preventDefault();
+          if (!isOpen) {
+            openMenu();
+          } else {
+            const prev = highlightedEl ? (highlightedEl.previousElementSibling || menu.lastElementChild) : menu.lastElementChild;
+            setHighlighted(prev);
+          }
+          break;
+
+        case 'Home':
+          if (isOpen) {
+            e.preventDefault();
+            setHighlighted(menu.firstElementChild);
+          }
+          break;
+
+        case 'End':
+          if (isOpen) {
+            e.preventDefault();
+            setHighlighted(menu.lastElementChild);
+          }
+          break;
+
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (!isOpen) {
+            openMenu();
+          } else if (highlightedEl) {
+            selectValue(highlightedEl.getAttribute('data-value'));
+          } else {
+            closeMenu(true);
+          }
+          break;
+
+        case 'Escape':
+          if (isOpen) {
+            e.preventDefault();
+            closeMenu(true);
+          }
+          break;
+
+        case 'Tab':
+          if (isOpen) {
+            closeMenu(false);
+          }
+          break;
+
+        default:
+          if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const char = e.key.toLowerCase();
+            const match = Array.from(menu.children).find(li => {
+              const text = li.textContent.trim().toLowerCase();
+              return text.startsWith(char);
+            });
+            if (match) {
+              if (!isOpen) openMenu();
+              setHighlighted(match);
+            }
+          }
+          break;
+      }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target)) {
+        closeMenu(false);
+      }
+    });
+
+    selectEl.addEventListener('change', syncDisplay);
+    rebuildOptions();
+
+    return {
+      sync: syncDisplay,
+      trigger
+    };
+  }
+
+  // Initialize accessible custom dropdowns
+  const eduLevelDropdown = setupAccessibleSelect('eduLevel', 'eduLevelLabel');
+  const streamDropdown = setupAccessibleSelect('stream', 'streamLabel');
+
   // Helper: Populate form fields from an education data object
   function populateEduFields(data) {
     if (!data) return;
@@ -178,6 +477,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (data.marks && marksInput) {
       marksInput.value = data.marks;
     }
+
+    // 5. Synchronize custom select visual controls
+    if (eduLevelDropdown) eduLevelDropdown.sync();
+    if (streamDropdown) streamDropdown.sync();
   }
 
   // 1. Initial pre-fill from localStorage for instantaneous rendering
@@ -226,6 +529,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      if (eduLevelSelect && !eduLevelSelect.value) {
+        showFormMessage('Please select your current education level.', 'error');
+        if (eduLevelDropdown && eduLevelDropdown.trigger) eduLevelDropdown.trigger.focus();
+        return;
+      }
+
+      if (streamSelect && !streamSelect.value) {
+        showFormMessage('Please select your stream or course.', 'error');
+        if (streamDropdown && streamDropdown.trigger) streamDropdown.trigger.focus();
+        return;
+      }
 
       const isOtherEdu = eduLevelSelect ? eduLevelSelect.value === 'Other' : false;
       const isOtherStream = streamSelect ? streamSelect.value === 'Other' : false;

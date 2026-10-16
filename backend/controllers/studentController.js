@@ -225,10 +225,30 @@ async function updateEducation(req, res) {
  */
 async function updateCareerInterest(req, res) {
   try {
-    const { field, favSubjects, preference, skills } = req.body || {};
+    const {
+      field,
+      fieldSelect,
+      fieldCustom,
+      favSubjects,
+      preference,
+      preferenceSelect,
+      preferenceCustom,
+      skills
+    } = req.body || {};
+
+    // Determine effective field and preference (resolving 'Other' to custom text)
+    const effectiveField = (fieldCustom && fieldSelect === 'Other'
+      ? fieldCustom
+      : (field || fieldSelect || fieldCustom || '')
+    ).trim();
+
+    const effectivePreference = (preferenceCustom && preferenceSelect === 'Other'
+      ? preferenceCustom
+      : (preference || preferenceSelect || preferenceCustom || '')
+    ).trim();
 
     // 1. Validation
-    if (!isValidString(field, 2, 100)) {
+    if (!isValidString(effectiveField, 2, 100) || effectiveField.toLowerCase() === 'other') {
       return res.status(400).json({
         status: 'error',
         message: 'Please select or enter your preferred career field.'
@@ -242,10 +262,10 @@ async function updateCareerInterest(req, res) {
       });
     }
 
-    if (!isValidString(preference, 2, 100)) {
+    if (!isValidString(effectivePreference, 2, 100) || effectivePreference.toLowerCase() === 'other') {
       return res.status(400).json({
         status: 'error',
-        message: 'Please select your career preference / priority.'
+        message: 'Please select or enter your career preference / priority.'
       });
     }
 
@@ -267,9 +287,13 @@ async function updateCareerInterest(req, res) {
 
     // 3. Update career interest subdocument
     student.careerInterest = {
-      field: field.trim(),
+      field: effectiveField,
+      fieldSelect: (fieldSelect || '').trim(),
+      fieldCustom: (fieldCustom || '').trim(),
       favSubjects: favSubjects.trim(),
-      preference: preference.trim(),
+      preference: effectivePreference,
+      preferenceSelect: (preferenceSelect || '').trim(),
+      preferenceCustom: (preferenceCustom || '').trim(),
       skills: skills.trim(),
       updatedAt: new Date()
     };

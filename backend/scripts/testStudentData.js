@@ -383,6 +383,37 @@ async function run() {
     assert(saveInterestRes.data.student.careerInterest.skills === validInterestPayload.skills, 'Returns updated skills');
     assert(saveInterestRes.data.student.interestComplete === true, 'Sets interestComplete flag to true');
 
+    // Test rejection of literal 'Other' without custom text
+    const rejectEmptyOther = await request(port, 'PUT', '/api/student/career-interest', {
+      fieldSelect: 'Other',
+      fieldCustom: '',
+      favSubjects: 'Physics',
+      preference: 'Higher Studies',
+      skills: 'C++'
+    }, tokenA);
+    assert(rejectEmptyOther.status === 400, 'Rejects literal Other field when custom text is empty (HTTP 400)');
+
+    // Test saving with custom field and custom preference ('Other')
+    const customInterestPayload = {
+      fieldSelect: 'Other',
+      fieldCustom: 'Robotics & Automation',
+      favSubjects: 'Physics, Mathematics',
+      preferenceSelect: 'Other',
+      preferenceCustom: 'Startup Incubation & Freelance',
+      skills: 'ROS, Python, Arduino'
+    };
+
+    const customInterestRes = await request(port, 'PUT', '/api/student/career-interest', customInterestPayload, tokenA);
+    assert(customInterestRes.status === 200, 'Accepts custom career field and preference (HTTP 200)');
+    assert(customInterestRes.data.student.careerInterest.field === 'Robotics & Automation', 'Stores effective custom career field');
+    assert(customInterestRes.data.student.careerInterest.preference === 'Startup Incubation & Freelance', 'Stores effective custom career preference');
+
+    // Verify GET /api/student/profile returns persisted custom career interest
+    const getInterestProfile = await request(port, 'GET', '/api/student/profile', null, tokenA);
+    assert(getInterestProfile.status === 200, 'GET /api/student/profile returns HTTP 200');
+    assert(getInterestProfile.data.student.careerInterest.field === 'Robotics & Automation', 'GET returns persisted custom field');
+    assert(getInterestProfile.data.student.careerInterest.preference === 'Startup Incubation & Freelance', 'GET returns persisted custom preference');
+
     /* ── 6. Updating Without Duplication ────────────────────────────── */
     console.log('\n6. Updating Profile Without Creating Duplicate Records:');
     const initialRecordCount = inMemoryStore.size;
