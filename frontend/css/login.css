@@ -382,53 +382,6 @@
   font-weight: 700;
 }
 
-.or-divider {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 24px 0;
-  color: var(--text-light);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.or-divider::before, .or-divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--border);
-}
-
-.or-divider span {
-  padding: 0 12px;
-}
-
-.google-btn {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.google-btn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-}
-
 @media (max-width: 900px) {
   .login-page-wrapper {
     flex-direction: column;
