@@ -30,7 +30,15 @@ process.env.JWT_SECRET = process.env.JWT_SECRET || 'test_jwt_secret_careersetu_2
 process.env.JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 
 const Student = require('../models/Student');
+const emailService = require('../services/emailService');
 const { app } = require('../server');
+
+// Intercept email dispatch during test to prevent real outbound emails to dummy test addresses
+const dispatchedResetEmails = [];
+emailService.sendPasswordResetEmail = async function (options) {
+  dispatchedResetEmails.push(options);
+  return { success: true, simulated: true, recipient: options.to, messageId: 'mock-test-id' };
+};
 
 let passedTests = 0;
 let totalTests  = 0;
@@ -357,6 +365,11 @@ async function run() {
     const validForgotRes = await request(port, 'POST', '/api/auth/forgot-password', { email: testStudentData.email });
     assert(validForgotRes.status === 200, 'Forgot password succeeds for registered email with HTTP 200');
     assert(validForgotRes.data.status === 'success', 'Response status is "success"');
+
+    // Email dispatch verification (intended recipient & duplicate prevention)
+    assert(dispatchedResetEmails.length === 1, 'Exactly one password reset email dispatched per request (no duplicates)');
+    assert(dispatchedResetEmails[0].to === testStudentData.email, 'Email sent strictly to intended recipient matching registered student');
+    assert(Boolean(dispatchedResetEmails[0].resetUrl && dispatchedResetEmails[0].resetUrl.includes('/reset-password.html?token=')), 'Reset email contains valid reset URL');
 
     // Check mock database for token
     const studentAfterForgot = inMemoryStore.get(testStudentData.email);

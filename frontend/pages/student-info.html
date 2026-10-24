@@ -144,52 +144,64 @@
 
     </div>
 
-    <!-- Stitch Design 11: Profile Card Preview Modal -->
-    <div id="profileCardModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
-      <div style="background: #ffffff; border-radius: var(--radius-lg); width: 100%; max-width: 820px; box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column;">
-        <div style="padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-main);">My Profile (Stitch Design 11)</h3>
-          <button type="button" id="closeProfileModalBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+        <!-- Profile Card Preview Modal -->
+    <div id="profileCardModal" class="profile-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+      <div class="profile-modal-dialog">
+        <div class="profile-modal-header">
+          <h3 class="profile-modal-title" id="profileModalTitle">My Profile</h3>
+          <button type="button" id="closeProfileModalBtn" class="profile-modal-close" aria-label="Close Profile Modal">&times;</button>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 260px; gap: 24px; padding: 28px;">
-          <!-- Left: Profile Details -->
-          <div>
-            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
-              <img src="../assets/icons/student-avatar.svg" alt="Student Avatar" style="width: 64px; height: 64px; border-radius: 50%;">
-              <div>
-                <h4 style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);" id="cardProfileName">Student</h4>
-                <p style="font-size: 0.9rem; color: var(--text-muted);" id="cardProfileEmail">student@example.com</p>
+        <div class="profile-modal-body">
+          <div class="profile-modal-grid">
+            <!-- Left: Profile Details -->
+            <div class="profile-details-col">
+              <div class="profile-user-summary">
+                <img src="../assets/icons/student-avatar.svg" alt="Student Avatar" class="profile-avatar-img">
+                <div class="profile-user-meta">
+                  <h4 class="profile-user-name" id="cardProfileName">Student</h4>
+                  <p class="profile-user-email" id="cardProfileEmail">student@example.com</p>
+                </div>
+              </div>
+
+              <div class="profile-card-section">
+                <div class="profile-card-heading">Profile Details</div>
+                <div class="profile-details-list">
+                  <div class="profile-detail-row">
+                    <span class="profile-detail-label">Name</span>
+                    <span class="profile-detail-value" id="dtName">Student</span>
+                  </div>
+
+                  <div class="profile-detail-row">
+                    <span class="profile-detail-label">Email</span>
+                    <span class="profile-detail-value" id="dtEmail">student@example.com</span>
+                  </div>
+
+                  <div class="profile-detail-row">
+                    <span class="profile-detail-label">Phone</span>
+                    <span class="profile-detail-value" id="dtPhone">98706543210</span>
+                  </div>
+
+                  <div class="profile-detail-row">
+                    <span class="profile-detail-label">Education</span>
+                    <span class="profile-detail-value" id="dtEdu">12th (Science)</span>
+                  </div>
+
+                  <div class="profile-detail-row">
+                    <span class="profile-detail-label">Interest</span>
+                    <span class="profile-detail-value" id="dtInterest">Data Science</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div style="background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px;">
-              <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; color: var(--text-main);">Profile Details</div>
-              <div style="display: grid; grid-template-columns: 110px 1fr; gap: 10px; font-size: 0.92rem;">
-                <div style="color: var(--text-muted);">Name</div>
-                <div style="font-weight: 600;" id="dtName">: Student</div>
-
-                <div style="color: var(--text-muted);">Email</div>
-                <div style="font-weight: 600;" id="dtEmail">: student@example.com</div>
-
-                <div style="color: var(--text-muted);">Phone</div>
-                <div style="font-weight: 600;" id="dtPhone">: 98706543210</div>
-
-                <div style="color: var(--text-muted);">Education</div>
-                <div style="font-weight: 600;" id="dtEdu">: 12th (Science)</div>
-
-                <div style="color: var(--text-muted);">Interest</div>
-                <div style="font-weight: 600;" id="dtInterest">: Data Science</div>
-              </div>
+            <!-- Right: Motivation Banner -->
+            <div class="profile-motivation-banner">
+              <div class="profile-motivation-emoji">🌱</div>
+              <h4 class="profile-motivation-title">Your Journey</h4>
+              <h4 class="profile-motivation-title">Is Important</h4>
+              <p class="profile-motivation-sub">Keep Going!</p>
             </div>
-          </div>
-
-          <!-- Right: Motivation Banner from Design 11 -->
-          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-            <div style="font-size: 2.2rem; margin-bottom: 16px;">🌱</div>
-            <h4 style="font-size: 1.15rem; font-weight: 800; color: #1e40af; margin-bottom: 6px;">Your Journey</h4>
-            <h4 style="font-size: 1.15rem; font-weight: 800; color: #1e40af; margin-bottom: 6px;">Is Important</h4>
-            <p style="font-size: 0.95rem; font-weight: 600; color: var(--primary);">Keep Going!</p>
           </div>
         </div>
       </div>

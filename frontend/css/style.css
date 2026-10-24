@@ -685,3 +685,340 @@ a:hover {
   }
 }
 
+
+/* ========================================================
+   STUDENT PROFILE PREVIEW MODAL
+   Responsive popup for desktop, tablet, and mobile (320px+)
+   ======================================================== */
+.profile-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.profile-modal-dialog {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 760px;
+  max-height: min(90vh, 680px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  animation: profileModalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+@keyframes profileModalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.profile-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.profile-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.profile-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted);
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  touch-action: manipulation;
+  margin: -6px -6px -6px auto;
+}
+
+.profile-modal-close:hover,
+.profile-modal-close:focus {
+  background: var(--bg-page);
+  color: var(--text-main);
+  outline: none;
+}
+
+.profile-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.profile-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 230px;
+  gap: 20px;
+  align-items: start;
+}
+
+.profile-user-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  min-width: 0;
+}
+
+.profile-avatar-img {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--primary-light);
+  object-fit: cover;
+  border: 2px solid var(--primary-border);
+}
+
+.profile-user-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-user-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 3px 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+
+.profile-user-email {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.profile-card-section {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
+}
+
+.profile-card-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text-main);
+}
+
+.profile-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-detail-row {
+  display: grid;
+  grid-template-columns: 95px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.profile-detail-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.profile-detail-label {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.profile-detail-value {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.profile-motivation-banner {
+  background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-lg);
+  padding: 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.profile-motivation-emoji {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+
+.profile-motivation-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1e40af;
+  margin: 0 0 4px 0;
+  line-height: 1.25;
+}
+
+.profile-motivation-sub {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 6px;
+}
+
+/* ── Mobile Responsive Adaptations ────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .profile-modal-overlay {
+    padding: 12px;
+    align-items: center;
+  }
+
+  .profile-modal-dialog {
+    max-height: calc(100vh - 24px);
+    border-radius: var(--radius-md);
+  }
+
+  .profile-modal-header {
+    padding: 14px 16px;
+  }
+
+  .profile-modal-title {
+    font-size: 1.15rem;
+  }
+
+  .profile-modal-body {
+    padding: 16px;
+  }
+
+  .profile-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .profile-card-section {
+    padding: 14px;
+  }
+
+  .profile-details-list {
+    gap: 10px;
+  }
+
+  .profile-detail-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 8px;
+  }
+
+  .profile-detail-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+  }
+
+  .profile-detail-value {
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .profile-motivation-banner {
+    padding: 16px;
+  }
+
+  .profile-motivation-emoji {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .profile-modal-overlay {
+    padding: 8px;
+  }
+
+  .profile-modal-dialog {
+    max-height: calc(100vh - 16px);
+  }
+
+  .profile-modal-header {
+    padding: 12px 14px;
+  }
+
+  .profile-modal-body {
+    padding: 12px;
+  }
+
+  .profile-avatar-img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .profile-user-name {
+    font-size: 1.1rem;
+  }
+
+  .profile-user-email {
+    font-size: 0.82rem;
+  }
+
+  .profile-card-section {
+    padding: 12px;
+  }
+}

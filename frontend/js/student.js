@@ -210,11 +210,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (document.getElementById('cardProfileName')) document.getElementById('cardProfileName').textContent = name;
       if (document.getElementById('cardProfileEmail')) document.getElementById('cardProfileEmail').textContent = email;
-      if (document.getElementById('dtName')) document.getElementById('dtName').textContent = ': ' + name;
-      if (document.getElementById('dtEmail')) document.getElementById('dtEmail').textContent = ': ' + email;
-      if (document.getElementById('dtPhone')) document.getElementById('dtPhone').textContent = ': ' + phone;
-      if (document.getElementById('dtEdu')) document.getElementById('dtEdu').textContent = ': ' + edu;
-      if (document.getElementById('dtInterest')) document.getElementById('dtInterest').textContent = ': ' + interest;
+      if (document.getElementById('dtName')) document.getElementById('dtName').textContent = name;
+      if (document.getElementById('dtEmail')) document.getElementById('dtEmail').textContent = email;
+      if (document.getElementById('dtPhone')) document.getElementById('dtPhone').textContent = phone;
+      if (document.getElementById('dtEdu')) document.getElementById('dtEdu').textContent = edu;
+      if (document.getElementById('dtInterest')) document.getElementById('dtInterest').textContent = interest;
 
       profileModal.style.display = 'flex';
     });
@@ -223,6 +223,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (closeModalBtn && profileModal) {
     closeModalBtn.addEventListener('click', () => {
       profileModal.style.display = 'none';
+    });
+  }
+
+  // Close on backdrop overlay click or Escape key
+  if (profileModal) {
+    profileModal.addEventListener('click', (e) => {
+      if (e.target === profileModal) {
+        profileModal.style.display = 'none';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && profileModal.style.display === 'flex') {
+        profileModal.style.display = 'none';
+      }
     });
   }
 });

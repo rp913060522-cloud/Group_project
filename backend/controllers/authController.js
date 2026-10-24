@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Student = require('../models/Student');
-const { sendPasswordResetEmail } = require('../services/emailService');
+const emailService = require('../services/emailService');
 
 // Simple RFC 5322 compliant regex for basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -292,7 +292,7 @@ async function forgotPassword(req, res) {
 
       // Send the email (or log simulated link if SMTP is not configured)
       try {
-        await sendPasswordResetEmail({
+        await emailService.sendPasswordResetEmail({
           to: student.email,
           name: student.personalInfo?.fullName || 'Student',
           resetUrl

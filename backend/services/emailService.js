@@ -1,19 +1,163 @@
 /**
  * CareerSetu — Email Service
- * Handles transactional emails (Password Reset, etc.) using Nodemailer.
+ * Handles transactional emails (Password Reset, etc.) across environments.
  *
- * Configured via environment variables:
- *   SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS, EMAIL_FROM
+ * Supported delivery mechanisms:
+ *   1. Brevo REST API (HTTPS Port 443 — Recommended for Render Free Tier)
+ *      Configured via: BREVO_API_KEY (or SENDINBLUE_API_KEY)
+ *   2. Resend REST API (HTTPS Port 443 — Alternative for cloud platforms)
+ *      Configured via: RESEND_API_KEY
+ *   3. Standard SMTP / Nodemailer (Ports 587/465 — Localhost / Paid Cloud / VPS)
+ *      Configured via: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE
+ *   4. Local Simulation Fallback (Localhost development when no provider configured)
  *
- * Resiliency:
- *   - Strict connectionTimeout (8s), greetingTimeout (5s), socketTimeout (10s)
- *   - Hard limit promise race (8s) preventing request hangs on cloud proxies / Render
- *   - Safe simulated fallback when SMTP is not configured in local development
+ * Resiliency & Safety:
+ *   - Uses HTTPS Port 443 on Render Free Tier to bypass platform outbound SMTP blocks
+ *   - Strict 8-second request timeouts via AbortController / Promise.race
+ *   - Zero secret or token exposure in error logs
  */
 
 'use strict';
 
 const nodemailer = require('nodemailer');
+
+/**
+ * Checks if a string contains placeholder / template values.
+ */
+function isPlaceholder(val) {
+  if (!val || typeof val !== 'string') return true;
+  const lower = val.toLowerCase();
+  return (
+    lower.includes('your_') ||
+    lower.includes('your-') ||
+    lower.includes('example.com') ||
+    lower.includes('<') ||
+    lower.includes('xxxx')
+  );
+}
+
+/**
+ * Parses sender name and email from RFC 5322 string: "Name <email@domain.com>" or "email@domain.com"
+ */
+function parseSender(fromStr, fallbackEmail) {
+  let name = 'CareerSetu Support';
+  let email = fallbackEmail || 'support@careersetu.org';
+
+  if (fromStr && typeof fromStr === 'string') {
+    const match = fromStr.match(/^(?:"?([^"]*)"?\s)?(?:<?([^>]+@[^>]+)>?)$/);
+    if (match) {
+      if (match[1] && match[1].trim()) name = match[1].trim();
+      if (match[2] && match[2].trim()) email = match[2].trim();
+    } else if (fromStr.includes('@')) {
+      email = fromStr.trim();
+    }
+  }
+
+  return { name, email };
+}
+
+/**
+ * Dispatch transactional email via Brevo HTTP REST API (Port 443 HTTPS).
+ * Bypasses Render Free Tier outbound SMTP port blocks.
+ */
+async function sendViaBrevo({ apiKey, from, to, name, subject, html, text }) {
+  const { name: senderName, email: senderEmail } = parseSender(
+    from || process.env.EMAIL_FROM,
+    process.env.SMTP_USER || 'support@careersetu.org'
+  );
+
+  const payload = {
+    sender: { name: senderName, email: senderEmail },
+    to: [{ email: to, name: name || 'Student' }],
+    subject,
+    htmlContent: html,
+    textContent: text
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'api-key': apiKey.trim(),
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const errMsg = data.message || `HTTP ${response.status}`;
+      throw new Error(`Brevo API responded with error: ${errMsg}`);
+    }
+
+    const messageId = data.messageId || 'brevo-sent';
+    console.log(`[EmailService] ✅ Email dispatched via Brevo HTTPS to ${to} (Message ID: ${messageId})`);
+    return { success: true, simulated: false, provider: 'brevo', messageId };
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('Brevo API request timed out after 8000ms');
+    }
+    throw err;
+  }
+}
+
+/**
+ * Dispatch transactional email via Resend HTTP REST API (Port 443 HTTPS).
+ * Bypasses Render Free Tier outbound SMTP port blocks.
+ */
+async function sendViaResend({ apiKey, from, to, name, subject, html, text }) {
+  const defaultFrom = 'CareerSetu Support <onboarding@resend.dev>';
+  const fromAddress = from || process.env.EMAIL_FROM || defaultFrom;
+
+  const payload = {
+    from: fromAddress,
+    to: [to],
+    subject,
+    html,
+    text
+  };
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey.trim()}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const errMsg = data.message || `HTTP ${response.status}`;
+      throw new Error(`Resend API responded with error: ${errMsg}`);
+    }
+
+    const messageId = data.id || 'resend-sent';
+    console.log(`[EmailService] ✅ Email dispatched via Resend HTTPS to ${to} (Message ID: ${messageId})`);
+    return { success: true, simulated: false, provider: 'resend', messageId };
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error('Resend API request timed out after 8000ms');
+    }
+    throw err;
+  }
+}
 
 /**
  * Creates a Nodemailer transporter instance if credentials exist.
@@ -25,8 +169,6 @@ function getTransporter() {
   const user = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : null;
   // Strip spaces if user copied Google's 4x4 app password with spaces
   const pass = process.env.SMTP_PASS ? process.env.SMTP_PASS.replace(/\s+/g, '') : null;
-
-  const isPlaceholder = (val) => !val || val.includes('YOUR_GMAIL') || val.includes('YOUR_16_CHAR') || val.includes('your-email') || val.includes('your-gmail');
 
   if (isPlaceholder(user) || isPlaceholder(pass)) {
     return null;
@@ -49,37 +191,71 @@ function getTransporter() {
 }
 
 /**
- * Sends a password reset email to the user.
+ * Dispatch transactional email via Nodemailer SMTP.
+ */
+async function sendViaSmtp({ transporter, from, to, subject, html, text }) {
+  const sendPromise = transporter.sendMail({
+    from,
+    to,
+    subject,
+    text,
+    html
+  });
+
+  let timerId;
+  const timeoutPromise = new Promise((_, reject) => {
+    timerId = setTimeout(() => {
+      const timeoutErr = new Error('SMTP connection timed out after 8000ms');
+      timeoutErr.code = 'ETIMEDOUT';
+      reject(timeoutErr);
+    }, 8000);
+  });
+
+  try {
+    const info = await Promise.race([sendPromise, timeoutPromise]);
+    clearTimeout(timerId);
+
+    console.log(`[EmailService] ✅ Email dispatched via SMTP to ${to} (Message ID: ${info.messageId})`);
+    return { success: true, simulated: false, provider: 'smtp', messageId: info.messageId };
+  } catch (err) {
+    clearTimeout(timerId);
+    console.error(`[EmailService] ❌ Failed to dispatch email via SMTP:`, err.message);
+
+    if (err.code === 'EAUTH') {
+      console.error('[EmailService] 💡 SMTP Authentication Failed: Verify SMTP_USER is your full Gmail address and SMTP_PASS is your 16-character Google App Password.');
+    } else if (err.code === 'ESOCKET' || err.code === 'ETIMEDOUT' || err.message.includes('timeout')) {
+      console.error('[EmailService] 💡 Cloud Platform Notice: Render Free Tier blocks outbound SMTP traffic on ports 25, 465, and 587.');
+      console.error('     To send emails reliably on Render Free Tier, please configure BREVO_API_KEY (from brevo.com, 300 free emails/day)');
+      console.error('     or RESEND_API_KEY (from resend.com). These deliver over standard HTTPS (Port 443), which is never blocked.');
+    }
+    throw err;
+  }
+}
+
+/**
+ * Sends a password reset email using the best available transport mechanism.
  *
  * @param {Object} options
  * @param {string} options.to - Recipient email address
  * @param {string} options.name - Recipient student name
  * @param {string} options.resetUrl - Full URL to password reset page with token
- * @returns {Promise<{ success: boolean, simulated: boolean, messageId?: string, resetUrl?: string }>}
+ * @returns {Promise<{ success: boolean, simulated: boolean, provider?: string, messageId?: string, resetUrl?: string }>}
  */
 async function sendPasswordResetEmail({ to, name = 'Student', resetUrl }) {
-  const from = process.env.EMAIL_FROM || '"CareerSetu Support" <no-reply@careersetu.org>';
-  const transporter = getTransporter();
-
-  // If SMTP is not yet configured
-  if (!transporter) {
-    if (process.env.NODE_ENV === 'production') {
-      console.warn('[EmailService] ⚠️ SMTP_USER and SMTP_PASS are not configured in production environment. Password reset email could not be dispatched.');
-      return { success: false, simulated: false, error: 'SMTP service not configured in production.' };
-    }
-
-    // In local development / testing, provide safe simulation banner
-    console.log('\n╔════════════════════════════════════════════════════════════════════╗');
-    console.log('║           CareerSetu Password Reset Notification (Simulated)       ║');
-    console.log('╚════════════════════════════════════════════════════════════════════╝');
-    console.log(`[EmailService] ✉️  To:        ${to}`);
-    console.log(`[EmailService] 👤 Name:      ${name}`);
-    console.log(`[EmailService] 🔗 Reset URL: ${resetUrl}`);
-    console.log('[EmailService] ℹ️  SMTP_USER / SMTP_PASS not set in .env. Reset link ready for testing.');
-    console.log('╚════════════════════════════════════════════════════════════════════╝\n');
-    return { success: true, simulated: true, resetUrl };
+  if (!to || typeof to !== 'string' || !to.includes('@')) {
+    throw new Error('Valid recipient email address is required');
   }
 
+  // RFC 2606 Reserved Test Domains Protection:
+  // If an automated test or local script uses a reserved test domain (e.g. example.com, .test, .invalid, .local),
+  // safely simulate delivery to avoid sending real SMTP traffic across the internet that bounces back.
+  const isTestDomain = /@(example\.(com|org|net)|test|invalid|localhost|careersetu\.org|careersetu\.local)$/i.test(to.trim());
+  if (isTestDomain) {
+    console.log(`[EmailService] 🧪 Test recipient detected (${to.trim()}). Safely simulating delivery to prevent network bounce.`);
+    return { success: true, simulated: true, recipient: to.trim(), messageId: 'simulated-test-recipient', resetUrl };
+  }
+
+  const from = process.env.EMAIL_FROM || '"CareerSetu Support" <no-reply@careersetu.org>';
   const subject = 'CareerSetu — Password Reset Request';
 
   const html = `
@@ -126,42 +302,45 @@ async function sendPasswordResetEmail({ to, name = 'Student', resetUrl }) {
 
   const text = `Hello ${name},\n\nWe received a request to reset your CareerSetu password.\n\nPlease visit the following link to reset your password (valid for 1 hour):\n${resetUrl}\n\nIf you did not request this, you can safely ignore this email.\n\n— The CareerSetu Team`;
 
-  try {
-    // Enforce 8-second hard limit on SMTP dispatch
-    const sendPromise = transporter.sendMail({
-      from,
-      to,
-      subject,
-      text,
-      html
-    });
-
-    let timerId;
-    const timeoutPromise = new Promise((_, reject) => {
-      timerId = setTimeout(() => {
-        const timeoutErr = new Error('SMTP connection timed out after 8000ms');
-        timeoutErr.code = 'ETIMEDOUT';
-        reject(timeoutErr);
-      }, 8000);
-    });
-
-    const info = await Promise.race([sendPromise, timeoutPromise]);
-    clearTimeout(timerId);
-
-    console.log(`[EmailService] ✅ Email dispatched successfully to ${to} (Message ID: ${info.messageId})`);
-    return { success: true, simulated: false, messageId: info.messageId };
-  } catch (err) {
-    console.error(`[EmailService] ❌ Failed to dispatch email via SMTP:`, err.message);
-    if (err.code === 'EAUTH') {
-      console.error('[EmailService] 💡 SMTP Authentication Failed: Please verify that SMTP_USER is your full Gmail address and SMTP_PASS is your 16-character Google App Password.');
-    } else if (err.code === 'ESOCKET' || err.code === 'ETIMEDOUT') {
-      console.error('[EmailService] 💡 Network Timeout: Unable to reach smtp.gmail.com on port 587 within timeout window. Check Render network or credentials.');
-    }
-    throw err;
+  // 1. Priority: Brevo REST API (HTTPS port 443 — works seamlessly on Render Free Tier)
+  const brevoKey = process.env.BREVO_API_KEY || process.env.SENDINBLUE_API_KEY;
+  if (brevoKey && !isPlaceholder(brevoKey)) {
+    return sendViaBrevo({ apiKey: brevoKey, from, to, name, subject, html, text });
   }
+
+  // 2. Priority: Resend REST API (HTTPS port 443 — works seamlessly on Render Free Tier)
+  const resendKey = process.env.RESEND_API_KEY;
+  if (resendKey && !isPlaceholder(resendKey)) {
+    return sendViaResend({ apiKey: resendKey, from, to, name, subject, html, text });
+  }
+
+  // 3. Priority: Standard SMTP via Nodemailer (Localhost / Paid Render / Generic SMTP)
+  const transporter = getTransporter();
+  if (transporter) {
+    return sendViaSmtp({ transporter, from, to, subject, html, text });
+  }
+
+  // 4. Priority: Local Development Simulation Fallback
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('[EmailService] ⚠️ No email service configured in production.');
+    console.warn('[EmailService] 💡 On Render Free Tier, please set BREVO_API_KEY or RESEND_API_KEY in environment variables.');
+    return { success: false, simulated: false, error: 'No email service configured in production.' };
+  }
+
+  console.log('\n╔════════════════════════════════════════════════════════════════════╗');
+  console.log('║           CareerSetu Password Reset Notification (Simulated)       ║');
+  console.log('╚════════════════════════════════════════════════════════════════════╝');
+  console.log(`[EmailService] ✉️  To:        ${to}`);
+  console.log(`[EmailService] 👤 Name:      ${name}`);
+  console.log(`[EmailService] 🔗 Reset URL: ${resetUrl}`);
+  console.log('[EmailService] ℹ️  SMTP / Brevo not configured in .env. Reset link simulated for testing.');
+  console.log('╚════════════════════════════════════════════════════════════════════╝\n');
+  return { success: true, simulated: true, resetUrl };
 }
 
 module.exports = {
   sendPasswordResetEmail,
-  getTransporter
+  getTransporter,
+  sendViaBrevo,
+  sendViaResend
 };
