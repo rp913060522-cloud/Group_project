@@ -15,6 +15,19 @@ const { sendPasswordResetEmail } = require('../services/emailService');
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
+ * Identify database unavailability or buffering timeout errors.
+ */
+function isDbUnavailableError(err) {
+  if (!err) return false;
+  return (
+    (err.name === 'MongooseError' && err.message && err.message.includes('buffering timed out')) ||
+    err.name === 'MongoServerSelectionError' ||
+    err.name === 'MongoNetworkError' ||
+    err.name === 'MongoTimeoutError'
+  );
+}
+
+/**
  * Register a new student account
  * POST /api/auth/register
  */
@@ -107,6 +120,13 @@ async function register(req, res) {
         message: 'An account with this email address already exists.'
       });
     }
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error while creating account.'
@@ -177,6 +197,13 @@ async function login(req, res) {
     });
   } catch (error) {
     console.error('[AuthController] Login error:', error);
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error during login.'
@@ -203,6 +230,13 @@ async function getMe(req, res) {
     });
   } catch (error) {
     console.error('[AuthController] GetMe error:', error);
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error fetching user profile.'
@@ -249,7 +283,11 @@ async function forgotPassword(req, res) {
       // Determine client base URL
       const host = req.get('host') || 'localhost:5000';
       const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
-      const clientUrl = process.env.CLIENT_URL || `${protocol}://${host}`;
+      let clientUrl = process.env.CLIENT_URL;
+      // Safeguard: In production (e.g. Render), never use localhost for email links
+      if (!clientUrl || (process.env.NODE_ENV === 'production' && clientUrl.includes('localhost'))) {
+        clientUrl = `${protocol}://${host}`;
+      }
       const resetUrl = `${clientUrl.replace(/\/$/, '')}/reset-password.html?token=${rawToken}`;
 
       // Send the email (or log simulated link if SMTP is not configured)
@@ -270,7 +308,14 @@ async function forgotPassword(req, res) {
       message: 'If an account exists with that email, a password reset link has been sent. Please check your inbox.'
     });
   } catch (error) {
-    console.error('[AuthController] Forgot password error:', error);
+    console.error('[AuthController] Forgot password error:', error.message || error);
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       message: 'Failed to process password reset request. Please try again later.'
@@ -316,6 +361,13 @@ async function verifyResetToken(req, res) {
     });
   } catch (error) {
     console.error('[AuthController] Verify token error:', error);
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       valid: false,
@@ -383,6 +435,13 @@ async function resetPassword(req, res) {
     });
   } catch (error) {
     console.error('[AuthController] Reset password error:', error);
+    if (isDbUnavailableError(error)) {
+      return res.status(503).json({
+        status: 'error',
+        code: 'DB_UNAVAILABLE',
+        message: 'Database service is temporarily unavailable. Please verify MongoDB Atlas connection.'
+      });
+    }
     return res.status(500).json({
       status: 'error',
       message: 'Internal server error while resetting password.'

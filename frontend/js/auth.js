@@ -327,25 +327,74 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Sending Link...';
       }
 
+      // Intermediate feedback if Render free-tier container is waking up
+      const coldStartTimer = setTimeout(() => {
+        if (submitBtn && submitBtn.disabled) {
+          submitBtn.textContent = 'Contacting server...';
+        }
+      }, 4000);
+
+      // 18-second client timeout via AbortController
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 18000);
+
       try {
         const response = await fetch('/api/auth/forgot-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email }),
+          signal: controller.signal
         });
 
-        const data = await response.json();
+        clearTimeout(timeoutId);
+        clearTimeout(coldStartTimer);
+
+        let data = null;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          try {
+            data = await response.json();
+          } catch (jsonErr) {
+            data = null;
+          }
+        }
 
         if (!response.ok) {
-          showAuthMessage(forgotForm, data.message || 'Failed to send reset email.', 'error');
+          const errMsg = (data && data.message)
+            ? data.message
+            : `Server returned an error (${response.status}). If the service was sleeping, please retry.`;
+          showAuthMessage(forgotForm, errMsg, 'error');
         } else {
-          showAuthMessage(forgotForm, data.message || 'If an account exists with that email, a password reset link has been sent.', 'success');
+          showAuthMessage(
+            forgotForm,
+            (data && data.message) || 'If an account exists with that email, a password reset link has been sent. Please check your inbox.',
+            'success'
+          );
           if (emailInput) emailInput.value = '';
         }
       } catch (err) {
+        clearTimeout(timeoutId);
+        clearTimeout(coldStartTimer);
         console.error('Forgot password error:', err);
-        showAuthMessage(forgotForm, 'Unable to connect to the server. Please check your connection.', 'error');
+
+        if (err.name === 'AbortError') {
+          showAuthMessage(
+            forgotForm,
+            'Request timed out. The server was likely waking up from sleep (Render cold start). Please click "Send Reset Link" again.',
+            'error'
+          );
+        } else {
+          showAuthMessage(
+            forgotForm,
+            'Unable to connect to the server. Please check your internet connection.',
+            'error'
+          );
+        }
       } finally {
+        clearTimeout(timeoutId);
+        clearTimeout(coldStartTimer);
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
@@ -445,28 +494,46 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Updating Password...';
       }
 
+      const resetController = new AbortController();
+      const resetTimeout = setTimeout(() => resetController.abort(), 18000);
+
       try {
         const response = await fetch('/api/auth/reset-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, password })
+          body: JSON.stringify({ token, password }),
+          signal: resetController.signal
         });
 
-        const data = await response.json();
+        clearTimeout(resetTimeout);
+
+        let data = null;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          try {
+            data = await response.json();
+          } catch (jsonErr) {
+            data = null;
+          }
+        }
 
         if (!response.ok) {
-          showAuthMessage(resetForm, data.message || 'Failed to update password.', 'error');
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-          }
+          const errMsg = (data && data.message) ? data.message : 'Failed to update password.';
+          showAuthMessage(resetForm, errMsg, 'error');
         } else {
           if (resetFormState) resetFormState.style.display = 'none';
           if (resetSuccessState) resetSuccessState.style.display = 'block';
         }
       } catch (err) {
+        clearTimeout(resetTimeout);
         console.error('Reset password error:', err);
-        showAuthMessage(resetForm, 'Unable to connect to the server. Please check your connection.', 'error');
+        if (err.name === 'AbortError') {
+          showAuthMessage(resetForm, 'Password update timed out. Please try again.', 'error');
+        } else {
+          showAuthMessage(resetForm, 'Unable to connect to the server. Please check your connection.', 'error');
+        }
+      } finally {
+        clearTimeout(resetTimeout);
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;

@@ -5,9 +5,10 @@
  * Configured via environment variables:
  *   SMTP_HOST, SMTP_PORT, SMTP_SECURE, SMTP_USER, SMTP_PASS, EMAIL_FROM
  *
- * If SMTP credentials are not configured (e.g. local development / viva demo),
- * the service safely logs the generated reset link to the server console
- * without throwing errors or halting the request.
+ * Resiliency:
+ *   - Strict connectionTimeout (8s), greetingTimeout (5s), socketTimeout (10s)
+ *   - Hard limit promise race (8s) preventing request hangs on cloud proxies / Render
+ *   - Safe simulated fallback when SMTP is not configured in local development
  */
 
 'use strict';
@@ -35,7 +36,15 @@ function getTransporter() {
     host,
     port,
     secure,
-    auth: { user, pass }
+    auth: { user, pass },
+    connectionTimeout: 8000, // 8s to establish socket connection
+    greetingTimeout: 5000,   // 5s for SMTP greeting
+    socketTimeout: 10000,    // 10s socket inactivity timeout
+    dnsTimeout: 5000,        // 5s DNS lookup timeout
+    tls: {
+      rejectUnauthorized: true,
+      minVersion: 'TLSv1.2'
+    }
   });
 }
 
@@ -55,7 +64,7 @@ async function sendPasswordResetEmail({ to, name = 'Student', resetUrl }) {
   // If SMTP is not yet configured
   if (!transporter) {
     if (process.env.NODE_ENV === 'production') {
-      console.warn('[EmailService] ⚠️ SMTP_USER and SMTP_PASS are not configured in production. Password reset email could not be dispatched.');
+      console.warn('[EmailService] ⚠️ SMTP_USER and SMTP_PASS are not configured in production environment. Password reset email could not be dispatched.');
       return { success: false, simulated: false, error: 'SMTP service not configured in production.' };
     }
 
@@ -118,13 +127,26 @@ async function sendPasswordResetEmail({ to, name = 'Student', resetUrl }) {
   const text = `Hello ${name},\n\nWe received a request to reset your CareerSetu password.\n\nPlease visit the following link to reset your password (valid for 1 hour):\n${resetUrl}\n\nIf you did not request this, you can safely ignore this email.\n\n— The CareerSetu Team`;
 
   try {
-    const info = await transporter.sendMail({
+    // Enforce 8-second hard limit on SMTP dispatch
+    const sendPromise = transporter.sendMail({
       from,
       to,
       subject,
       text,
       html
     });
+
+    let timerId;
+    const timeoutPromise = new Promise((_, reject) => {
+      timerId = setTimeout(() => {
+        const timeoutErr = new Error('SMTP connection timed out after 8000ms');
+        timeoutErr.code = 'ETIMEDOUT';
+        reject(timeoutErr);
+      }, 8000);
+    });
+
+    const info = await Promise.race([sendPromise, timeoutPromise]);
+    clearTimeout(timerId);
 
     console.log(`[EmailService] ✅ Email dispatched successfully to ${to} (Message ID: ${info.messageId})`);
     return { success: true, simulated: false, messageId: info.messageId };
@@ -133,7 +155,7 @@ async function sendPasswordResetEmail({ to, name = 'Student', resetUrl }) {
     if (err.code === 'EAUTH') {
       console.error('[EmailService] 💡 SMTP Authentication Failed: Please verify that SMTP_USER is your full Gmail address and SMTP_PASS is your 16-character Google App Password.');
     } else if (err.code === 'ESOCKET' || err.code === 'ETIMEDOUT') {
-      console.error('[EmailService] 💡 Network Error: Unable to connect to smtp.gmail.com on port 587. Please check your internet connection or firewall.');
+      console.error('[EmailService] 💡 Network Timeout: Unable to reach smtp.gmail.com on port 587 within timeout window. Check Render network or credentials.');
     }
     throw err;
   }

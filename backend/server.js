@@ -139,7 +139,9 @@ async function start() {
   // Connect to MongoDB Atlas (or log warning if URI not configured yet)
   const connected = await connectDB();
   if (!connected) {
-    console.log('[Server] ℹ️  Continuing startup without active database connection.');
+    console.warn('[Server] ⚠️  MongoDB Atlas is currently unreachable. Starting in degraded mode.');
+    console.warn('[Server] ⚠️  Database-dependent API requests will return 503 until connection is established.');
+    console.warn('[Server] 💡  Run "node backend/scripts/diagnoseDb.js" to test and diagnose your connection.');
   }
 
   const server = app.listen(PORT, () => {

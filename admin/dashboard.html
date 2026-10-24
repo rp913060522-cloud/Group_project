@@ -10,25 +10,36 @@
 
   <!-- Top Sticky Navbar -->
   <header class="admin-navbar">
-    <a href="dashboard.html" class="admin-nav-brand">
-      <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
-      <span>CareerSetu</span>
-      <span class="admin-badge">Admin Portal</span>
-    </a>
-
-    <div class="admin-nav-actions">
-      <div class="admin-user-pill">
-        <span>👤</span>
-        <span id="navAdminName">Administrator</span>
-      </div>
-      <a href="../dashboard.html" class="btn-admin btn-admin-outline" style="font-size: 0.8rem; padding: 5px 10px;" target="_blank">
-        🌐 Public Site
+    <div class="admin-navbar-inner">
+      <a href="dashboard.html" class="admin-nav-brand">
+        <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+        <span class="admin-brand-text">CareerSetu</span>
+        <span class="admin-badge">Admin</span>
       </a>
-      <button id="adminLogoutBtn" class="btn-admin-logout">
-        Logout ➔
+
+      <!-- Mobile Hamburger Toggle Button -->
+      <button id="adminNavToggle" class="admin-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
       </button>
+
+      <!-- Navigation Drawer / Actions -->
+      <div id="adminNavActions" class="admin-nav-actions">
+        <div class="admin-user-pill">
+          <span>👤</span>
+          <span id="navAdminName">Administrator</span>
+        </div>
+        <a href="../dashboard.html" class="btn-admin btn-admin-outline btn-public-site" target="_blank">
+          🌐 Public Site
+        </a>
+        <button id="adminLogoutBtn" class="btn-admin-logout">
+          Logout ➔
+        </button>
+      </div>
     </div>
   </header>
+  <div id="adminNavBackdrop" class="admin-nav-backdrop"></div>
 
   <main class="admin-container">
 
@@ -39,7 +50,7 @@
         <p>Monitor registrations, track profile completeness, and review career guidance trends.</p>
       </div>
 
-      <div style="display: flex; gap: 10px; align-items: center;">
+      <div class="admin-header-actions">
         <button id="btnExportCSV" class="btn-admin btn-admin-outline">
           📥 Export CSV / Excel
         </button>
@@ -92,12 +103,12 @@
           type="text"
           id="adminSearchInput"
           class="admin-search-input"
-          placeholder="Search by student name, email, phone, location..."
+          placeholder="Search by name, email, phone, location..."
         >
       </div>
 
       <div class="admin-filter-group">
-        <select id="adminFilterEdu" class="admin-select">
+        <select id="adminFilterEdu" class="admin-select" aria-label="Filter by Education Level">
           <option value="">All Education Levels</option>
           <option value="10th Standard">10th Standard (SSC)</option>
           <option value="12th Standard">12th Standard (HSC)</option>
@@ -107,7 +118,7 @@
           <option value="Other">Other / Custom</option>
         </select>
 
-        <select id="adminFilterStatus" class="admin-select">
+        <select id="adminFilterStatus" class="admin-select" aria-label="Filter by Profile Status">
           <option value="all">All Profile Statuses</option>
           <option value="complete">Complete Profiles Only</option>
           <option value="incomplete">Incomplete Profiles Only</option>
@@ -120,7 +131,7 @@
     </section>
 
     <!-- Student Data Table Card -->
-    <section class="admin-table-card">
+    <section id="studentTableCard" class="admin-table-card">
       <div class="table-responsive">
         <table class="admin-table">
           <thead>
@@ -159,14 +170,14 @@
   </main>
 
   <!-- Student Details Modal -->
-  <div id="studentDetailModal" class="admin-modal-backdrop">
+  <div id="studentDetailModal" class="admin-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalStudentName">
     <div class="admin-modal">
       <div class="admin-modal-header">
         <div>
           <h2 id="modalStudentName">Student Profile</h2>
           <p id="modalStudentEmail" style="font-size: 0.85rem; color: var(--admin-text-muted); margin-top: 2px;">student@example.com</p>
         </div>
-        <button id="btnCloseModal" class="btn-modal-close" title="Close">&times;</button>
+        <button id="btnCloseModal" class="btn-modal-close" title="Close" aria-label="Close dialog">&times;</button>
       </div>
 
       <div class="admin-modal-body">

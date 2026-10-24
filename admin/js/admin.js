@@ -1,14 +1,12 @@
 /**
  * CareerSetu — Admin Portal Script
  * Authentication guard, live search/filtering, statistics, detail modal,
- * CSV export, and PDF printing.
+ * responsive mobile navigation, CSV export, and PDF printing.
  */
 
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const isLoginPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('/admin') || window.location.pathname.endsWith('/admin/');
-
   if (document.getElementById('adminLoginForm')) {
     initAdminLogin();
   } else {
@@ -42,53 +40,62 @@ function initAdminLogin() {
     alertEl.style.border = isError ? '1px solid #fecaca' : '1px solid #bbf7d0';
   }
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('adminEmail').value.trim();
-    const password = document.getElementById('adminPassword').value;
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById('adminEmail');
+      const email = emailInput ? emailInput.value.trim() : '';
+      const password = passInput ? passInput.value : '';
 
-    if (!email || !password) {
-      showAlert('Please enter both administrative email and password.');
-      return;
-    }
-
-    const origText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Authenticating...';
-
-    try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        showAlert(data.message || 'Authentication failed. Please verify credentials.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = origText;
+      if (!email || !password) {
+        showAlert('Please enter both administrative email and password.');
         return;
       }
 
-      // Store admin session and token
-      sessionStorage.setItem('admin_token', data.token);
-      sessionStorage.setItem('admin_logged_in', 'true');
-      sessionStorage.setItem('admin_email', data.admin.email);
-      sessionStorage.setItem('admin_name', data.admin.fullName || 'Administrator');
+      const origText = submitBtn ? submitBtn.textContent : 'Authenticate & Enter →';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Authenticating...';
+      }
 
-      showAlert('Authentication successful. Redirecting...', false);
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 500);
-    } catch (err) {
-      console.error('Admin login error:', err);
-      showAlert('Unable to reach the administration server. Please verify connection.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = origText;
-    }
-  });
+      try {
+        const response = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showAlert(data.message || 'Authentication failed. Please verify credentials.');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = origText;
+          }
+          return;
+        }
+
+        // Store admin session and token
+        sessionStorage.setItem('admin_token', data.token);
+        sessionStorage.setItem('admin_logged_in', 'true');
+        sessionStorage.setItem('admin_email', data.admin.email);
+        sessionStorage.setItem('admin_name', data.admin.fullName || 'Administrator');
+
+        showAlert('Authentication successful. Redirecting...', false);
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 400);
+      } catch (err) {
+        console.error('Admin login error:', err);
+        showAlert('Unable to reach the administration server. Please verify connection.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = origText;
+        }
+      }
+    });
+  }
 }
 
 /* ── Admin Dashboard Logic ───────────────────────────────────────────────── */
@@ -114,6 +121,9 @@ function initAdminDashboard() {
   // DOM Elements
   const navNameEl = document.getElementById('navAdminName');
   const logoutBtn = document.getElementById('adminLogoutBtn');
+  const navToggle = document.getElementById('adminNavToggle');
+  const navActions = document.getElementById('adminNavActions');
+  const navBackdrop = document.getElementById('adminNavBackdrop');
   const searchInput = document.getElementById('adminSearchInput');
   const filterEdu = document.getElementById('adminFilterEdu');
   const filterStatus = document.getElementById('adminFilterStatus');
@@ -129,6 +139,58 @@ function initAdminDashboard() {
   // Modal Elements
   const modal = document.getElementById('studentDetailModal');
   const closeModalBtn = document.getElementById('btnCloseModal');
+
+  // Mobile Navigation Toggle
+  function closeMobileNav() {
+    if (navActions) navActions.classList.remove('open');
+    if (navToggle) {
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    }
+    if (navBackdrop) navBackdrop.classList.remove('open');
+    document.body.classList.remove('nav-locked');
+  }
+
+  function toggleMobileNav() {
+    const isOpen = navActions && navActions.classList.contains('open');
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      if (navActions) navActions.classList.add('open');
+      if (navToggle) {
+        navToggle.classList.add('open');
+        navToggle.setAttribute('aria-expanded', 'true');
+      }
+      if (navBackdrop) navBackdrop.classList.add('open');
+      document.body.classList.add('nav-locked');
+    }
+  }
+
+  if (navToggle) {
+    navToggle.addEventListener('click', toggleMobileNav);
+  }
+  if (navBackdrop) {
+    navBackdrop.addEventListener('click', closeMobileNav);
+  }
+
+  // Close nav on clicking links or buttons inside mobile drawer
+  if (navActions) {
+    navActions.querySelectorAll('a, button').forEach((el) => {
+      if (el.id !== 'adminLogoutBtn') {
+        el.addEventListener('click', () => {
+          closeMobileNav();
+        });
+      }
+    });
+  }
+
+  // Close mobile nav on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMobileNav();
+      closeModal();
+    }
+  });
 
   // Verify token on server
   fetch('/api/admin/me', {
@@ -196,7 +258,7 @@ function initAdminDashboard() {
 
     tableBody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; padding: 36px; color: var(--admin-text-muted);">
+        <td colspan="7" class="table-loading-cell">
           ⏳ Fetching student records...
         </td>
       </tr>
@@ -218,7 +280,7 @@ function initAdminDashboard() {
       if (!res.ok) {
         tableBody.innerHTML = `
           <tr>
-            <td colspan="7" style="text-align: center; padding: 30px; color: var(--admin-danger);">
+            <td colspan="7" class="table-error-cell">
               Failed to load student data. Please try again.
             </td>
           </tr>
@@ -237,7 +299,7 @@ function initAdminDashboard() {
       console.error('Error fetching students:', err);
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align: center; padding: 30px; color: var(--admin-danger);">
+          <td colspan="7" class="table-error-cell">
             Connection error fetching student records.
           </td>
         </tr>
@@ -245,12 +307,12 @@ function initAdminDashboard() {
     }
   }
 
-  // Render Table Rows
+  // Render Table Rows (with data-label for mobile card responsiveness)
   function renderTable(students) {
     if (!students || students.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
+          <td colspan="7" class="table-empty-cell">
             No student records found matching the specified filters.
           </td>
         </tr>
@@ -273,33 +335,33 @@ function initAdminDashboard() {
 
       return `
         <tr>
-          <td>
-            <div style="font-weight: 700; color: var(--admin-text-main);">${escapeHTML(p.fullName || 'Unnamed Student')}</div>
-            <div style="font-size: 0.8rem; color: var(--admin-text-muted);">${escapeHTML(s.email)}</div>
+          <td data-label="Student">
+            <div class="cell-student-name">${escapeHTML(p.fullName || 'Unnamed Student')}</div>
+            <div class="cell-student-email">${escapeHTML(s.email)}</div>
           </td>
-          <td>
-            <div>${escapeHTML(p.phone || 'No Phone')}</div>
-            <div style="font-size: 0.8rem; color: var(--admin-text-muted);">${escapeHTML(p.location || 'Location Not Set')}</div>
+          <td data-label="Contact &amp; Location">
+            <div class="cell-primary">${escapeHTML(p.phone || 'No Phone')}</div>
+            <div class="cell-secondary">${escapeHTML(p.location || 'Location Not Set')}</div>
           </td>
-          <td>
-            <div style="font-weight: 600;">${escapeHTML(e.eduLevel || 'Not Specified')}</div>
-            <div style="font-size: 0.8rem; color: var(--admin-text-muted);">${escapeHTML(e.stream || '—')}</div>
+          <td data-label="Education">
+            <div class="cell-primary cell-bold">${escapeHTML(e.eduLevel || 'Not Specified')}</div>
+            <div class="cell-secondary">${escapeHTML(e.stream || '—')}</div>
           </td>
-          <td>
-            <div style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHTML(c.field || '—')}">
+          <td data-label="Career Preference">
+            <div class="cell-career-field" title="${escapeHTML(c.field || '—')}">
               ${escapeHTML(c.field || 'Not Specified')}
             </div>
-            ${hasAI ? '<span class="badge-ai" style="margin-top: 4px; display: inline-block;">✨ AI Guided</span>' : ''}
+            ${hasAI ? '<span class="badge-ai">✨ AI Guided</span>' : ''}
           </td>
-          <td>
+          <td data-label="Profile Status">
             <span class="badge-status ${isComplete ? 'badge-complete' : 'badge-incomplete'}">
               ${isComplete ? 'Complete' : 'Incomplete'}
             </span>
           </td>
-          <td style="color: var(--admin-text-muted); font-size: 0.82rem; white-space: nowrap;">
+          <td data-label="Registered" class="cell-date">
             ${regDate}
           </td>
-          <td style="text-align: right; white-space: nowrap;">
+          <td data-label="Action" class="cell-action">
             <button class="btn-table-action btn-view-student" data-id="${s._id}">
               View Details &rarr;
             </button>
@@ -376,24 +438,25 @@ function initAdminDashboard() {
       if (ai.status === 'success' && ai.parsedResult) {
         const pr = ai.parsedResult;
         const careers = pr.recommendedCareers || [];
-        const careerList = careers.map((car) => `<li style="margin-bottom: 4px;"><strong>${escapeHTML(car.title || '')}</strong>: ${escapeHTML(car.whyFit || car.description || '')}</li>`).join('');
+        const careerList = careers.map((car) => `<li style="margin-bottom: 6px;"><strong>${escapeHTML(car.title || '')}</strong>: ${escapeHTML(car.whyFit || car.description || '')}</li>`).join('');
 
         aiContentEl.innerHTML = `
-          <div style="background: #f8fafc; border: 1px solid var(--admin-border); border-radius: 8px; padding: 14px; font-size: 0.88rem;">
+          <div class="modal-ai-box">
             <div style="margin-bottom: 8px;"><strong>Summary:</strong> ${escapeHTML(pr.summary || 'Guidance generated successfully.')}</div>
             <div style="font-weight: 700; margin-bottom: 6px;">Recommended Career Paths:</div>
-            <ul style="padding-left: 20px; margin-bottom: 8px;">${careerList || '<li>No specific careers listed</li>'}</ul>
+            <ul style="padding-left: 20px; margin-bottom: 8px; line-height: 1.5;">${careerList || '<li>No specific careers listed</li>'}</ul>
           </div>
         `;
       } else {
         aiContentEl.innerHTML = `
-          <p style="font-size: 0.88rem; color: var(--admin-text-muted);">
+          <p style="font-size: 0.88rem; color: var(--admin-text-muted); padding: 4px 0;">
             No personalized AI guidance has been generated for this student yet.
           </p>
         `;
       }
 
       modal.classList.add('open');
+      document.body.classList.add('modal-locked');
     } catch (err) {
       console.error('Error opening student modal:', err);
     }
@@ -401,6 +464,7 @@ function initAdminDashboard() {
 
   function closeModal() {
     if (modal) modal.classList.remove('open');
+    document.body.classList.remove('modal-locked');
   }
 
   if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
@@ -409,11 +473,6 @@ function initAdminDashboard() {
       if (e.target === modal) closeModal();
     });
   }
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && modal.classList.contains('open')) {
-      closeModal();
-    }
-  });
 
   // Debounced Search Input
   let searchTimeout;
