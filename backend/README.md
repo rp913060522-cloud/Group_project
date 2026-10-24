@@ -182,27 +182,40 @@ npm test
 ```
 Or run individual test suites:
 ```bash
-# Phase 1 Health & configuration checks (23 checks):
+# Phase 1 Health & configuration checks:
 npm run test:health
 
-# Phase 2 Authentication & JWT security tests (36 checks):
+# Phase 2 Authentication, JWT & Password Reset tests:
 npm run test:auth
 
-# Phase 3 Student Data API & Isolation tests (52 checks):
+# Phase 3 Student Data API & Isolation tests:
 npm run test:student
 
-# Phase 4 AI Career Guidance & Groq Mock tests (41 checks):
+# Phase 4 AI Career Guidance & Groq tests:
 npm run test:ai
+
+# Phase 5 Admin Authentication, Authorization & Export tests:
+npm run test:admin
 ```
 
 All test suites run against isolated mock stores and mocked AI providers so no test data touches real student records in MongoDB Atlas or makes billable API calls.
 
 ---
 
-## 4. Architecture & Upcoming Phases
+## 4. Administrative Account Setup
+
+To initialize the platform administrator account:
+```bash
+npm run setup:admin
+```
+*(Requires `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `.env`)*
+
+---
+
+## 5. Architecture & Phases Status
 
 - **Phase 1 (Completed):** Backend foundation, Express server, MongoDB Atlas configuration, Health check API.
-- **Phase 2 (Completed):** Authentication API (`register`, `login`, `me`), bcrypt hashing, JWT middleware, frontend integration.
+- **Phase 2 (Completed):** Authentication API (`register`, `login`, `me`), bcrypt hashing, JWT middleware, Forgot Password & Password Reset flow.
 - **Phase 3 (Completed):** Student profile persistence (`/api/student/profile`, `/api/student/education`, `/api/student/career-interest`), data isolation, frontend integration.
 - **Phase 4 (Completed):** Groq AI integration (`POST /api/ai/analyze`, `GET /api/ai/saved`), verified resource links, automated test suite, frontend AI guidance cards.
-- **Phase 5:** Admin authentication & student management dashboard.
+- **Phase 5 (Completed):** Admin portal (`/admin/login.html`, `/admin/dashboard.html`), RBAC authentication, student directory search/filter, and CSV/PDF export.

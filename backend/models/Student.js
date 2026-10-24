@@ -96,6 +96,16 @@ const studentSchema = new mongoose.Schema(
       select: false    // never returned in queries by default
     },
 
+    /* Password reset fields */
+    resetPasswordToken: {
+      type: String,
+      select: false
+    },
+    resetPasswordExpires: {
+      type: Date,
+      select: false
+    },
+
     /* Profile completeness flags — useful for admin overview */
     profileComplete:     { type: Boolean, default: false },
     educationComplete:   { type: Boolean, default: false },
@@ -127,6 +137,8 @@ studentSchema.index({ createdAt: -1 });
 studentSchema.methods.toPublicJSON = function () {
   const obj = this.toObject();
   delete obj.passwordHash;
+  delete obj.resetPasswordToken;
+  delete obj.resetPasswordExpires;
   return obj;
 };
 

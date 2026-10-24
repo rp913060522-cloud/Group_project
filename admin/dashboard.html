@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerSetu | Admin Dashboard</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- Top Sticky Navbar -->
+  <header class="admin-navbar">
+    <a href="dashboard.html" class="admin-nav-brand">
+      <img src="../assets/careersetu-logo.png" alt="CareerSetu Logo">
+      <span>CareerSetu</span>
+      <span class="admin-badge">Admin Portal</span>
+    </a>
+
+    <div class="admin-nav-actions">
+      <div class="admin-user-pill">
+        <span>👤</span>
+        <span id="navAdminName">Administrator</span>
+      </div>
+      <a href="../dashboard.html" class="btn-admin btn-admin-outline" style="font-size: 0.8rem; padding: 5px 10px;" target="_blank">
+        🌐 Public Site
+      </a>
+      <button id="adminLogoutBtn" class="btn-admin-logout">
+        Logout ➔
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- Header Section -->
+    <div class="admin-header">
+      <div class="admin-title-wrap">
+        <h1>Student Management &amp; Analytics</h1>
+        <p>Monitor registrations, track profile completeness, and review career guidance trends.</p>
+      </div>
+
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button id="btnExportCSV" class="btn-admin btn-admin-outline">
+          📥 Export CSV / Excel
+        </button>
+        <button id="btnPrintPDF" class="btn-admin btn-admin-outline">
+          🖨️ Save as PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Grid -->
+    <section class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="stat-icon blue">👥</div>
+        <div class="stat-info">
+          <span class="stat-value" id="statTotalStudents">—</span>
+          <span class="stat-label">Registered Students</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon green">✅</div>
+        <div class="stat-info">
+          <span class="stat-value" id="statCompletedProfiles">—</span>
+          <span class="stat-label">Complete Profiles</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon purple">🤖</div>
+        <div class="stat-info">
+          <span class="stat-value" id="statAiGuidance">—</span>
+          <span class="stat-label">AI Reports Generated</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="stat-icon amber">🧭</div>
+        <div class="stat-info">
+          <span class="stat-value" id="statTotalGuests">—</span>
+          <span class="stat-label">Guest Sessions</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters & Action Bar -->
+    <section class="admin-controls-card">
+      <div class="admin-search-group">
+        <span class="admin-search-icon">🔍</span>
+        <input
+          type="text"
+          id="adminSearchInput"
+          class="admin-search-input"
+          placeholder="Search by student name, email, phone, location..."
+        >
+      </div>
+
+      <div class="admin-filter-group">
+        <select id="adminFilterEdu" class="admin-select">
+          <option value="">All Education Levels</option>
+          <option value="10th Standard">10th Standard (SSC)</option>
+          <option value="12th Standard">12th Standard (HSC)</option>
+          <option value="Diploma / ITI">Diploma / ITI</option>
+          <option value="Undergraduate">Undergraduate Degree</option>
+          <option value="Postgraduate">Postgraduate Degree</option>
+          <option value="Other">Other / Custom</option>
+        </select>
+
+        <select id="adminFilterStatus" class="admin-select">
+          <option value="all">All Profile Statuses</option>
+          <option value="complete">Complete Profiles Only</option>
+          <option value="incomplete">Incomplete Profiles Only</option>
+        </select>
+
+        <button id="btnRefresh" class="btn-admin btn-admin-outline" title="Refresh records">
+          🔄 Refresh
+        </button>
+      </div>
+    </section>
+
+    <!-- Student Data Table Card -->
+    <section class="admin-table-card">
+      <div class="table-responsive">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Contact &amp; Location</th>
+              <th>Education</th>
+              <th>Career Preference</th>
+              <th>Profile Status</th>
+              <th>Registered</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <!-- Populated via admin.js -->
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: var(--admin-text-muted);">
+                ⏳ Loading student records...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div class="admin-pagination">
+        <div id="paginationInfo">Showing 0 of 0 students</div>
+        <div class="pagination-controls">
+          <button id="btnPrevPage" class="btn-page" disabled>&larr; Previous</button>
+          <span id="pageNumberDisplay" style="font-weight: 600; padding: 0 8px;">Page 1</span>
+          <button id="btnNextPage" class="btn-page" disabled>Next &rarr;</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Student Details Modal -->
+  <div id="studentDetailModal" class="admin-modal-backdrop">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <div>
+          <h2 id="modalStudentName">Student Profile</h2>
+          <p id="modalStudentEmail" style="font-size: 0.85rem; color: var(--admin-text-muted); margin-top: 2px;">student@example.com</p>
+        </div>
+        <button id="btnCloseModal" class="btn-modal-close" title="Close">&times;</button>
+      </div>
+
+      <div class="admin-modal-body">
+        
+        <!-- Personal Information -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Personal Information</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Full Name</span>
+              <div class="detail-value" id="modalFullName">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Phone</span>
+              <div class="detail-value" id="modalPhone">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Age / Gender</span>
+              <div class="detail-value" id="modalAgeGender">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Location / City</span>
+              <div class="detail-value" id="modalLocation">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Educational Background -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Educational Background</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Education Level</span>
+              <div class="detail-value" id="modalEduLevel">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Stream / Specialization</span>
+              <div class="detail-value" id="modalStream">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Marks / Score</span>
+              <div class="detail-value" id="modalMarks">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Key Subjects</span>
+              <div class="detail-value" id="modalSubjects">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Career Interests & Skills -->
+        <div class="detail-section">
+          <h3 class="detail-section-title">Career Interests &amp; Skills</h3>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Preferred Field / Industry</span>
+              <div class="detail-value" id="modalCareerField">—</div>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Career Priority</span>
+              <div class="detail-value" id="modalPreference">—</div>
+            </div>
+            <div class="detail-item" style="grid-column: 1 / -1;">
+              <span class="detail-label">Target Skills to Learn</span>
+              <div class="detail-value" id="modalSkills">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Guidance Status -->
+        <div class="detail-section" style="margin-bottom: 0;">
+          <h3 class="detail-section-title">AI Career Guidance (Groq)</h3>
+          <div id="modalAiGuidanceContent">
+            <p style="font-size: 0.9rem; color: var(--admin-text-muted);">No AI report generated yet.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

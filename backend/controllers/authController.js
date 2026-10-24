@@ -5,9 +5,11 @@
 
 'use strict';
 
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Student = require('../models/Student');
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 // Simple RFC 5322 compliant regex for basic email format validation
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -208,8 +210,191 @@ async function getMe(req, res) {
   }
 }
 
+/**
+ * Request password reset link sent to registered email
+ * POST /api/auth/forgot-password
+ */
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body || {};
+
+    if (!email || typeof email !== 'string' || !email.trim()) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide a valid email address.'
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide a valid email address.'
+      });
+    }
+
+    const student = await Student.findOne({ email: normalizedEmail }).select('+passwordHash +resetPasswordToken +resetPasswordExpires');
+
+    if (student) {
+      // Generate cryptographically secure raw token (32 random bytes)
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      // Store SHA-256 hash in database
+      const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+      // Token expires in 1 hour
+      student.resetPasswordToken = hashedToken;
+      student.resetPasswordExpires = Date.now() + 60 * 60 * 1000;
+      await student.save();
+
+      // Determine client base URL
+      const host = req.get('host') || 'localhost:5000';
+      const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      const clientUrl = process.env.CLIENT_URL || `${protocol}://${host}`;
+      const resetUrl = `${clientUrl.replace(/\/$/, '')}/reset-password.html?token=${rawToken}`;
+
+      // Send the email (or log simulated link if SMTP is not configured)
+      try {
+        await sendPasswordResetEmail({
+          to: student.email,
+          name: student.personalInfo?.fullName || 'Student',
+          resetUrl
+        });
+      } catch (emailErr) {
+        console.error('[AuthController] ⚠️ Password reset email could not be dispatched:', emailErr.message);
+      }
+    }
+
+    // Always return generic success message to prevent user enumeration
+    return res.status(200).json({
+      status: 'success',
+      message: 'If an account exists with that email, a password reset link has been sent. Please check your inbox.'
+    });
+  } catch (error) {
+    console.error('[AuthController] Forgot password error:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Failed to process password reset request. Please try again later.'
+    });
+  }
+}
+
+/**
+ * Verify validity of a password reset token
+ * GET /api/auth/verify-reset-token
+ */
+async function verifyResetToken(req, res) {
+  try {
+    const token = req.query.token || req.body?.token;
+
+    if (!token || typeof token !== 'string' || !token.trim()) {
+      return res.status(400).json({
+        status: 'error',
+        valid: false,
+        message: 'Password reset token is required.'
+      });
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token.trim()).digest('hex');
+    const student = await Student.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!student) {
+      return res.status(400).json({
+        status: 'error',
+        valid: false,
+        message: 'Password reset link is invalid or has expired.'
+      });
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      valid: true,
+      message: 'Password reset token is valid.',
+      email: student.email
+    });
+  } catch (error) {
+    console.error('[AuthController] Verify token error:', error);
+    return res.status(500).json({
+      status: 'error',
+      valid: false,
+      message: 'Internal server error verifying token.'
+    });
+  }
+}
+
+/**
+ * Reset password using a valid reset token
+ * POST /api/auth/reset-password
+ */
+async function resetPassword(req, res) {
+  try {
+    const { token, password, newPassword } = req.body || {};
+    const pass = password || newPassword;
+
+    if (!token || typeof token !== 'string' || !token.trim()) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Password reset token is required.'
+      });
+    }
+
+    if (!pass || typeof pass !== 'string') {
+      return res.status(400).json({
+        status: 'error',
+        message: 'New password is required.'
+      });
+    }
+
+    if (pass.length < 6) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Password must be at least 6 characters long.'
+      });
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token.trim()).digest('hex');
+    const student = await Student.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: { $gt: Date.now() }
+    }).select('+passwordHash +resetPasswordToken +resetPasswordExpires');
+
+    if (!student) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Password reset link is invalid or has expired. Please request a new one.'
+      });
+    }
+
+    // Hash new password using bcrypt
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(pass, salt);
+
+    student.passwordHash = passwordHash;
+    // Invalidate the one-time reset token
+    student.resetPasswordToken = undefined;
+    student.resetPasswordExpires = undefined;
+    await student.save();
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Your password has been reset successfully. You can now log in with your new password.'
+    });
+  } catch (error) {
+    console.error('[AuthController] Reset password error:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Internal server error while resetting password.'
+    });
+  }
+}
+
 module.exports = {
   register,
   login,
-  getMe
+  getMe,
+  forgotPassword,
+  verifyResetToken,
+  resetPassword
 };

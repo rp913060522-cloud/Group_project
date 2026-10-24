@@ -52,9 +52,11 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' }));           // parse JSON bodies
 app.use(express.urlencoded({ extended: true }));    // parse form bodies
 
-/* ── Static: serve the frontend ─────────────────────────────────────────── */
+/* ── Static: serve the frontend & admin panel ─────────────────────────── */
 // Students can open http://localhost:5000 to reach the frontend directly.
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
+// Administrators can open http://localhost:5000/admin to reach the admin portal.
+app.use('/admin', express.static(path.join(__dirname, '..', 'admin')));
 
 /* ── Health endpoint ─────────────────────────────────────────────────────── */
 /**
@@ -95,7 +97,8 @@ app.use('/api/student', require('./routes/studentRoutes'));
 // Phase 4: Groq AI Career Guidance
 app.use('/api/ai', require('./routes/aiRoutes'));
 
-// Phase 5: app.use('/api/admin',   require('./routes/adminRoutes'));
+// Phase 5: Admin Panel & Student Management
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 /* ── 404 handler for unknown API routes ─────────────────────────────────── */
 app.use('/api', (req, res) => {
@@ -105,7 +108,11 @@ app.use('/api', (req, res) => {
   });
 });
 
-/* ── Catch-all: serve index.html for frontend navigation ─────────────────── */
+/* ── Catch-all: serve admin or frontend navigation ───────────────────────── */
+app.get(['/admin', '/admin/*'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'admin', 'login.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html'));
 });

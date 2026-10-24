@@ -307,6 +307,174 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Forgot Password Form Submission — /api/auth/forgot-password
+  const forgotForm = document.getElementById('forgotPasswordForm');
+  if (forgotForm) {
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById('forgotEmail');
+      const email = emailInput ? emailInput.value.trim() : '';
+
+      if (!email) {
+        showAuthMessage(forgotForm, 'Please enter your registered email address.', 'error');
+        return;
+      }
+
+      const submitBtn = forgotForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : 'Send Reset Link ➔';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending Link...';
+      }
+
+      try {
+        const response = await fetch('/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showAuthMessage(forgotForm, data.message || 'Failed to send reset email.', 'error');
+        } else {
+          showAuthMessage(forgotForm, data.message || 'If an account exists with that email, a password reset link has been sent.', 'success');
+          if (emailInput) emailInput.value = '';
+        }
+      } catch (err) {
+        console.error('Forgot password error:', err);
+        showAuthMessage(forgotForm, 'Unable to connect to the server. Please check your connection.', 'error');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    });
+  }
+
+  // Reset Password Page Handler — /api/auth/verify-reset-token & /api/auth/reset-password
+  const resetForm = document.getElementById('resetPasswordForm');
+  const resetLoadingState = document.getElementById('resetLoadingState');
+  const resetInvalidState = document.getElementById('resetInvalidState');
+  const resetFormState = document.getElementById('resetFormState');
+  const resetSuccessState = document.getElementById('resetSuccessState');
+  const resetInvalidMsg = document.getElementById('resetInvalidMsg');
+
+  if (resetLoadingState) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (!token) {
+      resetLoadingState.style.display = 'none';
+      if (resetInvalidState) resetInvalidState.style.display = 'block';
+      if (resetInvalidMsg) resetInvalidMsg.textContent = 'No password reset token was provided in the link. Please request a new link.';
+    } else {
+      // Verify token with backend
+      fetch(`/api/auth/verify-reset-token?token=${encodeURIComponent(token)}`)
+        .then(res => res.json())
+        .then(data => {
+          resetLoadingState.style.display = 'none';
+          if (data.status === 'success' && data.valid) {
+            if (resetFormState) resetFormState.style.display = 'block';
+            const tokenInput = document.getElementById('resetTokenInput');
+            if (tokenInput) tokenInput.value = token;
+          } else {
+            if (resetInvalidState) resetInvalidState.style.display = 'block';
+            if (resetInvalidMsg && data.message) resetInvalidMsg.textContent = data.message;
+          }
+        })
+        .catch(err => {
+          console.error('Verify token error:', err);
+          resetLoadingState.style.display = 'none';
+          if (resetInvalidState) resetInvalidState.style.display = 'block';
+          if (resetInvalidMsg) resetInvalidMsg.textContent = 'Unable to verify reset link. Please check your network connection.';
+        });
+    }
+  }
+
+  // Reset Password Visibility Toggles
+  const toggleNewPass = document.getElementById('toggleNewPassword');
+  const newPassInput = document.getElementById('newPassword');
+  if (toggleNewPass && newPassInput) {
+    toggleNewPass.addEventListener('click', () => {
+      const type = newPassInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      newPassInput.setAttribute('type', type);
+      toggleNewPass.textContent = type === 'password' ? '👁' : '🙈';
+    });
+  }
+
+  const toggleConfirmPass = document.getElementById('toggleConfirmPassword');
+  const confirmPassInput = document.getElementById('confirmPassword');
+  if (toggleConfirmPass && confirmPassInput) {
+    toggleConfirmPass.addEventListener('click', () => {
+      const type = confirmPassInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPassInput.setAttribute('type', type);
+      toggleConfirmPass.textContent = type === 'password' ? '👁' : '🙈';
+    });
+  }
+
+  // Reset Password Form Submit
+  if (resetForm) {
+    resetForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = document.getElementById('resetTokenInput') ? document.getElementById('resetTokenInput').value : '';
+      const password = document.getElementById('newPassword') ? document.getElementById('newPassword').value : '';
+      const confirmPassword = document.getElementById('confirmPassword') ? document.getElementById('confirmPassword').value : '';
+
+      if (!token) {
+        showAuthMessage(resetForm, 'Reset token is missing. Please request a new link.', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthMessage(resetForm, 'Password must be at least 6 characters long.', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showAuthMessage(resetForm, 'Passwords do not match. Please re-enter.', 'error');
+        return;
+      }
+
+      const submitBtn = resetForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : 'Update Password ➔';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Updating Password...';
+      }
+
+      try {
+        const response = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          showAuthMessage(resetForm, data.message || 'Failed to update password.', 'error');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        } else {
+          if (resetFormState) resetFormState.style.display = 'none';
+          if (resetSuccessState) resetSuccessState.style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Reset password error:', err);
+        showAuthMessage(resetForm, 'Unable to connect to the server. Please check your connection.', 'error');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    });
+  }
+
   // CEP Project Introduction Popup (College Community Engagement Project)
   initCepIntroPopup();
 });

@@ -6,11 +6,13 @@
   "scripts": {
     "start": "node backend/server.js",
     "dev": "nodemon backend/server.js",
+    "setup:admin": "node backend/scripts/createAdmin.js",
     "test:health": "node backend/scripts/testHealth.js",
     "test:auth": "node backend/scripts/testAuth.js",
     "test:student": "node backend/scripts/testStudentData.js",
     "test:ai": "node backend/scripts/testAiGuidance.js",
-    "test": "npm run test:health && npm run test:auth && npm run test:student && npm run test:ai"
+    "test:admin": "node backend/scripts/testAdmin.js",
+    "test": "npm run test:health && npm run test:auth && npm run test:student && npm run test:ai && npm run test:admin"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -19,7 +21,8 @@
     "express": "^4.19.2",
     "groq-sdk": "^1.6.0",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^8.4.1"
+    "mongoose": "^8.4.1",
+    "nodemailer": "^10.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
